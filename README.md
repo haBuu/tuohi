@@ -28,6 +28,7 @@ JavaScript-kirjasto HTML-dokumentin muokkaamiseen, tapahtumine käsittelyyn, ani
 ### jQuery Mobile
 JavaScript-kirjasto responsiivisten nettisivujen tekemiseen, jotka ovat käytettäviä kaikilla laitteilla. Käyttöliittymä on toteutettu kokonaan käyttäen jQuery Mobile kirjastoa.
 
+
 Ominaisuudet
 ------------
 
