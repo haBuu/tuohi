@@ -60,3 +60,6 @@ Käyttäjät, jotka eivät ole kirjautuneet sisään omalla tunnukselleen tunnis
 ##### Tulosten pitäminen muistissa, jos verkkoyhteys on poikki
 Tilanteessa, jossa laitteella ei ole verkkoyhteyttä, sovellus pitää syötettyjä tuloksia laitteen muistissa ja lähettää ne palvelimelle välittömästi yhteyden palautuessa.
 
+Toteutus
+---------
+TODO
