@@ -2,11 +2,10 @@ Turvallinen ohjelmointi
 Syksy 2014
 Sähköinen kilpailutulospalvelu
 
-=====
+==============================
 
 Yleiskuvaus
-
-=====
+-----------
 
 Verkkosovellus frisbeegolfkilpailuiden tulosten kirjaamiseen, arkistointiin ja katselmointiin. Tulosten syöttäminen tapahtuu yleensä älypuhelimilla, mutta sovellus on toteutettu siten, että sen käyttö onnistuu kaikilla alustoilla. Käyttöliittymä on kuitenkin suunniteltu toimimaan pienellä näytöllä.
 
@@ -14,11 +13,8 @@ Sovelluksella on muutamia erilaisia käyttötapauksia. Kaikki pelaajat voivat k�
 
 Käyttäjät voivat tehdä sovellukseen oman tunnuksen, mutta se ei ole pakollista. Tunnuksen tarkoitus on helpottaa sovelluksen käyttämistä, mutta se ei tarjoa lisäominaisuuksia käyttäjälle.
 
-=====
-
 Tekniikat
-
-=====
+---------
 
 Haskell
 Puhdas funktionaalinen ohjelmointikieli. Päädyin valitsemaan Haskellin ohjelmointikieleksi, koska se on turvallisuuden kannalta erinomainen valinta. Käännettävyys, staattinen ja vahva tyypitus tarjoavat hyvän pohjan lähteä rakentamaan turvallista ohjelmaa.
@@ -35,11 +31,8 @@ JavaScript-kirjasto HTML-dokumentin muokkaamiseen, tapahtumine käsittelyyn, ani
 jQuery Mobile
 JavaScript-kirjasto responsiivisten nettisivujen tekemiseen, jotka ovat käytettäviä kaikilla laitteilla. Käyttöliittymä on toteutettu kokonaan käyttäen jQuery Mobile kirjastoa.
 
-=====
-
 Ominaisuudet
-
-=====
+------------
 
 Kaikkia ominaisuuksia ei ole vielä toteutettu tai tämän hetkinen toteutus on ristiriitainen dokumentaation kanssa.
 
