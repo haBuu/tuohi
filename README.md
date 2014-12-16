@@ -1,7 +1,4 @@
-Turvallinen ohjelmointi
-Syksy 2014
 Sähköinen kilpailutulospalvelu
-
 ==============================
 
 Yleiskuvaus
