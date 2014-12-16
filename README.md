@@ -31,7 +31,6 @@ JavaScript-kirjasto responsiivisten nettisivujen tekemiseen, jotka ovat käytett
 
 Ominaisuudet
 ------------
-
 Kaikkia ominaisuuksia ei ole vielä toteutettu tai tämän hetkinen toteutus on ristiriitainen dokumentaation kanssa.
 
 ### Käyttäjä
