@@ -1,0 +1,18 @@
+<div data-role="page">
+  ^{headerWidget}
+    <div data-role="content">
+      <div .content-primary>
+
+        <ul data-role="listview" data-inset="true">
+          <li data-role="list-divider"> Käynnissä olevat kisat
+          $forall Entity cid competition <- competitions
+            $if competitionState competition == Started
+              <li>
+                <a href=@{GroupsR cid}>#{competitionName competition}
+
+        <ul data-role="listview" data-inset="true">
+          <li data-role="list-divider"> Avoimet ilmoittautumiset
+          $forall Entity cid competition <- competitions
+            $if competitionState competition == Init
+              <li>
+                <a href=@{SignUpR cid}>#{competitionName competition}, #{showDay (competitionDate competition)}

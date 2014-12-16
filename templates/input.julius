@@ -1,0 +1,24 @@
+window.onload = function() {
+  var body = $('body');
+
+  body.on('change', 'form select', function() {
+    var self = $(this);
+    var url = self.data("url");
+    var form = self.closest('form');
+    $.ajax({
+      type: form.attr('method'),
+      data: form.serialize(),
+      url: url
+    });
+  });
+
+  body.on("swipeleft", function(e) {
+    var nextpage = $('div.ui-page-active').find("a#next").attr("href");
+    $(":mobile-pagecontainer").pagecontainer("change", nextpage);
+  });
+
+  body.on("swiperight", function(e) {
+    var prevpage = $('div.ui-page-active').find("a#prev").attr("href");
+    $(":mobile-pagecontainer").pagecontainer("change", prevpage);
+  });
+}

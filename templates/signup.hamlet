@@ -1,0 +1,32 @@
+<div data-role="page">
+  <div data-role="header">
+    <h1>#{competitionName competition}, #{showDay (competitionDate competition)}
+
+  <div data-role="content">
+    <div .content-primary>
+      $maybe msg <- mmsg
+        <div #message>#{msg}
+
+      $if full
+        <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype} .ui-state-disabled>
+          ^{formWidget}
+      $else
+        <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
+          ^{formWidget}
+
+      <ol data-role="listview" data-inset="true">
+
+        <li data-role="list-divider">Avoin
+        $forall (_, _, E.Value division, E.Value name) <- signups
+          $if division == MPO
+            <li data-icon="false">
+              <a href="">#{name}
+
+        <li data-role="list-divider">Naiset
+        $forall (_, _, E.Value division, E.Value name) <- signups
+          $if division == FPO
+            <li data-icon="false">
+              <a href="">#{name}
+
+      <a href=@{HomeR} data-role="button">Takaisin
+

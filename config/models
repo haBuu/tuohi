@@ -1,0 +1,87 @@
+User
+  ident Text
+  password Text Maybe
+  UniqueUser ident
+  deriving Typeable
+
+Email
+  email Text
+  user UserId Maybe
+  verkey Text Maybe
+  UniqueEmail email
+
+ -- By default this file is used in Model.hs (which is imported by Foundation.hs)
+
+-- own models start here
+
+User2
+  email Text
+  password Text Maybe -- Password may not be set yet
+  verkey Text Maybe -- Used for resetting passwords
+  verified Bool
+  UniqueUser2 email
+  deriving Typeable
+  deriving Show
+
+Player
+  name Text
+  email Text
+  password Text Maybe -- Password may not be set yet
+  verkey Text Maybe -- Used for resetting passwords
+  verified Bool default=False
+  admin Bool default=False
+  UniquePlayer email
+  deriving Typeable
+  deriving Show
+
+Competition
+  layoutId LayoutId
+  date Day
+  name Text
+  playerLimit Int
+  state CompetitionState default=Init
+  UniqueCompetition layoutId date name
+  deriving Show
+
+SignUp
+  playerId PlayerId
+  competitionId CompetitionId
+  confirmed Bool default=False
+  division Division default=MPO
+  UniqueSignUp playerId competitionId
+  deriving Show
+
+Round
+  playerId PlayerId
+  competitionId CompetitionId
+  state RoundState default=Started
+  roundnumber Int
+  groupnumber Int
+  UniqueRound playerId competitionId roundnumber
+  deriving Show
+
+Score
+  roundId RoundId
+  holeId HoleId
+  score Int
+  UniqueScore roundId holeId
+  deriving Show
+
+Course
+  name Text
+  UniqueCourse name
+  deriving Show
+
+Layout
+  courseId CourseId
+  name Text
+  description Text
+  UniqueLayout courseId name
+  deriving Show
+
+Hole
+  layoutId LayoutId
+  number Int
+  par Int
+  UniqueHole layoutId number
+  deriving Show

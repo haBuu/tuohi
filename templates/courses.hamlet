@@ -1,0 +1,27 @@
+<div data-role="page">
+  <div data-role="header">
+    <h1>WeeklyApp
+
+  <div data-role="content">
+    <div .content-primary>
+
+      $maybe msg <- mmsg
+        <div #message>#{msg}
+
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider"> Radat
+        $forall Entity cid course <- courses
+          <li>
+            <a href=#>#{courseName course}
+      <form method=post action=@{CoursesR}#form enctype=#{courseFormEnctype}>
+        ^{courseFormWidget}
+
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider"> Layoutit
+        $forall Entity lid layout <- layouts
+          <li>
+            <a href=#>#{layoutName layout}
+      <form method=post action=@{CoursesR}#form enctype=#{layoutFormEnctype}>
+        ^{layoutFormWidget}
+
+      <a href=@{AdminR} data-role="button">Takaisin

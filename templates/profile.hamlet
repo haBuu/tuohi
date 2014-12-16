@@ -1,0 +1,11 @@
+<div data-role="page">
+  ^{headerWidget}
+    <div data-role="content">
+      <div .content-primary>
+        $maybe msg <- mmsg
+          <div #message>#{msg}
+
+        <form method=post action=@{ProfileR}#form enctype=#{formEnctype}>
+          ^{formWidget}
+
+        <a href=@{HomeR} data-role="button">Takaisin

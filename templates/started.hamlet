@@ -1,0 +1,24 @@
+<div data-role="page">
+  <div data-role="header">
+    <h1>WeeklyApp
+
+  <div data-role="content">
+    <div .content-primary>
+
+      <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
+        ^{nextRoundFormWidget}
+
+      <ol data-role="listview" data-inset="true" data-split-icon="delete">
+
+        $forall group <- groups
+          <li data-role="list-divider"> #{group}
+          $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
+            $if group == groupNumber
+              <li>
+                <a>#{name}
+                <a data-url=@{DnfRoundR rid} #dnf-round data-rel="popup" data-position-to="window" data-transition="pop">#{name}
+
+      <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishCompetitionFormEnctype}>
+        ^{finishCompetitionFormWidget}
+
+      <a href=@{AdminR} data-role="button">Takaisin

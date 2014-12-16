@@ -1,0 +1,17 @@
+<div data-role="page">
+  <div data-role="header">
+    <h1>WeeklyApp
+
+  <div data-role="content">
+    <div .content-primary>
+
+      <ol data-role="listview" data-inset="true">
+
+        $forall group <- groups
+          <li data-role="list-divider"> #{group}
+          $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
+            $if group == groupNumber
+              <li data-icon="false">
+                <a href=@{InputR cid groupNumber}>#{name}
+
+      <a href=@{HomeR} data-role="button">Takaisin

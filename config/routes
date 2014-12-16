@@ -1,0 +1,40 @@
+/static StaticR Static getStatic
+/auth   AuthR   Auth   getAuth
+
+/favicon.ico FaviconR GET
+/robots.txt RobotsR GET
+
+/ HomeR GET
+
+!/#CompetitionId/#Int InputR GET
+
+/score/#RoundId/#HoleId ScoreR POST
+
+/competition/#CompetitionId/signup SignUpR GET POST
+/competition/#CompetitionId/groups GroupsR GET
+
+/live LiveR GET
+
+/profile ProfileR GET POST
+
+/admin AdminR GET
+
+/admin/newcompetition NewCompetitionR GET POST
+
+/admin/courses CoursesR GET POST
+/admin/course/#CourseId CourseR GET POST
+
+/admin/editcourse/#CourseId EditCourseR GET POST
+
+/admin/course/#CourseId/layout/#LayoutId LayoutR GET POST
+
+/admin/competition/#CompetitionId CompetitionR GET POST
+
+/admin/competition/signup/#SignUpId/confirm ConfirmSignUpR POST
+/admin/competition/signup/#SignUpId/remove RemoveSignUpR POST
+/admin/competition/round/#RoundId/dnf DnfRoundR POST
+
+/admin/competition/#CompetitionId/nextround CompetitionNextRoundR POST
+/admin/competition/#CompetitionId/finish CompetitionFinishR POST
+
+/test TestR GET POST

@@ -1,0 +1,10 @@
+<div data-role="page">
+  <div data-role="header">
+    <h1>WeeklyApp
+
+  <div data-role="content">
+    <div .content-primary>
+
+      <h2> Kilpailun tila: #{show $ competitionState competition}
+
+      <a href=@{AdminR} data-role="button">Takaisin

@@ -1,0 +1,15 @@
+.ui-block-b
+  text-align: right
+
+table
+  text-align: center
+  margin: auto
+
+table tr th
+  text-align: center
+
+table tr th
+  padding: 15px
+
+body
+  font-size: 1.1em

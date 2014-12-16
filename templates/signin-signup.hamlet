@@ -1,0 +1,13 @@
+<div data-role="navbar">
+  $maybe aid <- maid
+    <ul>
+      <li>
+        <a href=@{ProfileR}>#{show aid}
+      <li>
+        <a href=@{AuthR LogoutR}>Kirjaudu ulos
+  $nothing
+    <ul>
+      <li>
+        <a href=@{AuthR LoginR}>Kirjaudu sisään
+      <li>
+        <a href=@{AuthR registerR}>Rekisteröidy

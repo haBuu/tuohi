@@ -1,0 +1,4 @@
+(function() {
+  $.mobile.ajaxEnabled = false;
+  $.mobile.defaultPageTransition = 'none';
+})();

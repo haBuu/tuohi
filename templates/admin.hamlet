@@ -1,0 +1,24 @@
+<div data-role="page">
+  <div data-role="header">
+    <h1>WeeklyApp
+
+  <div data-role="content">
+    <div .content-primary>
+      <a href=@{NewCompetitionR} .ui-btn> Uusi kilpailu
+      <a href=@{CoursesR} .ui-btn> Uusi rata
+
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider"> Käynnissä olevat kisat
+        $forall Entity cid competition <- competitions
+          $if competitionState competition == Started
+            <li>
+              <a href=@{CompetitionR cid}>#{competitionName competition}
+        <li data-role="list-divider"> Tulevat kisat
+        $forall Entity cid competition <- competitions
+          $if competitionState competition == Init
+            <li>
+              <a href=@{CompetitionR cid}>#{competitionName competition}
+        <li data-role="list-divider"> Menneet kisat
+        $forall Entity cid competition <- finished
+          <li>
+            <a href=@{CompetitionR cid}>#{competitionName competition}

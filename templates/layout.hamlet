@@ -1,0 +1,11 @@
+<div data-role="page">
+  <div data-role="header">
+    <h1>WeeklyApp
+
+  <div data-role="content">
+    <div .content-primary>
+      $maybe msg <- mmsg
+        <div #message>#{msg}
+      <form method=post action=@{CoursesR}#form enctype=#{formEnctype}>
+        ^{formWidget}
+      <a href=@{CourseR cid} data-role="button">Takaisin

@@ -1,0 +1,22 @@
+$forall (hole, forms) <- holesAndForms
+  <div data-role="page" #hole-#{show hole}>
+    <div data-role="header">
+      <h1>Väylä #{show hole}
+
+    <div data-role="content">
+      <div .content-primary>
+
+        $forall (formWidget, formEnctype) <- forms
+          <form method=post enctype=#{formEnctype}>
+            ^{formWidget}
+
+    <div data-role="footer" data-position="fixed">
+      <div data-role="navbar">
+        <ul>
+          <li>
+            $if hole == 1
+              <a href=#hole-#{length holesAndForms} #prev data-role="button" data-icon="arrow-l">Edellinen
+            $else
+              <a href=#hole-#{show (hole - 1)} #prev data-role="button" data-icon="arrow-l">Edellinen
+          <li>
+            <a href=#hole-#{mod hole (length holesAndForms) + 1} #next data-role="button" data-icon="arrow-r">Seuraava

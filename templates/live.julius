@@ -1,0 +1,8 @@
+(function() {
+
+  //setInterval(fetch, 5000);
+  function fetch() {
+    location.reload();
+  }
+
+})();

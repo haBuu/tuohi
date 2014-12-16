@@ -1,0 +1,20 @@
+(function() {
+
+  var listview = $("ol");
+  var dnfLinks = listview.find("a#dnf-round");
+
+  dnfLinks.on("click", function() {
+    var self = $(this);
+    var item = self.parent();
+    var url = self.data("url");
+    console.log(url);
+    // remove from db
+    $.ajax({
+      type: 'POST',
+      url: url
+    });
+    // remove from page
+    item.remove();
+  });
+
+})();

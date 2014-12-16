@@ -1,0 +1,33 @@
+(function() {
+
+  var listview = $("ol");
+  var removeLinks = listview.find("a#remove-signup");
+  var confirmLinks = listview.find("a#confirm-signup");
+
+  removeLinks.on("click", function() {
+    var self = $(this);
+    var item = self.parent();
+    var url = self.data("url");
+    // remove from db
+    $.ajax({
+      type: 'POST',
+      url: url
+    });
+    // remove from page
+    item.remove();
+  });
+
+  confirmLinks.on("click", function() {
+    var self = $(this);
+    var item = self.parent();
+    var url = self.data("url");
+    // set to confirmed in db
+    $.ajax({
+      type: 'POST',
+      url: url
+    });
+    // move to confirmed players
+    item.appendTo(listview);
+  });
+
+})();
