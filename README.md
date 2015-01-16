@@ -108,7 +108,7 @@ sslOnlyMiddleware lisää Strict-Transport-Security otsakkeen kaikkiin vastauksi
 
 http://www.yesodweb.com/page/about
 
-1.Injection. Persistent will escape any SQL injections.
+1. Injection. Persistent will escape any SQL injections.
 
 2. XSS injection. Any html coming back from a form will be efficiently sanitized just once on arrival. Unsanitized strings will be sanitized before being displayed.
 
