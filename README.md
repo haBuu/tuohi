@@ -80,7 +80,7 @@ Turvallisuus
 
 ##### Istunnot
 
-Käyttäjien istunnot säilytetään salatuissa eväisteissä (AES-256). Eväisteisiin on asetettu lisäksi SecureFlag, jotta selaimet eivät lähetä evästeitä salaamattoman HTTP-pyynnön mukana.
+Käyttäjien istunnot säilytetään salatuissa eväisteissä (AES-256). Evästeissä on asetettu lisäksi SecureFlag, jotta selaimet eivät lähetä evästeitä salaamattoman HTTP-pyynnön mukana.
 
 https://www.owasp.org/index.php/SecureFlag
 
