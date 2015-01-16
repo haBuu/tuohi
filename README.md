@@ -65,7 +65,7 @@ Toteutus
 
 Reitit, niihin liittyvien resurssien nimet ja sallitut metodit on määritelty config/routes tiedostossa. Resurssien käsittelijät löytyvät Handler-kansiosta.
 
-Esim. config/routes: "/ HomeR GET" ja vastaa käsittelijä Handler/Home.hs: "getHomeR"
+Esim. config/routes: "/ HomeR GET" ja vastaava käsittelijä Handler/Home.hs: "getHomeR"
 
 Tietokantafunktiot löytyvät Database.hs tiedostosta.
 
