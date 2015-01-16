@@ -45,13 +45,13 @@ Rata koostuu aina vähintään yhdestä layoutista. Ylläpitäjä voi lisätä u
 ##### Ilmoittautuminen
 Kun kilpailu luodaan, sille tehdään automaattisesti ilmoittautumis-sivu, jonka kautta käyttäjät voivat ilmoittautua kilpailuun.
 
-##### Käyttäjien hallinta
+##### Käyttäjien hallinta (TODO)
 Pääylläpitäjä voi katsella ja muokata käyttäjien tietoja sekä luoda tavallisia ylläpitäjä.
 
-##### Sarja
+##### Sarja (TODO)
 Useita erillisiä kilpailuja voi kytkeä toisiinsa määrittelemällä ne kuulumaan samaan sarjaan.
 
-##### Tasoitukset
+##### Tasoitukset (TODO)
 Ylläpitäjä voi määritella haluaako hän, että kilpailulle lasketaan tasoitetut tulokset. Tasoitettu tulos tarkoittaa tulosta, jossa pelaajan aikaisemmat tulokset vaikuttavat hänen lopulliseen tulokseensa.
 
 ##### Käyttäjien tunnistaminen väliaikaiselle salasanalla
@@ -62,4 +62,68 @@ Tilanteessa, jossa laitteella ei ole verkkoyhteyttä, sovellus pitää syötetty
 
 Toteutus
 ---------
-TODO
+
+Reitit, niihin liittyvien resurssien nimet ja sallitut metodit on määritelty config/routes tiedostossa. Resurssien käsittelijät löytyvät Handler-kansiosta.
+
+Esim. config/routes: "/ HomeR GET" ja vastaava käsittelijä Handler/Home.hs: "getHomeR"
+
+Tietokantafunktiot löytyvät Database.hs tiedostosta.
+
+Foundation.hs määrittelee mm. autentikoinnin, istunnot ja lukuisia muita sovelluksen yleisiä asetuksia.
+
+Mallit löytyvät config/models tiedostosta.
+
+messages hakemisto sisältää käännöstiedostot (suomi ja englanti).
+
+Turvallisuus
+------------
+
+##### Istunnot
+
+Käyttäjien istunnot säilytetään salatuissa eväisteissä (AES-256). Eväisteisiin on asetettu lisäksi SecureFlag, jotta selaimet eivät lähetä evästeitä salaamattoman HTTP-pyynnön mukana.
+
+https://www.owasp.org/index.php/SecureFlag
+
+##### Lomakkeet
+
+Jokaisessa lomakkeessa on piilotettu token CSRF-hyökkäyksiä vastaan. Yesod ja Haskellin tyyppijärjestelmä takaavat lisäksi, että lomakkeista tuleva tieto on aina vähintään oikeaa tyyppiä ja lomake vastaa sitä mitä odotettiinkin.
+
+##### SQL-injektiot
+
+Persistent kirjasto pitää huolen, että SQL-injektiot eivät ole mahdollisia.
+
+##### XSS-injektiot
+
+Yesod siivoaa lomakkeista saapuvan html:n automaattisesti.
+
+##### Salasanat ja rekisteröityminen
+
+Yesod.Auth(.Email)-kirjasto huolehtii salasanojen suolauksesta ja salaamisesta. Käyttäjien tunnukset aktivoidaan lähettämällä käyttäjän antamaan sähköpostiin aktivointilinkki.
+
+##### HTTPS
+
+sslOnlyMiddleware lisää Strict-Transport-Security otsakkeen kaikkiin vastauksiin. Otsake kertoo selaimille, että kyseiseen osoitteeseen ei tule tehdä HTTP-pyyntöjä.
+
+##### Yesod: Type-safe Security
+
+http://www.yesodweb.com/page/about
+
+1.Injection. Persistent will escape any SQL injections.
+
+2. XSS injection. Any html coming back from a form will be efficiently sanitized just once on arrival. Unsanitized strings will be sanitized before being displayed.
+
+3. Authentication & Session Management: Yesod uses cryptographic libraries to keep your data secure.
+
+4. Insecure Reference: Yesod Forms do not allow sending extra parameters
+
+5. CSRF: Forms have special tokens to block CSRF attacks.
+
+6. Security Misconfiguration: Yesod simplifies this process by simplifying deployments.
+
+7. Insecure Cryptographic Storage: Passwords are encrypted
+
+8. Failure to Restrict URL access: Yesod exposes declarative access controls.
+
+9. Insufficient Transport Layer Protection: Yesod supports SSL through industry standards like nginx or apache.
+
+10. Unvalidated Redirects and Forwards: Yesod encourage use of type-safe urls. Any route can be checked to see if it is valid.
