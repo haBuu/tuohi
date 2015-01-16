@@ -53,9 +53,9 @@ table#score-table tr th
   background-color: #ff8979
 
 .flag-icon-en:after
-  background-image: url("gb.png")
+  background-image: url(@{StaticR img_gb_png})
   background-size: 18px 18px
 
 .flag-icon-fi:after
-  background-image: url("fi.png")
+  background-image: url(@{StaticR img_fi_png})
   background-size: 18px 18px
