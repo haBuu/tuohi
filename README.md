@@ -45,13 +45,13 @@ Rata koostuu aina vähintään yhdestä layoutista. Ylläpitäjä voi lisätä u
 ##### Ilmoittautuminen
 Kun kilpailu luodaan, sille tehdään automaattisesti ilmoittautumis-sivu, jonka kautta käyttäjät voivat ilmoittautua kilpailuun.
 
-##### Käyttäjien hallinta
+##### Käyttäjien hallinta (TODO)
 Pääylläpitäjä voi katsella ja muokata käyttäjien tietoja sekä luoda tavallisia ylläpitäjä.
 
-##### Sarja
+##### Sarja (TODO)
 Useita erillisiä kilpailuja voi kytkeä toisiinsa määrittelemällä ne kuulumaan samaan sarjaan.
 
-##### Tasoitukset
+##### Tasoitukset (TODO)
 Ylläpitäjä voi määritella haluaako hän, että kilpailulle lasketaan tasoitetut tulokset. Tasoitettu tulos tarkoittaa tulosta, jossa pelaajan aikaisemmat tulokset vaikuttavat hänen lopulliseen tulokseensa.
 
 ##### Käyttäjien tunnistaminen väliaikaiselle salasanalla
