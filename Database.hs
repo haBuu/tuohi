@@ -15,41 +15,58 @@ import Handler.Division
 import Competition.Groups
 import Competition.Competition
 import Data.List(nub, nubBy, find, sortBy)
+import Data.Time(Day)
 
-maybeAuthPlayer :: Handler (Maybe Player)
-maybeAuthPlayer = do
+isAdmin :: Handler Bool
+isAdmin = do
+  muser <- maybeAuthUser
+  return $ case muser of
+    Just user -> userAdmin user
+    Nothing -> False
+
+isSuperAdmin :: Handler Bool
+isSuperAdmin = do
+  muser <- maybeAuthUser
+  return $ case muser of
+    Just user -> userSuperAdmin user
+    Nothing -> False
+
+maybeAuthUser :: Handler (Maybe User)
+maybeAuthUser = do
   maid <- maybeAuthId
   case maid of
-    Just aid -> do
-      mplayer <- runDB $ get aid
-      return mplayer
+    Just aid -> runDB $ get aid
     Nothing -> return Nothing
 
-updateUser :: PlayerId -> Text -> Text -> Handler ()
-updateUser pid name email = runDB $ do
-  update pid [PlayerName =. name]
-  update pid [PlayerEmail =. email]
+updateUser :: UserId -> Text -> Text -> Handler ()
+updateUser uid name email = runDB $
+  update uid [UserName =. name, UserEmail =. email]
 
--- select competitions with state Init and corresponding sign ups with player names for each competition
+getNotifications :: Handler [Entity Notification]
+getNotifications = runDB $ selectList []
+  [Desc NotificationDate, LimitTo 5]
+
+-- select competitions with state Init and corresponding sign ups with user names for each competition
 competitionsAndSignUps :: Handler [(Entity Competition, [(E.Value (Key SignUp), E.Value Bool, E.Value Division, E.Value Text)])]
 competitionsAndSignUps = do
-  competitions <- runDB $ selectList [CompetitionState ==. Init] [Asc CompetitionDate]
+  competitions <- runDB $ selectList [CompetitionState ==. Init]
+    [Asc CompetitionDate]
   forM competitions $ \competition -> do
     signUps <- signUpsWithName $ entityKey competition
     return (competition, signUps)
 
--- select sign ups for given competition with player name
+-- select sign ups for given competition with user name
 signUpsWithName :: CompetitionId
   -> Handler [(E.Value (Key SignUp), E.Value Bool, E.Value Division, E.Value Text)]
 signUpsWithName cid = runDB $ E.select $
-  E.from $ \(signUp `E.InnerJoin` player) -> do
-    E.on $ signUp ^. SignUpPlayerId E.==. player ^. PlayerId
+  E.from $ \(signUp `E.InnerJoin` user) -> do
+    E.on $ signUp ^. SignUpUserId E.==. user ^. UserId
     E.where_ $ signUp ^. SignUpCompetitionId E.==. E.val cid
     return
       ( signUp ^. SignUpId
       , signUp ^. SignUpConfirmed
       , signUp ^. SignUpDivision
-      , player ^. PlayerName
+      , user ^. UserName
       )
 
 maybeInsertSignUp :: CompetitionId -> Text -> Text -> Division
@@ -60,20 +77,21 @@ maybeInsertSignUp cid name email division = do
   if full then return Nothing
     else insertSignUp cid name email division
 
--- insert new player or get existing player's id and insert sign up
+-- insert new user or get existing user's id and insert sign up
 insertSignUp :: CompetitionId -> Text -> Text -> Division
   -> Handler (Maybe SignUpId)
 insertSignUp cid name email division = do
-  pid <- insertPlayer name email
+  pid <- insertUser name email
   runDB $ insertUnique $ SignUp pid cid False division
 
--- either insert new player or get id from existing player
-insertPlayer :: Text -> Text -> Handler PlayerId
-insertPlayer name email = do
-  eitherPlayer <- runDB $ insertBy $ Player name email Nothing Nothing False False
-  return $ case eitherPlayer of
-    Left (Entity pid _) -> pid
-    Right pid -> pid
+-- either insert new user or get id from existing user
+insertUser :: Text -> Text -> Handler UserId
+insertUser name email = do
+  eitherUser <- runDB $ insertBy $
+    User name email Nothing Nothing False False False
+  return $ case eitherUser of
+    Left (Entity uid _) -> uid
+    Right uid -> uid
 
 -- returns true if the competition is full
 competitionFull :: CompetitionId -> Handler Bool
@@ -102,7 +120,7 @@ startCompetition cid = do
   let groups_ = groups holes (length confirmedSignUps)
   -- make a round for each confirmed sign up
   forM_ (zip confirmedSignUps groups_ ) $ \((Entity _ signup), groupNumber) ->
-    runDB $ insertBy $ Round (signUpPlayerId signup) cid R.Started 1 groupNumber
+    runDB $ insertBy $ Round (signUpUserId signup) cid R.Started 1 groupNumber
 
 insertLayout :: Layout -> Int -> Handler ()
 insertLayout layout holes = do
@@ -113,12 +131,12 @@ insertLayout layout holes = do
     Just lid -> forM_ [1..holes] $ \n -> runDB $ insertUnique $ Hole lid n 3
     Nothing -> return ()
 
--- select rounds for given competition with player names
+-- select rounds for given competition with user names
 roundsWithNames :: CompetitionId
   -> Handler [(E.Value (Key Round), E.Value Int, E.Value Int, E.Value Text)]
 roundsWithNames cid = runDB $ E.select $
-  E.from $ \(round_ `E.InnerJoin` player) -> do
-    E.on $ round_ ^. RoundPlayerId E.==. player ^. PlayerId
+  E.from $ \(round_ `E.InnerJoin` user) -> do
+    E.on $ round_ ^. RoundUserId E.==. user ^. UserId
     E.where_ $ round_ ^. RoundCompetitionId E.==. E.val cid
     E.where_ $ round_ ^. RoundState E.==. E.val R.Started
     E.orderBy [E.asc (round_ ^. RoundGroupnumber)]
@@ -126,15 +144,15 @@ roundsWithNames cid = runDB $ E.select $
       ( round_ ^. RoundId
       , round_ ^. RoundRoundnumber
       , round_ ^. RoundGroupnumber
-      , player ^. PlayerName
+      , user ^. UserName
       )
 
--- select rounds for given competition and group with player names
+-- select rounds for given competition and group with user names
 groupWithNames :: CompetitionId -> Int
   -> Handler [(E.Value (Key Round), E.Value Int, E.Value Int, E.Value Text)]
 groupWithNames cid groupNumber = runDB $ E.select $
-  E.from $ \(round_ `E.InnerJoin` player) -> do
-    E.on $ round_ ^. RoundPlayerId E.==. player ^. PlayerId
+  E.from $ \(round_ `E.InnerJoin` user) -> do
+    E.on $ round_ ^. RoundUserId E.==. user ^. UserId
     E.where_ $ round_ ^. RoundCompetitionId E.==. E.val cid
     E.where_ $ round_ ^. RoundState E.==. E.val R.Started
     E.where_ $ round_ ^. RoundGroupnumber E.==. E.val groupNumber
@@ -142,7 +160,7 @@ groupWithNames cid groupNumber = runDB $ E.select $
       ( round_ ^. RoundId
       , round_ ^. RoundRoundnumber
       , round_ ^. RoundGroupnumber
-      , player ^. PlayerName
+      , user ^. UserName
       )
 
 nextRound :: CompetitionId -> Handler ()
@@ -171,8 +189,8 @@ nextRound cid = do
       let groups_ = groups (length holes) (length rounds)
       -- get players and scores so we can put them in order
       players <- forM rounds $ \(Entity _ r) -> do
-        rounds <- runDB $ playerRoundsAndScores (roundPlayerId r) cid
-        return (roundPlayerId r, rounds)
+        rounds <- runDB $ playerRoundsAndScores (roundUserId r) cid
+        return (roundUserId r, rounds)
       let sortedPlayers = playerSort holes players
       -- insert round for each player
       forM_ (zip sortedPlayers groups_) $ \((pid, _), groupNumber) -> do
@@ -206,31 +224,37 @@ currentRound cid = do
     Just (Entity _ round_) -> Just $ roundRoundnumber round_
     Nothing -> Nothing
 
--- returns players, rounds and scores for given competition
+-- returns users, rounds and scores for given competition
 -- return type may seem a bit complicated but it is very
 -- convenient in the hamlet template
--- function flow: signups -> players -> rounds -> scores
+-- function flow: signups -> users -> rounds -> scores
 playersAndScores :: CompetitionId
-  -> Handler [(Player, [(Round, [Entity Score])])]
+  -> Handler [(User, [(Round, [Entity Score])])]
 playersAndScores cid = runDB $ selectList
   [SignUpCompetitionId ==. cid, SignUpConfirmed ==. True] []
   >>= mapM (\(Entity _ signUp) -> do
-    let pid = signUpPlayerId signUp
-    player <- get404 pid
-    rounds <- playerRoundsAndScores pid cid
-    return (player, rounds))
+    let uid = signUpUserId signUp
+    user <- get404 uid
+    rounds <- playerRoundsAndScores uid cid
+    return (user, rounds))
 
-playerRoundsAndScores pid cid = selectList
-  [RoundPlayerId ==. pid, RoundCompetitionId ==. cid]
+playerRoundsAndScores uid cid = selectList
+  [RoundUserId ==. uid, RoundCompetitionId ==. cid]
   [Asc RoundRoundnumber]
   >>= mapM (\entity@(Entity rid round_) -> do
     scores <- selectList [ScoreRoundId ==. rid] []
     return (round_, scores))
 
---productsAndCategories :: GHandler App App [(Product, Maybe Category)]
---productsAndCategories = runDB $ selectList [] [Asc ProductName] >>= mapM (\(Entity _ p) -> do
---    category <- case (productCategory p) of
---        Just c -> do
---            get c
---        Nothing -> return Nothing
---    return (p, category))
+-- for handicaps
+f :: UserId -> CourseId -> Day -> Handler [Int]
+f uid coid date = runDB $ do
+  layouts <- selectList [LayoutCourseId ==. coid] []
+  -- layout ids
+  let lids = map entityKey layouts
+  competitions <- selectList
+    [ CompetitionLayoutId <-. lids
+    , CompetitionDate <=. date]
+    []
+  rounds <- forM competitions $ \(Entity cid _) ->
+    playerRoundsAndScores uid cid
+  return $ map (scoreScore . entityVal) $ concat $ map snd $ concat rounds

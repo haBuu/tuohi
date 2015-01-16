@@ -8,4 +8,4 @@
         <form method=post action=@{ProfileR}#form enctype=#{formEnctype}>
           ^{formWidget}
 
-        <a href=@{HomeR} data-role="button">Takaisin
+        <a href=@{HomeR} data-role="button">_{MsgBack}

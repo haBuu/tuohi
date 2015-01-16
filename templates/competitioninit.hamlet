@@ -1,6 +1,5 @@
 <div data-role="page">
-  <div data-role="header">
-    <h1>WeeklyApp
+  ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
@@ -10,18 +9,18 @@
 
       <ol data-role="listview" data-inset="true" data-split-icon="delete">
 
-        <li data-role="list-divider"> Ei paikalla
-        $forall (E.Value sid, E.Value confirmed, E.Value division, E.Value name) <- signups
+        <li data-role="list-divider">_{MsgNotPresent}
+        $forall (E.Value sid, E.Value confirmed, E.Value _, E.Value name) <- signups
           $if not confirmed
             <li>
               <a data-url=@{ConfirmSignUpR sid} #confirm-signup >#{name}
               <a data-url=@{RemoveSignUpR sid} #remove-signup data-rel="popup" data-position-to="window" data-transition="pop">#{name}
 
-        <li data-role="list-divider" data-split-icon="delete"> Paikalla
-        $forall (E.Value sid, E.Value confirmed, E.Value division, E.Value name) <- signups
+        <li data-role="list-divider" data-split-icon="delete">_{MsgPresent}
+        $forall (E.Value sid, E.Value confirmed, E.Value _, E.Value name) <- signups
           $if confirmed
             <li>
               <a>#{name}
               <a data-url=@{RemoveSignUpR sid} id="remove-signup" data-rel="popup" data-position-to="window" data-transition="pop">#{name}
 
-      <a href=@{AdminR} data-role="button">Takaisin
+      <a href=@{AdminR} data-role="button">_{MsgBack}

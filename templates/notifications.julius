@@ -1,9 +1,9 @@
 (function() {
 
-  var listview = $("ol");
-  var dnfLinks = listview.find("a#dnf-round");
+  var listview = $("ul");
+  var notificationLinks = listview.find("a#notification");
 
-  dnfLinks.on("click", function() {
+  notificationLinks.on("click", function() {
     var self = $(this);
     var item = self.parent();
     var url = self.data("url");

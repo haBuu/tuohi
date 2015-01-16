@@ -1,0 +1,10 @@
+<fieldset>
+  <div style="float:right">
+    <form action=@{LanguageR} method=post>
+      <input type="hidden" value="en" name="lang">
+      <input type="submit" data-icon="none" data-iconpos="notext" data-wrapper-class="flag-icon-en">
+
+  <div style="float:right">
+    <form action=@{LanguageR} method=post>
+      <input type="hidden" value="fi" name="lang">
+      <input type="submit" data-icon="none" data-iconpos="notext" data-wrapper-class="flag-icon-fi">

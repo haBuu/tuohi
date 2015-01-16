@@ -1,18 +1,35 @@
 <div data-role="page">
   ^{headerWidget}
+  ^{loginWidget}
     <div data-role="content">
       <div .content-primary>
 
         <ul data-role="listview" data-inset="true">
-          <li data-role="list-divider"> Käynnissä olevat kisat
+          <li data-role="list-divider">_{MsgNotifications}
+          $forall Entity _ notification <- notifications
+            <li>#{notificationContent notification}
+
+        <ul data-role="listview" data-inset="true">
+          <li data-role="list-divider">_{MsgActiveCompetitions}
           $forall Entity cid competition <- competitions
             $if competitionState competition == Started
               <li>
-                <a href=@{GroupsR cid}>#{competitionName competition}
+                <a href=@{GroupsR cid}>
+                  #{competitionName competition}
 
         <ul data-role="listview" data-inset="true">
-          <li data-role="list-divider"> Avoimet ilmoittautumiset
+          <li data-role="list-divider">_{MsgOpenSignUps}
           $forall Entity cid competition <- competitions
             $if competitionState competition == Init
               <li>
-                <a href=@{SignUpR cid}>#{competitionName competition}, #{showDay (competitionDate competition)}
+                <a href=@{SignUpR cid}>
+                  #{competitionName competition}, #{showDay (competitionDate competition)}
+
+        <ul data-role="listview" data-inset="true">
+          <li data-role="list-divider">_{MsgPastCompetitions}
+          $forall Entity cid competition <- competitions
+            $if competitionState competition == Finished
+              <li>
+                <a href=@{CompetitionScoresR cid}>#{competitionName competition}
+
+        ^{languageWidget}

@@ -1,16 +1,18 @@
 <div data-role="page">
-  <div data-role="header">
-    <h1>WeeklyApp
+  ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
       $maybe msg <- mmsg
         <div #message>#{msg}
+
       <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider"> Layoutit
+        <li data-role="list-divider">_{MsgLayouts}
         $forall Entity lid layout <- layouts
           <li>
             <a href=@{LayoutR cid lid}>#{layoutName layout}
+
       <form method=post action=@{CourseR cid}#form enctype=#{formEnctype}>
         ^{formWidget}
-      <a href=@{CoursesR} data-role="button">Takaisin
+
+      <a href=@{CoursesR} data-role="button">_{MsgBack}

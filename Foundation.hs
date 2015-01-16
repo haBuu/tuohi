@@ -6,6 +6,7 @@ import Yesod.Static
 import Yesod.Auth
 import Yesod.Auth.BrowserId
 import Yesod.Auth.Email
+import Yesod.Auth.Message
 import Yesod.Default.Config
 import Yesod.Default.Util (addStaticContentExternal)
 import Network.HTTP.Client.Conduit (Manager, HasHttpManager (getHttpManager))
@@ -27,7 +28,10 @@ import Network.Mail.Mime
 import Text.Shakespeare.Text (stext)
 import qualified Data.Text.Lazy.Encoding
 import Data.Maybe (isJust)
+import Data.List(find)
+import Data.Text(Text, isInfixOf)
 import Control.Monad (join)
+import Helpers
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -46,6 +50,7 @@ instance HasHttpManager App where
   getHttpManager = httpManager
 
 -- Set up i18n messages. See the message folder.
+-- yesod will overwrite this if it detects finnish
 mkMessage "App" "messages" "en"
 
 -- This is where we define all of the routes in our application. For a full
@@ -66,9 +71,12 @@ instance Yesod App where
 
   -- Store session data on the client in encrypted cookies,
   -- default session idle timeout is 120 minutes
-  makeSessionBackend _ = fmap Just $ defaultClientSessionBackend
-    120    -- timeout in minutes
-    "config/client_session_key.aes"
+  makeSessionBackend _ = --sslOnlySessions $
+    fmap Just $ defaultClientSessionBackend
+      120    -- timeout in minutes
+      "config/client_session_key.aes"
+
+  -- yesodMiddleware = (sslOnlyMiddleware 120) . defaultYesodMiddleware
 
   defaultLayout widget = do
     master <- getYesod
@@ -106,15 +114,23 @@ instance Yesod App where
   isAuthorized FaviconR _ = return Authorized
   isAuthorized RobotsR _ = return Authorized
 
-  -- user profile
+  -- public
+  isAuthorized HomeR _ = return Authorized
+  isAuthorized (GroupsR _) _ = return Authorized
+  isAuthorized (SignUpR _) _ = return Authorized
+  isAuthorized ScoresR _ = return Authorized
+  isAuthorized (CompetitionScoresR _) _ = return Authorized
+  isAuthorized TempAuthR _ = return Authorized
+
+  -- user
   isAuthorized ProfileR _ = isUser
 
-  -- admin ui
+  -- admin
   isAuthorized AdminR _ = isAdmin
   isAuthorized NewCompetitionR _ = isAdmin
   isAuthorized CoursesR _ = isAdmin
+  isAuthorized SeriesR _ = isAdmin
   isAuthorized (CourseR _) _ = isAdmin
-  isAuthorized (EditCourseR _) _ = isAdmin
   isAuthorized (LayoutR _ _) _ = isAdmin
   isAuthorized (CompetitionR _) _ = isAdmin
   isAuthorized (ConfirmSignUpR _) _ = isAdmin
@@ -122,8 +138,15 @@ instance Yesod App where
   isAuthorized (DnfRoundR _) _ = isAdmin
   isAuthorized (CompetitionNextRoundR _) _ = isAdmin
   isAuthorized (CompetitionFinishR _) _ = isAdmin
+  isAuthorized NotificationsR _ = isAdmin
+  isAuthorized (RemoveNotificationR _) _ = isAdmin
+
+  -- super admin
+  isAuthorized UsersR _ = isSuperAdmin
+  isAuthorized (UserR _) _ = isSuperAdmin
 
   -- Default to Authorized for now.
+  -- TODO: REMOVE THIS
   isAuthorized _ _ = return Authorized
 
   -- This function creates static content files in the static folder
@@ -155,20 +178,40 @@ isUser = do
     Nothing -> AuthenticationRequired
 
 isAdmin = do
+  mr <- getMessageRender
   maid <- maybeAuthId
   case maid of
     Just aid -> do
-      mplayer <- runDB $ get aid
-      return $ case mplayer of
-        Just player ->
-          if playerAdmin player
+      muser <- runDB $ get aid
+      return $ case muser of
+        Just user ->
+          if userAdmin user
             -- user is admin,
             then Authorized
             -- user is not admin
-            else Unauthorized "You must be an admin"
+            else Unauthorized $ mr MsgNotAdmin
         -- logged in user was not found in db
         -- this should and can't never happen
-        Nothing -> Unauthorized "You must be an admin"
+        Nothing -> Unauthorized $ mr MsgNotAdmin
+    -- not logged in
+    Nothing -> return AuthenticationRequired
+
+isSuperAdmin = do
+  mr <- getMessageRender
+  maid <- maybeAuthId
+  case maid of
+    Just aid -> do
+      muser <- runDB $ get aid
+      return $ case muser of
+        Just user ->
+          if userSuperAdmin user
+            -- user is super admin,
+            then Authorized
+            -- user is not super admin
+            else Unauthorized $ mr MsgNotSuperAdmin
+        -- logged in user was not found in db
+        -- this should and can't never happen
+        Nothing -> Unauthorized $ mr MsgNotSuperAdmin
     -- not logged in
     Nothing -> return AuthenticationRequired
 
@@ -180,8 +223,12 @@ instance YesodPersistRunner App where
   getDBRunner = defaultGetDBRunner connPool
 
 instance YesodAuth App where
-  --type AuthId App = UserId
-  type AuthId App = PlayerId
+  type AuthId App = UserId
+
+  renderAuthMessage _ langs =
+    case safeHead langs of
+      Just "fi" -> finnishMessage
+      _ -> defaultMessage
 
   -- Where to send a user after successful login
   loginDest _ = HomeR
@@ -189,9 +236,9 @@ instance YesodAuth App where
   logoutDest _ = HomeR
 
   getAuthId creds = runDB $ do
-    x <- getBy $ UniquePlayer (credsIdent creds)
+    x <- getBy $ UniqueUser (credsIdent creds)
     return $ case x of
-      Just (Entity pid _) -> Just pid
+      Just (Entity uid _) -> Just uid
       Nothing -> Nothing
 
   -- You can add other plugins like BrowserID, email or OAuth here
@@ -202,12 +249,13 @@ instance YesodAuth App where
 instance YesodAuthPersist App
 
 instance YesodAuthEmail App where
-  type AuthEmailId App = PlayerId
+  type AuthEmailId App = UserId
 
   afterPasswordRoute _ = HomeR
 
   addUnverified email verkey =
-    runDB $ insert $ Player "" email Nothing (Just verkey) False False
+    runDB $ insert $
+      User "" email Nothing (Just verkey) False False False
 
   sendVerifyEmail email _ verurl = do
     liftIO $ print verurl
@@ -247,33 +295,35 @@ instance YesodAuthEmail App where
         , partHeaders = []
         }
 
-  getVerifyKey = runDB . fmap (join . fmap playerVerkey) . get
-  setVerifyKey uid key = runDB $ update uid [PlayerVerkey =. Just key]
+  getVerifyKey = runDB . fmap (join . fmap userVerkey) . get
+  setVerifyKey uid key = runDB $ update uid [UserVerkey =. Just key]
 
   verifyAccount uid = runDB $ do
     muser <- get uid
     case muser of
       Nothing -> return Nothing
       Just u -> do
-        update uid [PlayerVerified =. True]
+        update uid [UserVerified =. True]
         return $ Just uid
 
-  getPassword = runDB . fmap (join . fmap playerPassword) . get
-  setPassword uid pass = runDB $ update uid [PlayerPassword =. Just pass]
+  getPassword = runDB . fmap (join . fmap userPassword) . get
+  setPassword uid pass = runDB $ update uid [UserPassword =. Just pass]
 
   getEmailCreds email = runDB $ do
-    muser <- getBy $ UniquePlayer email
+    muser <- getBy $ UniqueUser email
     case muser of
       Nothing -> return Nothing
-      Just (Entity pid player) -> return $ Just EmailCreds
-          { emailCredsId = pid
-          , emailCredsAuthId = Just pid
-          , emailCredsStatus = isJust $ playerPassword player
-          , emailCredsVerkey = playerVerkey player
+      Just (Entity uid user) -> return $ Just EmailCreds
+          { emailCredsId = uid
+          , emailCredsAuthId = Just uid
+          , emailCredsStatus = isJust $ userPassword user
+          , emailCredsVerkey = userVerkey user
           , emailCredsEmail = email
           }
 
-  getEmail = runDB . fmap (fmap playerEmail) . get
+  getEmail = runDB . fmap (fmap userEmail) . get
+
+  registerHandler = defaultRegisterHandler
 
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.

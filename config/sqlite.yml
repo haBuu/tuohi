@@ -1,6 +1,6 @@
 Default: &defaults
   database: weeklyapp.sqlite3
-  poolsize: 10
+  poolsize: 1
 
 Development:
   <<: *defaults

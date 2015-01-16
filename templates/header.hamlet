@@ -1,3 +1,6 @@
 <div data-role="header">
   <h1>WeeklyApp
-  ^{loginWidget}
+  <a href=@{HomeR} .ui-btn-left .ui-btn .ui-corner-all .ui-icon-home .ui-btn-icon-notext>
+  $maybe user <- muser
+    $if userAdmin user || userSuperAdmin user
+      <a href=@{AdminR} .ui-btn-right .ui-btn .ui-corner-all .ui-icon-gear .ui-btn-icon-notext>

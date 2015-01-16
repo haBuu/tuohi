@@ -1,15 +1,61 @@
+body
+  font-size: 1.1em
+
 .ui-block-b
   text-align: right
 
-table
+table#score-table
   text-align: center
-  margin: auto
+  border-collapse: collapse
+  width: 100%
 
-table tr th
+table#score-table tr th
+  border: 1px solid #bab7a8
+
+table#score-table tbody tr td
+  border: 1px solid #bab7a8
+
+table#score-table tr th
   text-align: center
+  padding: 10px
 
-table tr th
-  padding: 15px
+.round-divider
+  border-bottom: 0px solid gray
 
-body
-  font-size: 1.1em
+.hole-in-one
+  background-color: #fdd017
+
+.condor
+  background-color: #90e7c6
+
+.albatross
+  background-color: #90e7c6
+
+.eagle
+  background-color: #90e7c6
+
+.birdie
+  background-color: #c0f3e0
+
+.par
+  background-color: inherit
+
+.bogey
+  background-color: #ffded2
+
+.double-bogey
+  background-color: #ffafa1
+
+.triple-bogey
+  background-color: #ff8979
+
+.other
+  background-color: #ff8979
+
+.flag-icon-en:after
+  background-image: url("gb.png")
+  background-size: 18px 18px
+
+.flag-icon-fi:after
+  background-image: url("fi.png")
+  background-size: 18px 18px

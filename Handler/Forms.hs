@@ -2,32 +2,43 @@
 module Handler.Forms where
 
 import Import
-import Yesod.Form.Bootstrap3
-    ( BootstrapFormLayout (..), renderBootstrap3, withSmallInput )
 
-import Data.Time(Day)
+import Data.Time(Day, UTCTime, getCurrentTime)
 import Yesod.Form.Jquery
-import Data.Text hiding(count)
+import Data.Text hiding(count, head)
 import qualified Data.Text.Read
-import Control.Monad(forM)
+import Control.Monad(forM, liftM)
+import Data.Traversable(sequenceA)
+import qualified Database.Esqueleto as E
 
 import Handler.CompetitionState
 import qualified Handler.Division as D
 
-import qualified Database.Esqueleto as E
+-- form handler with default action for FormFailure and FormMissing
+formHandler :: FormResult a -> (a -> Handler ()) -> Handler ()
+formHandler result f =
+  case result of
+    FormSuccess res -> f res
+    FormFailure err -> setMessageI $ MsgFormFailure $
+      Data.Text.concat err
+    FormMissing -> setMessageI MsgFormMissing
 
-newCompetitionForm :: Html -> MForm Handler (FormResult Competition, Widget)
+newCompetitionForm :: Html
+  -> MForm Handler (FormResult Competition, Widget)
 newCompetitionForm extra = do
+  mr <- lift getMessageRender
   (layoutRes, layoutView) <- mreq (selectField layouts)
-    "Layout" Nothing
+    (FieldSettings (SomeMessage MsgLayout) Nothing Nothing Nothing
+      []) Nothing
   (dayRes, dayView) <- mreq dayField
-    (FieldSettings "Päivämäärä" Nothing Nothing Nothing
-      [("placeholder","Päivämäärä"),("data-role","date"),("readonly","true")]) Nothing
+    (FieldSettings (SomeMessage MsgDate) Nothing Nothing Nothing
+      [ ("placeholder", mr MsgDate)
+      , ("data-role","date"),("readonly","true")]) Nothing
   (nameRes, nameView) <- mreq textField
-    (FieldSettings "Kisan nimi" Nothing Nothing Nothing
-      [("placeholder","Kisan nimi")]) Nothing
+    (FieldSettings (SomeMessage MsgCompetitionName) Nothing Nothing Nothing
+      [("placeholder", mr MsgCompetitionName)]) Nothing
   (playersRes, playersView) <- mreq rangeField
-    (FieldSettings "Pelaajamäärä" Nothing Nothing Nothing
+    (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
       [("min","1"),("max", "200")]) (Just 54)
   let competitionRes = Competition
                         <$> layoutRes
@@ -51,7 +62,7 @@ newCompetitionForm extra = do
             <label>^{fvLabel playersView}
             ^{fvInput playersView}
           <li .ui-field-contain>
-            <input type=submit value="Lisää kisa">
+            <input type=submit value=_{MsgAddCompetition}>
       |]
   return (competitionRes, widget)
   where
@@ -64,9 +75,10 @@ newCompetitionForm extra = do
 
 newCourseForm :: Html -> MForm Handler (FormResult Course, Widget)
 newCourseForm extra = do
+  mr <- lift getMessageRender
   (nameRes, nameView) <- mreq textField
-    (FieldSettings "Radan nimi" Nothing Nothing Nothing
-      [("placeholder","Radan nimi")]) Nothing
+    (FieldSettings (SomeMessage MsgAddCourse) Nothing Nothing Nothing
+      [("placeholder", mr MsgAddCourse)]) Nothing
   let courseRes = Course <$> nameRes
   let widget = [whamlet|
         #{extra}
@@ -75,20 +87,40 @@ newCourseForm extra = do
             <label>^{fvLabel nameView}
             ^{fvInput nameView}
           <li .ui-field-contain>
-            <input type=submit value="Lisää rata">
+            <input type=submit value=_{MsgAddCourse}>
       |]
   return (courseRes, widget)
 
-newLayoutForm :: CourseId -> Html -> MForm Handler (FormResult (Layout, Int), Widget)
-newLayoutForm cid extra = do
+newSerieForm :: Html -> MForm Handler (FormResult Serie, Widget)
+newSerieForm extra = do
+  mr <- lift getMessageRender
   (nameRes, nameView) <- mreq textField
-    (FieldSettings "Layoutin nimi" Nothing Nothing Nothing
-      [("placeholder","Layoutin nimi")]) Nothing
+    (FieldSettings (SomeMessage MsgSerieName) Nothing Nothing Nothing
+      [("placeholder", mr MsgSerieName)]) Nothing
+  let serieRes = Serie <$> nameRes
+  let widget = [whamlet|
+        #{extra}
+        <ul data-role="listview" data-inset="true">
+          <li .ui-field-contain>
+            <label>^{fvLabel nameView}
+            ^{fvInput nameView}
+          <li .ui-field-contain>
+            <input type=submit value=_{MsgAddSerie}>
+      |]
+  return (serieRes, widget)
+
+newLayoutForm :: CourseId -> Html
+  -> MForm Handler (FormResult (Layout, Int), Widget)
+newLayoutForm cid extra = do
+  mr <- getMessageRender
+  (nameRes, nameView) <- mreq textField
+    (FieldSettings (SomeMessage MsgLayoutName) Nothing Nothing Nothing
+      [("placeholder", mr MsgLayoutName)]) Nothing
   (descRes, descView) <- mreq textField
-    (FieldSettings "Layoutin kuvaus" Nothing Nothing Nothing
-      [("placeholder","Layoutin kuvaus")]) Nothing
+    (FieldSettings (SomeMessage MsgLayoutDesc) Nothing Nothing Nothing
+      [("placeholder", mr MsgLayoutDesc)]) Nothing
   (holesRes, holesView) <- mreq rangeField
-    (FieldSettings "Väylien määrä" Nothing Nothing Nothing
+    (FieldSettings (SomeMessage MsgNumberOfHoles) Nothing Nothing Nothing
       [("min","1"),("max", "50")]) (Just 9)
   let layoutRes = Layout
                     <$> (pure cid)
@@ -108,89 +140,45 @@ newLayoutForm cid extra = do
             <label>^{fvLabel holesView}
             ^{fvInput holesView}
           <li .ui-field-contain>
-            <input type=submit value="Lisää layout">
+            <input type=submit value=_{MsgAddLayout}>
       |]
   return (res, widget)
 
-newLayoutForm2 :: Html -> MForm Handler (FormResult (Layout, Int), Widget)
-newLayoutForm2 extra = do
-  (courseRes, courseView) <- mreq (selectField courses)
-    "Rata" Nothing
-  (nameRes, nameView) <- mreq textField
-    (FieldSettings "Layoutin nimi" Nothing Nothing Nothing
-      [("placeholder","Layoutin nimi")]) Nothing
-  (descRes, descView) <- mreq textField
-    (FieldSettings "Layoutin kuvaus" Nothing Nothing Nothing
-      [("placeholder","Layoutin kuvaus")]) Nothing
-  (holesRes, holesView) <- mreq rangeField
-    (FieldSettings "Väylien määrä" Nothing Nothing Nothing
-      [("min","1"),("max", "50")]) (Just 9)
-  let layoutRes = Layout
-                    <$> courseRes
-                    <*> nameRes
-                    <*> descRes
-  let res = (,) <$> layoutRes <*> holesRes
-  let widget = [whamlet|
-        #{extra}
-        <ul data-role="listview" data-inset="true">
-          <li .ui-field-contain>
-            <label>^{fvLabel courseView}
-            ^{fvInput courseView}
-          <li .ui-field-contain>
-            <label>^{fvLabel nameView}
-            ^{fvInput nameView}
-          <li .ui-field-contain>
-            <label>^{fvLabel descView}
-            ^{fvInput descView}
-          <li .ui-field-contain>
-            <label>^{fvLabel holesView}
-            ^{fvInput holesView}
-          <li .ui-field-contain>
-            <input type=submit value="Lisää layout">
-      |]
-  return (res, widget)
-  where
-    courses :: Handler (OptionList CourseId)
-    courses = do
-      entities <- runDB $ selectList [] [Asc CourseName]
-      optionsPairs $ for entities $
-        \(Entity cid course) -> (courseName course, cid)
-
--- TODO
-holesForm :: LayoutId -> Html -> MForm Handler (FormResult (LayoutId, [Hole]), Widget)
-holesForm lid extra = do
-  let set = (FieldSettings "Väylien ihannetulokset" Nothing Nothing Nothing [("data-icon","false")])
-  holeFields <- forM [1..9] $ \h -> mreq (selectFieldList holes) set Nothing
+holesForm :: [Entity Hole] -> Html
+  -> MForm Handler (FormResult [(HoleId, Int)], Widget)
+holesForm holes extra = do
+  -- select field for every hole
+  holeFields <- forM holes $ \(Entity hid hole) ->
+    mreq (selectFieldList pars) set $ Just $ holePar hole
   let (holeResults, holeViews) = unzip holeFields
+  -- add holeids
+  let result = sequenceA $ Import.for (Import.zip holes holeResults) $
+        \((Entity hid _), res) -> (,) <$> (pure hid) <*> res
   let widget = [whamlet|
         #{extra}
         <ul data-role="listview" data-inset="true">
           <li .ui-field-contain>
-            <label>Väylien ihannetulokset
+            <label>_{MsgPars}
             <fieldset data-role="controlgroup" data-type="horizontal">
               $forall holeView <- holeViews
                 ^{fvInput holeView}
           <li .ui-field-contain>
-            <input type=submit value="Muokkaa layouttia">
+            <input type=submit value=_{MsgUpdateLayout}>
       |]
-  return (FormFailure [], widget)
+  return (result, widget)
   where
-    holes :: [(Text, String)]
-    holes = [("2", "2"),("3", "3"),("4", "4"),("5", "5"),("6", "6")]
-    -- get holes from db
-    holes2 :: Handler [OptionList HoleId]
-    holes2 = do
-      entities <- runDB $ selectList [HoleLayoutId ==. lid] [Asc HoleNumber]
-      forM entities $ \(Entity hid _) -> optionsPairs $ for [2..6] $ \n -> (pack (show n), hid)
-    holeCount :: Handler Int
-    holeCount = runDB $ count [HoleLayoutId ==. lid]
+    pars :: [(Text, Int)]
+    pars = [("2", 2),("3", 3),("4", 4),("5", 5),("6", 6)]
+    set :: FieldSettings App
+    set = FieldSettings (SomeMessage MsgPars)
+      Nothing Nothing Nothing [("data-icon","false")]
 
 startCompetitionForm :: CompetitionId -> Html
   -> MForm Handler (FormResult CompetitionId, Widget)
 startCompetitionForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit value="Aloita kilpailu">
+        <input type=submit value=_{MsgStartCompetition}>
       |]
   return (pure cid, widget)
 
@@ -199,7 +187,7 @@ nextRoundForm :: CompetitionId -> Html
 nextRoundForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit value="Seuraava kierros">
+        <input type=submit value=_{MsgNextRound}>
       |]
   return (pure cid, widget)
 
@@ -208,22 +196,31 @@ finishCompetitionForm :: CompetitionId -> Html
 finishCompetitionForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit value="Lopeta kilpailu">
+        <input type=submit value=_{MsgFinishCompetition}>
       |]
   return (pure cid, widget)
 
 signUpForm :: CompetitionId -> Html
-  -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
+  -> MForm Handler (FormResult (Text, Text, D.Division, Int), Widget)
 signUpForm cid extra = do
+  mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
-    (FieldSettings "Nimi" Nothing Nothing Nothing
-      [("placeholder","Nimi")]) Nothing
+    (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
+      [("placeholder", mr MsgName)]) Nothing
   (emailRes, emailView) <- mreq emailField
-    (FieldSettings "Sähköposti" Nothing Nothing Nothing
-      [("placeholder","Sähköposti")]) Nothing
-  (divisionRes, divisionView) <- mreq (radioFieldList D.divisions)
-    "Luokka" Nothing
-  let result = (,,) <$> nameRes <*> emailRes <*> divisionRes
+    (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
+      [("placeholder", mr MsgEmail)]) Nothing
+  (divisionRes, divisionView) <- mreq (radioFieldList (divisions mr))
+    (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
+      []) Nothing
+  (botCheckRes, botCheckView) <- mreq checkBotField
+    (FieldSettings (SomeMessage MsgBotCheckField) Nothing Nothing Nothing
+      [("placeholder", mr MsgBotCheckQuestion)]) Nothing
+  let result = (,,,)
+                <$> nameRes
+                <*> emailRes
+                <*> divisionRes
+                <*> botCheckRes
   let widget = [whamlet|
         #{extra}
         <label>^{fvLabel nameView}
@@ -232,29 +229,44 @@ signUpForm cid extra = do
         ^{fvInput emailView}
         <label>^{fvLabel divisionView}
         ^{fvInput divisionView}
-        <input type=submit value="Ilmoittaudu">
+        <label>^{fvLabel botCheckView}
+        ^{fvInput botCheckView}
+        <input type=submit value=_{MsgSignUp}>
       |]
   return (result, widget)
+  where
+    errorMessage :: Text
+    errorMessage = "Wrong answer..."
+    checkBotField = checkBool (==5) errorMessage intField
 
-signUpFormLoggedIn :: CompetitionId -> Player -> Html
-  -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
-signUpFormLoggedIn cid player extra = do
-  (divisionRes, divisionView) <- mreq (radioFieldList D.divisions)
-    "Luokka" Nothing
-  let name = playerName player
-      email = playerEmail player
-  let result = (,,) <$> pure name <*> pure email <*> divisionRes
+signUpFormLoggedIn :: CompetitionId -> User -> Html
+  -> MForm Handler (FormResult (Text, Text, D.Division, Int), Widget)
+signUpFormLoggedIn cid user extra = do
+  mr <- getMessageRender
+  (divisionRes, divisionView) <- mreq (radioFieldList (divisions mr))
+    (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
+      []) Nothing
+  let name = userName user
+      email = userEmail user
+  let result = (,,,)
+                <$> pure name
+                <*> pure email
+                <*> divisionRes
+                <*> (pure 0)
   let widget = [whamlet|
         #{extra}
         <label>^{fvLabel divisionView}
         ^{fvInput divisionView}
-        <input type=submit value="Ilmoittaudu">
+        <input type=submit value=_{MsgSignUp}>
       |]
   return (result, widget)
 
-scoreForm :: HoleId -> RoundId -> Text
+-- helper
+divisions mr = [(mr MsgMPO, D.MPO), (mr MsgFPO, D.FPO)]
+
+scoreForm :: HoleId -> RoundId -> Text -> Maybe Int
    -> Html -> MForm Handler (FormResult Score, Widget)
-scoreForm hid rid name extra = do
+scoreForm hid rid name score extra = do
   r <- getUrlRender
   let set = (FieldSettings "" Nothing Nothing Nothing
         [ ("data-icon","false")
@@ -262,7 +274,7 @@ scoreForm hid rid name extra = do
         , ("data-inline","true")
         , ("data-url", r (ScoreR rid hid))
         ])
-  (scoreRes, scoreView) <- mreq (selectFieldList holes) set Nothing
+  (scoreRes, scoreView) <- mreq (selectFieldList scores) set score
   let result = Score <$> (pure rid) <*> (pure hid) <*> scoreRes
   let widget = [whamlet|
       #{extra}
@@ -274,25 +286,80 @@ scoreForm hid rid name extra = do
     |]
   return (result, widget)
   where
-    holes :: [(Text, Int)]
-    holes = ("#", 0) : [(pack (show i), i) | i <- [1..99]]
+    scores :: [(Text, Int)]
+    scores = ("#", 0) : [(pack (show i), i) | i <- [1..99]]
 
-profileForm :: Player -> Html -> MForm Handler (FormResult (Text, Text), Widget)
-profileForm player extra = do
+profileForm :: User -> Html -> MForm Handler (FormResult (Text, Text), Widget)
+profileForm user extra = do
+  mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
-    (FieldSettings "Nimi" Nothing Nothing Nothing
-      [("placeholder","Nimi")]) (Just $ playerName player)
-  (emailRes, emailView) <- mreq textField
-    (FieldSettings "Sähköposti" Nothing Nothing Nothing
-      [("placeholder","Sähköposti")]) (Just $ playerEmail player)
-  let result =  (,) <$> nameRes <*> emailRes
+    (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
+      [("placeholder", mr MsgName)]) (Just $ userName user)
+  (emailRes, emailView) <- mreq emailField
+    (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
+      [("placeholder", mr MsgEmail)]) (Just $ userEmail user)
+  let result = (,) <$> nameRes <*> emailRes
   let widget = [whamlet|
         #{extra}
         <label>^{fvLabel nameView}
         ^{fvInput nameView}
         <label>^{fvLabel emailView}
         ^{fvInput emailView}
-        <input type=submit value="Päivitä">
+        <input type=submit value=_{MsgUpdate}>
+      |]
+  return (result, widget)
+
+userForm :: User -> Html -> MForm Handler (FormResult Bool, Widget)
+userForm user extra = do
+  (adminRes, adminView) <- mreq checkBoxField
+    (FieldSettings (SomeMessage MsgAdmin) Nothing Nothing Nothing
+      []) (Just $ userAdmin user)
+  let widget = [whamlet|
+        #{extra}
+        <ul data-role="listview" data-inset="true">
+          <li>_{MsgName}: #{userName user}
+          <li>_{MsgEmail}: #{userEmail user}
+          <li .ui-field-contain>
+            <label>^{fvLabel adminView}
+              ^{fvInput adminView}
+          <li .ui-field-contain>
+            <input type=submit value=_{MsgUpdate}>
+      |]
+  return (adminRes, widget)
+
+tempAuthForm :: Html -> MForm Handler (FormResult Text, Widget)
+tempAuthForm extra = do
+  mr <- getMessageRender
+  (pwRes, pwView) <- mreq passwordField
+    (FieldSettings (SomeMessage MsgPassword) Nothing Nothing Nothing
+      [("placeholder", mr MsgPassword)]) Nothing
+  let widget = [whamlet|
+        #{extra}
+        <label>^{fvLabel pwView}
+        ^{fvInput pwView}
+        <input type=submit value=_{MsgLogIn}>
+      |]
+  return (pwRes, widget)
+
+notificationForm :: UserId -> UTCTime -> Html
+  -> MForm Handler (FormResult Notification, Widget)
+notificationForm uid time extra = do
+  mr <- getMessageRender
+  (contentRes, contentView) <- mreq textareaField
+    (FieldSettings (SomeMessage MsgNotification) Nothing Nothing Nothing
+      [("placeholder", mr MsgNotification)]) Nothing
+  let result = Notification
+                <$> contentRes
+                <*> pure uid
+                <*> pure time
+  let widget = [whamlet|
+        #{extra}
+        <ul data-role="listview" data-inset="true">
+          <li .ui-field-contain>
+            <label>^{fvLabel contentView}
+            ^{fvInput contentView}
+          <li .ui-field-contain>
+            <input type=submit value=_{MsgAddNotification}>
       |]
   return (result, widget)
 

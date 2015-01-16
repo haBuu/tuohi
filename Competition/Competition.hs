@@ -5,12 +5,18 @@ module Competition.Competition
 , countRoundTotal
 , countRoundToPar
 , playerSort
+, addPlacements
+, dnf
 )
 where
 
 import Prelude
 import Data.List(nub, nubBy, find, sortBy)
 import Import
+
+import Data.List
+
+import Handler.RoundState
 
 countPar :: [Entity Hole] -> Int
 countPar = foldl (\n (Entity _ hole) -> n + holePar hole) 0
@@ -45,26 +51,27 @@ playerSort holes players = flip sortBy players $
       total1 = countToPar holes rounds1
       total2 = countToPar holes rounds2
     in
-      if total1 >= total2 then GT else LT
+      -- if both or neither have dnf then result will determine order
+      -- if only one has dnf then that will determine order
+      if ((dnf rounds1 && dnf rounds2 -- both dnf
+            || not (dnf rounds1) && not (dnf rounds2)) -- neither dnf
+            && total1 >= total2) -- order by result
+            || (dnf rounds1 && not (dnf rounds2)) -- order by dnf
+        then GT else LT
 
+addPlacements :: [Entity Hole] -> [(a, [(Round, [Entity Score])])]
+  -> [(Int, (a, [(Round, [Entity Score])]))]
+addPlacements holes [] = []
+addPlacements holes (x:xs) = loop 2 (1, x) xs
+  where
+    loop index previous [] = [previous]
+    loop index previous (x:xs) =
+      if countToPar holes (snd x) == countToPar holes (snd $ snd previous)
+        -- placement remains the same
+        then [previous] ++ loop (index + 1) (fst previous, x) xs
+        -- next placement from index
+        else [previous] ++ loop (index + 1) (index, x) xs
 
-f1 = func South 0 0
-f2 = func 1 0 0
-f3 = func North 0 0
-f4 = func 2 0 0
-
-data MagnetPole = North | South
-
-data Magnet = Magnet
-  { x :: Double
-  , y :: Double
-  , pole :: MagnetPole
-}
-
-instance Num MagnetPole where
-  fromInteger 1 = South
-  fromInteger 2 = North
-  fromInteger _ = error "fromInteger: MagnetPole"
-
-func :: MagnetPole -> Double -> Double -> Magnet
-func pole x y = Magnet x y pole
+dnf :: [(Round, [Entity Score])] -> Bool
+dnf rounds = flip any rounds $
+  \(round_, _) -> roundState round_ == DidNotFinish

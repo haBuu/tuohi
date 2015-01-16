@@ -1,6 +1,5 @@
 <div data-role="page">
-  <div data-role="header">
-    <h1>WeeklyApp
+  ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
@@ -11,7 +10,7 @@
       <ol data-role="listview" data-inset="true" data-split-icon="delete">
 
         $forall group <- groups
-          <li data-role="list-divider"> #{group}
+          <li data-role="list-divider">#{group}
           $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
             $if group == groupNumber
               <li>
@@ -21,4 +20,4 @@
       <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishCompetitionFormEnctype}>
         ^{finishCompetitionFormWidget}
 
-      <a href=@{AdminR} data-role="button">Takaisin
+      <a href=@{AdminR} data-role="button">_{MsgBack}

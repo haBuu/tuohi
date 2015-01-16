@@ -1,10 +1,12 @@
 <div data-role="page">
-  <div data-role="header">
-    <h1>WeeklyApp
+  ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
 
-      <h2> Kilpailun tila: #{show $ competitionState competition}
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider">_{MsgInformation}
+          <li>Nimi: #{competitionName competition}
+          <li>Aika: #{show $ competitionDate competition}
 
-      <a href=@{AdminR} data-role="button">Takaisin
+      <a href=@{AdminR} data-role="button">_{MsgBack}

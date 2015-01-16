@@ -3,10 +3,11 @@
 
   <div data-role="content">
     <div .content-primary>
+
       $maybe msg <- mmsg
         <div #message>#{msg}
 
-      <form method=post action=@{NewCompetitionR}#form enctype=#{formEnctype}>
+      <form method=post enctype=#{formEnctype}>
         ^{formWidget}
 
-      <a href=@{AdminR} data-role="button">_{MsgBack}
+      <a href=@{UsersR} data-role="button">_{MsgBack}

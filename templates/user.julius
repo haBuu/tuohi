@@ -1,7 +1,7 @@
 (function() {
 
   var listview = $("ol");
-  var dnfLinks = listview.find("a#dnf-round");
+  var dnfLinks = listview.find("a#make-admin");
 
   dnfLinks.on("click", function() {
     var self = $(this);

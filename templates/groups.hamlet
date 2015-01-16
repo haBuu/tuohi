@@ -1,6 +1,5 @@
 <div data-role="page">
-  <div data-role="header">
-    <h1>WeeklyApp
+  ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
@@ -14,4 +13,5 @@
               <li data-icon="false">
                 <a href=@{InputR cid groupNumber}>#{name}
 
-      <a href=@{HomeR} data-role="button">Takaisin
+      <a href=@{CompetitionScoresR cid} data-role="button">_{MsgResults}
+      <a href=@{HomeR} data-role="button">_{MsgBack}

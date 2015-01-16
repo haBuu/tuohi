@@ -1,6 +1,5 @@
 <div data-role="page">
-  <div data-role="header">
-    <h1>WeeklyApp
+  ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
@@ -9,19 +8,12 @@
         <div #message>#{msg}
 
       <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider"> Radat
+        <li data-role="list-divider">_{MsgCourses}
         $forall Entity cid course <- courses
           <li>
-            <a href=#>#{courseName course}
-      <form method=post action=@{CoursesR}#form enctype=#{courseFormEnctype}>
-        ^{courseFormWidget}
+            <a href=@{CourseR cid}>#{courseName course}
 
-      <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider"> Layoutit
-        $forall Entity lid layout <- layouts
-          <li>
-            <a href=#>#{layoutName layout}
-      <form method=post action=@{CoursesR}#form enctype=#{layoutFormEnctype}>
-        ^{layoutFormWidget}
+      <form method=post action=@{CoursesR}#form enctype=#{formEnctype}>
+        ^{formWidget}
 
-      <a href=@{AdminR} data-role="button">Takaisin
+      <a href=@{AdminR} data-role="button">_{MsgBack}

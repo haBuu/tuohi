@@ -15,7 +15,7 @@ import Network.Wai.Middleware.RequestLogger
     )
 import qualified Network.Wai.Middleware.RequestLogger as RequestLogger
 import qualified Database.Persist
-import Database.Persist.Sql (runMigration, runSqlPool)
+import Database.Persist.Sql (runMigrationUnsafe, runMigration, runSqlPool, printMigration)
 import Database.Persist.Sqlite (createSqlitePool, sqlDatabase, sqlPoolSize)
 import Network.HTTP.Client.Conduit (newManager)
 import Control.Monad.Logger (runLoggingT)
@@ -29,6 +29,25 @@ import Database
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
 import Handler.Home
+import Handler.Profile
+import Handler.Admin
+import Handler.Notifications
+import Handler.NewCompetition
+import Handler.Competition
+import Handler.Layout
+import Handler.SignUp
+import Handler.Series
+import Handler.TempAuth
+import Handler.Scores
+import Handler.Groups
+import Handler.Input
+import Handler.Courses
+import Handler.Course
+import Handler.User
+import Handler.Users
+import Handler.Language
+
+
 import Handler.Test
 
 -- This line actually creates our YesodDispatch instance. It is the second half
@@ -89,7 +108,7 @@ makeFoundation conf = do
 
     -- Perform database migration using our application's logging settings.
     flip runLoggingT logFunc
-        (Database.Persist.runPool dbconf (runMigration migrateAll) p)
+        (Database.Persist.runPool dbconf (printMigration migrateAll) p)
 
     flip runSqlPool p $ do
         --mcid <- insertUnique $ Course "Vihioja"

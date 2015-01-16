@@ -1,13 +1,13 @@
 <div data-role="navbar">
-  $maybe aid <- maid
+  $maybe user <- muser
     <ul>
       <li>
-        <a href=@{ProfileR}>#{show aid}
+        <a href=@{ProfileR}>#{userName user}
       <li>
-        <a href=@{AuthR LogoutR}>Kirjaudu ulos
+        <a href=@{AuthR LogoutR}>_{MsgLogOut}
   $nothing
     <ul>
       <li>
-        <a href=@{AuthR LoginR}>Kirjaudu sisään
+        <a href=@{AuthR LoginR}>_{MsgLogIn}
       <li>
-        <a href=@{AuthR registerR}>Rekisteröidy
+        <a href=@{AuthR registerR}>_{MsgRegister}

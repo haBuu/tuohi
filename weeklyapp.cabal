@@ -20,15 +20,33 @@ library
                      Settings.StaticFiles
                      Settings.Development
                      Handler.Home
+                     Handler.Profile
+                     Handler.Admin
+                     Handler.Notifications
+                     Handler.NewCompetition
+                     Handler.Competition
+                     Handler.Layout
+                     Handler.SignUp
+                     Handler.Series
+                     Handler.TempAuth
+                     Handler.Scores
+                     Handler.Groups
+                     Handler.Input
+                     Handler.Courses
+                     Handler.Course
+                     Handler.User
+                     Handler.Users
                      Handler.Forms
                      Handler.CompetitionState
                      Handler.RoundState
                      Handler.Division
                      Handler.Test
+                     Handler.Language
                      Helpers
                      Database
                      Competition.Competition
                      Competition.Groups
+                     Competition.Handicap
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -53,7 +71,7 @@ library
 
     build-depends: base                          >= 4          && < 5
                  , yesod                         >= 1.4.0      && < 1.5
-                 , yesod-core                    >= 1.4.0      && < 1.5
+                 , yesod-core                    >= 1.4.7.2    && < 1.5
                  , yesod-auth                    >= 1.4.0      && < 1.5
                  , yesod-static                  >= 1.4.0      && < 1.5
                  , yesod-form                    >= 1.4.0      && < 1.5

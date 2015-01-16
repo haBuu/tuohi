@@ -1,0 +1,28 @@
+<div data-role="page">
+  ^{headerWidget}
+
+  <div data-role="content">
+    <div .content-primary>
+
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider">_{MsgHeadAdmins} (#{length $ filter superAdmin users})
+        $forall Entity uid user <- users
+          $if userSuperAdmin user
+            <li>
+              <a href=@{UserR uid}>#{userName user}
+
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider">_{MsgAdmins} (#{length $ filter admin users})
+        $forall Entity uid user <- users
+          $if userAdmin user && not (userSuperAdmin user)
+            <li>
+              <a href=@{UserR uid}>#{userName user}
+
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider">_{MsgUsers} (#{length $ filter user users})
+        $forall Entity uid user <- users
+          $if not (userSuperAdmin user) && not (userAdmin user)
+            <li>
+              <a href=@{UserR uid}>#{userName user}
+
+      <a href=@{AdminR} data-role="button">_{MsgBack}

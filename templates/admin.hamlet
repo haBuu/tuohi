@@ -1,24 +1,37 @@
 <div data-role="page">
-  <div data-role="header">
-    <h1>WeeklyApp
+  ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
-      <a href=@{NewCompetitionR} .ui-btn> Uusi kilpailu
-      <a href=@{CoursesR} .ui-btn> Uusi rata
+      $maybe msg <- mmsg
+        <div #message>#{msg}
+
+      <h4 .ui-bar  .ui-bar-a .ui-corner-all>
+        _{MsgPassword}: #{current}
+
+      <a href=@{NewCompetitionR} .ui-btn>_{MsgNewCompetition}
+      <a href=@{NotificationsR} .ui-btn>_{MsgNotifications}
 
       <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider"> Käynnissä olevat kisat
+        <li data-role="list-divider">_{MsgActiveCompetitions}
         $forall Entity cid competition <- competitions
           $if competitionState competition == Started
             <li>
               <a href=@{CompetitionR cid}>#{competitionName competition}
-        <li data-role="list-divider"> Tulevat kisat
+
+        <li data-role="list-divider">_{MsgFutureCompetitions}
         $forall Entity cid competition <- competitions
           $if competitionState competition == Init
             <li>
               <a href=@{CompetitionR cid}>#{competitionName competition}
-        <li data-role="list-divider"> Menneet kisat
+
+        <li data-role="list-divider">_{MsgPastCompetitions}
         $forall Entity cid competition <- finished
           <li>
             <a href=@{CompetitionR cid}>#{competitionName competition}
+
+      <a href=@{CoursesR} .ui-btn>_{MsgCourses}
+      <a href=@{SeriesR} .ui-btn>_{MsgSeries}
+
+      $if superAdmin
+        <a href=@{UsersR} .ui-btn>_{MsgUsers}

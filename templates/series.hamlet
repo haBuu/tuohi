@@ -1,0 +1,19 @@
+<div data-role="page">
+  ^{headerWidget}
+
+  <div data-role="content">
+    <div .content-primary>
+
+      $maybe msg <- mmsg
+        <div #message>#{msg}
+
+      <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider">_{MsgSeries}
+        $forall Entity _ serie <- series
+          <li>
+            #{serieName serie}
+
+      <form method=post action=@{SeriesR}#form enctype=#{formEnctype}>
+        ^{formWidget}
+
+      <a href=@{AdminR} data-role="button">_{MsgBack}

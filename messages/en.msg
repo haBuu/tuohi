@@ -1,1 +1,64 @@
-Hello: Hello
+LogIn: Login
+LogOut: Logout
+Register: Register
+Notifications: Notifications
+ActiveCompetitions: Active competitions
+OpenSignUps: Open sign-ups
+PastCompetitions: Past competitions
+FutureCompetitions: Future competitions
+Results: Results
+Back: Back
+Hole: Hole
+Round: Round
+Total: Total
+MPO: Open
+FPO: Women
+Password: Password
+Courses: Courses
+Series: Series
+Users: Users
+Homepage: Homepage
+NewCompetition: New competition
+NewCourse: New course
+Layouts: Layouts
+Pars: Pars
+HeadAdmins: Head Admins
+Admins: Admins
+AddCourse: Add course
+CourseName: Course name
+AddSerie: Add serie
+SerieName: Serie name
+AddCompetition: Add competition
+Layout: Layout
+Date: Date
+CompetitionName: Competition name
+PlayerLimit: Player limit
+Notification: Notification
+AddNotification: Add notification
+Admin: Admin
+Update: Update
+Name: Name
+Email: Email
+Division: Division
+SignUp: Sign up
+FinishCompetition: Finish competition
+NextRound: Next round
+StartCompetition: Start competition
+UpdateLayout: Update layout
+AddLayout: Add layout
+LayoutName: Layout name
+LayoutDesc: Layout description
+NumberOfHoles: Number of holes
+NotAdmin: You must be an admin
+NotSuperAdmin: You must be a super admin
+BotCheckQuestion: How much is two plus three?
+BotCheckField: Check
+SignUpSuccess: Signed up succesfully
+SignUpFail: Sign up failed
+UserUpdatedSuccess: User updated
+FormMissing: Error: Form missing
+FormFailure err@Text: Error: #{err}
+NotPresent: Not present
+Present: Present
+Information: Information
+AdminPanel: Admin panel
