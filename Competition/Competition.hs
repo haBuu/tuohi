@@ -17,24 +17,25 @@ import Import
 import Data.List
 
 import Handler.RoundState
+import Handler.Division
 
 countPar :: [Entity Hole] -> Int
 countPar = foldl (\n (Entity _ hole) -> n + holePar hole) 0
 
-countTotal :: [(Round, [Entity Score])] -> Int
+countTotal :: [(Round, [Score])] -> Int
 countTotal = foldl (\n (_, scores) -> n + countRoundTotal scores) 0
 
-countToPar :: [Entity Hole] -> [(Round, [Entity Score])] -> Int
+countToPar :: [Entity Hole] -> [(Round, [Score])] -> Int
 countToPar holes rounds =
   foldl (\n (_, scores) -> n + countRoundToPar holes scores) 0 rounds
 
-countRoundTotal :: [Entity Score] -> Int
-countRoundTotal = foldl (\n (Entity _ score) -> n + scoreScore score) 0
+countRoundTotal :: [Score] -> Int
+countRoundTotal = foldl (\n score -> n + scoreScore score) 0
 
-countRoundToPar :: [Entity Hole] -> [Entity Score] -> Int
+countRoundToPar :: [Entity Hole] -> [Score] -> Int
 countRoundToPar holes scores =
   let
-    toPar = foldl (\n (Entity _ score) -> n + holePar' holes score) 0 scores
+    toPar = foldl (\n score -> n + holePar' holes score) 0 scores
   in
     (countRoundTotal scores) -  toPar
 
@@ -43,10 +44,10 @@ holePar' holes score = maybe 0 (\(Entity _ hole) -> holePar hole) $
   find (\(Entity hid _) -> hid == scoreHoleId score) holes
 
 -- sorts players according to their current to par result
-playerSort :: [Entity Hole] -> [(a, [(Round, [Entity Score])])]
-  -> [(a, [(Round, [Entity Score])])]
+playerSort :: [Entity Hole] -> [(a, b, [(Round, [Score])])]
+  -> [(a, b, [(Round, [Score])])]
 playerSort holes players = flip sortBy players $
-  \(_, rounds1) (_, rounds2) ->
+  \(_, _, rounds1) (_, _, rounds2) ->
     let
       total1 = countToPar holes rounds1
       total2 = countToPar holes rounds2
@@ -59,19 +60,19 @@ playerSort holes players = flip sortBy players $
             || (dnf rounds1 && not (dnf rounds2)) -- order by dnf
         then GT else LT
 
-addPlacements :: [Entity Hole] -> [(a, [(Round, [Entity Score])])]
-  -> [(Int, (a, [(Round, [Entity Score])]))]
+addPlacements :: [Entity Hole] -> [(a, b, [(Round, [Score])])]
+  -> [(Int, (a, b, [(Round, [Score])]))]
 addPlacements holes [] = []
 addPlacements holes (x:xs) = loop 2 (1, x) xs
   where
     loop index previous [] = [previous]
     loop index previous (x:xs) =
-      if countToPar holes (snd x) == countToPar holes (snd $ snd previous)
+      if countToPar holes (thd x) == countToPar holes (thd $ snd previous)
         -- placement remains the same
         then [previous] ++ loop (index + 1) (fst previous, x) xs
         -- next placement from index
         else [previous] ++ loop (index + 1) (index, x) xs
 
-dnf :: [(Round, [Entity Score])] -> Bool
+dnf :: [(Round, [Score])] -> Bool
 dnf rounds = flip any rounds $
   \(round_, _) -> roundState round_ == DidNotFinish

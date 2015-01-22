@@ -62,3 +62,5 @@ NotPresent: Ei paikalla
 Present: Paikalla
 Information: Tiedot
 AdminPanel: Hallinta
+WrongAnswer: Väärä vastaus
+ReloadPage: Lataa uudestaan sivu tulosten muuttuessa

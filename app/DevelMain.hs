@@ -62,6 +62,6 @@ update = do
 start :: MVar () -- ^ Written to when the thread is killed.
       -> IO ThreadId
 start done = do
-    (port,app) <- getApplicationDev
-    forkIO (finally (runSettings (setPort port defaultSettings) app)
-                    (putMVar done ()))
+  (port,app) <- getApplicationDev
+  forkIO (finally (runSettings (setPort port defaultSettings) app)
+    (putMVar done ()))

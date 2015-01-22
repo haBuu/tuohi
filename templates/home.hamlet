@@ -30,6 +30,6 @@
           $forall Entity cid competition <- competitions
             $if competitionState competition == Finished
               <li>
-                <a href=@{CompetitionScoresR cid}>#{competitionName competition}
+                <a href=@{ResultsR cid}>#{competitionName competition}
 
         ^{languageWidget}

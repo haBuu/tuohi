@@ -1,9 +1,11 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module Application
-    ( makeApplication
-    , getApplicationDev
-    , makeFoundation
-    ) where
+( makeApplication
+, getApplicationDev
+, makeFoundation
+, startProductionApp
+)
+where
 
 import Import
 import Yesod.Auth
@@ -18,11 +20,17 @@ import qualified Database.Persist
 import Database.Persist.Sql (runMigrationUnsafe, runMigration, runSqlPool, printMigration)
 import Database.Persist.Sqlite (createSqlitePool, sqlDatabase, sqlPoolSize)
 import Network.HTTP.Client.Conduit (newManager)
-import Control.Monad.Logger (runLoggingT)
-import System.Log.FastLogger (newStdoutLoggerSet, defaultBufSize)
+import Control.Monad.Logger (runLoggingT, LogLevel(LevelError), liftLoc)
+import System.Log.FastLogger (newStdoutLoggerSet, defaultBufSize, toLogStr)
 import Network.Wai.Logger (clockDateCacher)
 import Data.Default (def)
 import Yesod.Core.Types (loggerSet, Logger (Logger))
+
+-- production
+import Control.Monad
+import Language.Haskell.TH.Syntax (qLocation)
+import Network.Wai.Handler.WarpTLS
+import Network.Wai.Handler.Warp
 
 import Database
 
@@ -46,9 +54,7 @@ import Handler.Course
 import Handler.User
 import Handler.Users
 import Handler.Language
-
-
-import Handler.Test
+import Handler.Results
 
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the
@@ -61,78 +67,84 @@ mkYesodDispatch "App" resourcesApp
 -- migrations handled by Yesod.
 makeApplication :: AppConfig DefaultEnv Extra -> IO (Application, LogFunc)
 makeApplication conf = do
-    foundation <- makeFoundation conf
+  foundation <- makeFoundation conf
 
-    -- Initialize the logging middleware
-    logWare <- mkRequestLogger def
-        { outputFormat =
-            if development
-                then Detailed True
-                else Apache FromSocket
-        , destination = RequestLogger.Logger $ loggerSet $ appLogger foundation
-        }
+  -- Initialize the logging middleware
+  logWare <- mkRequestLogger def
+    { outputFormat =
+        if development
+            then Detailed True
+            else Apache FromSocket
+    , destination = RequestLogger.Logger $ loggerSet $ appLogger foundation
+    }
 
-    -- Create the WAI application and apply middlewares
-    app <- toWaiAppPlain foundation
-    let logFunc = messageLoggerSource foundation (appLogger foundation)
-    return (logWare $ defaultMiddlewaresNoLogging app, logFunc)
+  -- Create the WAI application and apply middlewares
+  app <- toWaiAppPlain foundation
+  let logFunc = messageLoggerSource foundation (appLogger foundation)
+  return (logWare $ defaultMiddlewaresNoLogging app, logFunc)
 
 -- | Loads up any necessary settings, creates your foundation datatype, and
 -- performs some initialization.
 makeFoundation :: AppConfig DefaultEnv Extra -> IO App
 makeFoundation conf = do
-    manager <- newManager
-    s <- staticSite
-    dbconf <- withYamlEnvironment "config/sqlite.yml" (appEnv conf)
-              Database.Persist.loadConfig >>=
-              Database.Persist.applyEnv
+  manager <- newManager
+  s <- staticSite
+  dbconf <- withYamlEnvironment "config/sqlite.yml" (appEnv conf)
+            Database.Persist.loadConfig >>=
+            Database.Persist.applyEnv
 
-    loggerSet' <- newStdoutLoggerSet defaultBufSize
-    (getter, _) <- clockDateCacher
+  loggerSet' <- newStdoutLoggerSet defaultBufSize
+  (getter, _) <- clockDateCacher
 
-    let logger = Yesod.Core.Types.Logger loggerSet' getter
-        mkFoundation p = App
-            { settings = conf
-            , getStatic = s
-            , connPool = p
-            , httpManager = manager
-            , persistConfig = dbconf
-            , appLogger = logger
-            }
-        tempFoundation = mkFoundation $ error "connPool forced in tempFoundation"
-        logFunc = messageLoggerSource tempFoundation logger
+  let logger = Yesod.Core.Types.Logger loggerSet' getter
+      mkFoundation p = App
+        { settings = conf
+        , getStatic = s
+        , connPool = p
+        , httpManager = manager
+        , persistConfig = dbconf
+        , appLogger = logger
+        }
+      tempFoundation = mkFoundation $ error "connPool forced in tempFoundation"
+      logFunc = messageLoggerSource tempFoundation logger
 
-    p <- flip runLoggingT logFunc
-       $ createSqlitePool (sqlDatabase dbconf) (sqlPoolSize dbconf)
-    let foundation = mkFoundation p
+  p <- flip runLoggingT logFunc
+     $ createSqlitePool (sqlDatabase dbconf) (sqlPoolSize dbconf)
+  let foundation = mkFoundation p
 
-    -- Perform database migration using our application's logging settings.
-    flip runLoggingT logFunc
-        (Database.Persist.runPool dbconf (printMigration migrateAll) p)
+  -- Perform database migration using our application's logging settings.
+  flip runLoggingT logFunc
+    (Database.Persist.runPool dbconf (runMigration migrateAll) p)
 
-    flip runSqlPool p $ do
-        --mcid <- insertUnique $ Course "Vihioja"
-        --case mcid of
-        --    Just cid -> do
-        --        _ <- insertLayout (Layout cid "Vihioja-A" "A-layout (par 28)") 9
-        --        _ <- insertLayout (Layout cid "Vihioja-B" "B-layout (par 27)") 9
-        --        return ()
-        --    Nothing -> return ()
-        --mcid <- insertUnique $ Course "Epilä"
-        --case mcid of
-        --    Just cid -> do
-        --        _ <- insertLayout (Layout cid "Epilä-12" "Mettäväylät") 12
-        --        _ <- insertLayout (Layout cid "Epilä-9" "Ei mettäväyliä") 9
-        --        return ()
-        --    Nothing -> return ()
-
-    return foundation
+  flip runSqlPool p $ do
+    let pw = Just "sha256|14|vRb1oHsjxtKhQ/ftDnRc0w==|wJA1uiJK/o8q+zvcBeYlRoHP9iVSPcRfg4efqiuxrSs="
+        verKey = Just "yAqw2iRbi7"
+    _ <- insertUnique $ User "super admin" "super@super" pw verKey True True True
+    return ()
+  return foundation
 
 -- for yesod devel
 getApplicationDev :: IO (Int, Application)
 getApplicationDev =
-    defaultDevelApp loader (fmap fst . makeApplication)
+  defaultDevelApp loader (fmap fst . makeApplication)
   where
     loader = Yesod.Default.Config.loadConfig (configSettings Development)
-        { csParseExtra = parseExtra
-        }
+      { csParseExtra = parseExtra
+      }
+
+startProductionApp :: IO ()
+startProductionApp = do
+  let tls = tlsSettings "config/certificate.pem" "config/key.pem"
+  config <- fromArgs parseExtra
+  (app, logFunc) <- makeApplication config
+  runTLS tls defaultSettings
+    { settingsPort = appPort config
+    , settingsHost = appHost config
+    , settingsOnException = const $ \e -> when (shouldLog' e) $ logFunc
+      $(qLocation >>= liftLoc)
+      "yesod"
+      LevelError
+      (toLogStr $ "Exception from Warp: " ++ show e)
+    } app
+  where
+    shouldLog' = defaultShouldDisplayException

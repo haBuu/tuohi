@@ -40,13 +40,14 @@ library
                      Handler.CompetitionState
                      Handler.RoundState
                      Handler.Division
-                     Handler.Test
                      Handler.Language
+                     Handler.Results
                      Helpers
                      Database
                      Competition.Competition
                      Competition.Groups
                      Competition.Handicap
+                     DivisionMessages
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT
@@ -89,6 +90,7 @@ library
                  , http-conduit                  >= 2.1        && < 2.2
                  , directory                     >= 1.1        && < 1.3
                  , warp                          >= 3.0        && < 3.1
+                 , warp-tls                      >= 3.0.1.3    && < 3.1
                  , data-default
                  , aeson                         >= 0.6        && < 0.9
                  , conduit                       >= 1.0        && < 2.0
@@ -114,6 +116,9 @@ executable         weeklyapp
     build-depends:     base
                      , weeklyapp
                      , yesod
+                     , warp-tls
+                     , warp
+                     , monad-logger
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
 

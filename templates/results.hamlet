@@ -1,0 +1,27 @@
+<div data-role="page">
+  ^{headerWidget}
+
+  <div data-role="content">
+    <div .content-primary>
+
+      $forall (d, msg) <- divisions
+        <ol data-role="listview" data-inset="true">
+          <li data-role="list-divider">_{msg}
+            $forall (user, division, rounds) <- sortedPlayers
+              $if division == d
+                <li>
+                  #{userName user}
+                  <span .ui-li-count .result>
+                    $if dnf rounds
+                      DNF
+                    $else
+                      #{countTotal rounds} (
+                      $if countToPar holes rounds == 0
+                        E
+                      $else
+                        $if countToPar holes rounds > 0
+                          +
+                        #{countToPar holes rounds}
+                      )
+
+      <a href=@{HomeR} data-role="button">_{MsgBack}

@@ -1,10 +1,15 @@
-<div data-role="page" style="width:100%">
+<div #score-page data-role="page">
   ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
 
-      <table #score-table cellspacing="10" data-scroll="x">
+      <a href=@{GroupsR cid} data-role="button">_{MsgBack}
+
+      <label>
+        <input name="live-update" type="checkbox" checked="checked">_{MsgReloadPage}
+
+      <table #score-table cellspacing="10">
         <thead>
           <tr>
             <th>
@@ -25,44 +30,39 @@
             <th>
             <th>#{show $ layoutPar * roundCount}
         <tbody>
-          $forall (place, (user, rounds)) <- sortedPlayers
-            $forall (round_, scores) <- rounds
-              $if roundRoundnumber round_ == 1
-                <tr .round-divider>
-              <tr>
-                $if roundRoundnumber round_ == 1
-                  <td rowspan=#{length rounds}>#{show place}
-                  <td rowspan=#{length rounds}>#{userName user}
-                $forall (Entity hid hole) <- holes
+          $forall (place, (user, division, rounds)) <- sortedPlayers
+              $forall (round_, scores) <- rounds
+                <tr>
+                  $if roundRoundnumber round_ == 1
+                    <td rowspan=#{length rounds}>#{show place}
+                    <td rowspan=#{length rounds}>#{userName user}
+                  $forall (Entity hid hole) <- holes
+                    <td>
+                      $forall score <- scores
+                        $if scoreHoleId score == hid
+                          <div data-hid=#{toPathPiece $ scoreHoleId score} data-rid=#{toPathPiece $ scoreRoundId score} class=#{textualScore (holePar hole) (scoreScore score)}>#{scoreScore score}
                   <td>
-                    $forall (Entity _ score) <- scores
-                      $if scoreHoleId score == hid
-                        <div class=#{textualScore (holePar hole) (scoreScore score)}>#{scoreScore score}
-                <td>
-                  $if countRoundToPar holes scores == 0
-                    E
-                  $else
-                    $if countRoundToPar holes scores > 0
-                      +
-                    #{countRoundToPar holes scores}
-                <td>
-                  $if roundState round_ == DidNotFinish
-                    DNF
-                  $else
-                    #{countRoundTotal scores}
-                $if roundRoundnumber round_ == 1
-                  <td rowspan=#{length rounds}>
-                    $if countToPar holes rounds == 0
+                    $if countRoundToPar holes scores == 0
                       E
                     $else
-                      $if countToPar holes rounds > 0
+                      $if countRoundToPar holes scores > 0
                         +
-                      #{countToPar holes rounds}
-                  <td rowspan=#{length rounds}>
-                    $if dnf rounds
+                      #{countRoundToPar holes scores}
+                  <td>
+                    $if roundState round_ == DidNotFinish
                       DNF
                     $else
-                      #{countTotal rounds}
-
-      <a href=@{GroupsR cid} data-role="button">_{MsgBack}
-
+                      #{countRoundTotal scores}
+                  $if roundRoundnumber round_ == 1
+                    <td rowspan=#{length rounds}>
+                      $if countToPar holes rounds == 0
+                        E
+                      $else
+                        $if countToPar holes rounds > 0
+                          +
+                        #{countToPar holes rounds}
+                    <td rowspan=#{length rounds}>
+                      $if dnf rounds
+                        DNF
+                      $else
+                        #{countTotal rounds}

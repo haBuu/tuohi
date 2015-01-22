@@ -16,15 +16,11 @@
 
       <ol data-role="listview" data-inset="true">
 
-        <li data-role="list-divider">_{MsgMPO}
-        $forall (_, _, E.Value division, E.Value name) <- signups
-          $if division == MPO
-            <li data-icon="false">#{name}
-
-        <li data-role="list-divider">_{MsgFPO}
-        $forall (_, _, E.Value division, E.Value name) <- signups
-          $if division == FPO
-            <li data-icon="false">#{name}
+        $forall (d, msg) <- divisions
+          <li data-role="list-divider">_{msg}
+          $forall (_, _, E.Value division, E.Value name) <- signups
+            $if division == d
+              <li data-icon="false">#{name}
 
       <a href=@{HomeR} data-role="button">_{MsgBack}
 

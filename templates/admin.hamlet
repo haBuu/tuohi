@@ -6,11 +6,10 @@
       $maybe msg <- mmsg
         <div #message>#{msg}
 
-      <h4 .ui-bar  .ui-bar-a .ui-corner-all>
+      <h5 .ui-bar  .ui-bar-a .ui-corner-all>
         _{MsgPassword}: #{current}
 
       <a href=@{NewCompetitionR} .ui-btn>_{MsgNewCompetition}
-      <a href=@{NotificationsR} .ui-btn>_{MsgNotifications}
 
       <ul data-role="listview" data-inset="true">
         <li data-role="list-divider">_{MsgActiveCompetitions}
@@ -30,8 +29,9 @@
           <li>
             <a href=@{CompetitionR cid}>#{competitionName competition}
 
-      <a href=@{CoursesR} .ui-btn>_{MsgCourses}
-      <a href=@{SeriesR} .ui-btn>_{MsgSeries}
-
       $if superAdmin
         <a href=@{UsersR} .ui-btn>_{MsgUsers}
+
+      <a href=@{NotificationsR} .ui-btn>_{MsgNotifications}
+      <a href=@{CoursesR} .ui-btn>_{MsgCourses}
+      <a href=@{SeriesR} .ui-btn>_{MsgSeries}

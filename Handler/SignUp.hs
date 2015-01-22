@@ -7,6 +7,7 @@ import Handler.Forms
 import Handler.Division
 import qualified Database.Esqueleto as E
 import Database
+import DivisionMessages
 
 getSignUpR :: CompetitionId -> Handler Html
 getSignUpR cid = do

@@ -71,12 +71,17 @@ instance Yesod App where
 
   -- Store session data on the client in encrypted cookies,
   -- default session idle timeout is 120 minutes
-  makeSessionBackend _ = --sslOnlySessions $
-    fmap Just $ defaultClientSessionBackend
-      120    -- timeout in minutes
-      "config/client_session_key.aes"
+  makeSessionBackend _
+    | development = session
+    | otherwise = sslOnlySessions session
+    where
+      session = fmap Just $ defaultClientSessionBackend
+        120 -- timeout in minutes
+        "config/client_session_key.aes"
 
-  -- yesodMiddleware = (sslOnlyMiddleware 120) . defaultYesodMiddleware
+  yesodMiddleware
+    | development = defaultYesodMiddleware
+    | otherwise = (sslOnlyMiddleware 120) . defaultYesodMiddleware
 
   defaultLayout widget = do
     master <- getYesod

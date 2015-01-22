@@ -190,10 +190,10 @@ nextRound cid = do
       -- get players and scores so we can put them in order
       players <- forM rounds $ \(Entity _ r) -> do
         rounds <- runDB $ playerRoundsAndScores (roundUserId r) cid
-        return (roundUserId r, rounds)
+        return (roundUserId r, True, rounds)
       let sortedPlayers = playerSort holes players
       -- insert round for each player
-      forM_ (zip sortedPlayers groups_) $ \((pid, _), groupNumber) -> do
+      forM_ (zip sortedPlayers groups_) $ \((pid, _, _), groupNumber) -> do
         runDB $ insertBy $ Round pid cid R.Started
           (roundNumber + 1) groupNumber
 
@@ -229,21 +229,21 @@ currentRound cid = do
 -- convenient in the hamlet template
 -- function flow: signups -> users -> rounds -> scores
 playersAndScores :: CompetitionId
-  -> Handler [(User, [(Round, [Entity Score])])]
+  -> Handler [(User, Division, [(Round, [Score])])]
 playersAndScores cid = runDB $ selectList
   [SignUpCompetitionId ==. cid, SignUpConfirmed ==. True] []
   >>= mapM (\(Entity _ signUp) -> do
     let uid = signUpUserId signUp
     user <- get404 uid
     rounds <- playerRoundsAndScores uid cid
-    return (user, rounds))
+    return (user, signUpDivision signUp, rounds))
 
 playerRoundsAndScores uid cid = selectList
   [RoundUserId ==. uid, RoundCompetitionId ==. cid]
   [Asc RoundRoundnumber]
   >>= mapM (\entity@(Entity rid round_) -> do
     scores <- selectList [ScoreRoundId ==. rid] []
-    return (round_, scores))
+    return (round_, map entityVal scores))
 
 -- for handicaps
 f :: UserId -> CourseId -> Day -> Handler [Int]
@@ -257,4 +257,4 @@ f uid coid date = runDB $ do
     []
   rounds <- forM competitions $ \(Entity cid _) ->
     playerRoundsAndScores uid cid
-  return $ map (scoreScore . entityVal) $ concat $ map snd $ concat rounds
+  return $ map scoreScore $ concat $ map snd $ concat rounds

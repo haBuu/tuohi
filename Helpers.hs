@@ -3,12 +3,16 @@ module Helpers
 , showDay
 , textualScore
 , safeHead
+, thd
 )
 where
 
 import Prelude
 import Data.Time
 import Data.Text(Text)
+
+thd :: (t1,t2,t3) -> t3
+thd (_, _, x) = x
 
 for :: [a] -> (a -> b) -> [b]
 for = flip map

@@ -4,6 +4,9 @@
   <div data-role="content">
     <div .content-primary>
 
+      <a href=@{CompetitionScoresR cid} data-role="button">_{MsgResults}
+      <a href=@{HomeR} data-role="button">_{MsgBack}
+
       <ol data-role="listview" data-inset="true">
 
         $forall group <- groups
@@ -12,6 +15,3 @@
             $if group == groupNumber
               <li data-icon="false">
                 <a href=@{InputR cid groupNumber}>#{name}
-
-      <a href=@{CompetitionScoresR cid} data-role="button">_{MsgResults}
-      <a href=@{HomeR} data-role="button">_{MsgBack}

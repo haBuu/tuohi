@@ -1,7 +1,11 @@
 dist/
 static/tmp/
 config/client_session_key.aes
+config/certificate.csr
+config/certificate.pem
+config/key.pem
 *.hi
 *.o
 yesod-devel/
 *.sqlite3
+*.keter

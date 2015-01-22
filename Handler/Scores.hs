@@ -19,7 +19,7 @@ getScoresR = do
     Nothing -> notFound
     Just (Entity cid competition) -> redirect $ CompetitionScoresR cid
 
-getCompetitionScoresR :: CompetitionId -> Handler Html
+getCompetitionScoresR :: CompetitionId -> Handler TypedContent
 getCompetitionScoresR cid = do
   competition <- runDB $ get404 cid
   let lid = competitionLayoutId competition
@@ -31,10 +31,12 @@ getCompetitionScoresR cid = do
   players <- playersAndScores cid
   let sortedPlayers = addPlacements holes $ playerSort holes players
   muser <- maybeAuthUser
-  defaultLayout $ do
-    $(widgetFile "style")
-    let headerWidget = $(widgetFile "header")
-    $(widgetFile "scores")
+  let headerWidget = $(widgetFile "header")
+  -- Accept: application/json will return JSON
+  -- Accept: text/html will return HTML
+  defaultLayoutJson
+    $(widgetFile "scores") -- html
+    (returnJson sortedPlayers) -- json
 
 postScoreR :: RoundId -> HoleId -> Handler Html
 postScoreR rid hid = do
@@ -45,7 +47,6 @@ postScoreR rid hid = do
       user <- runDB $ get404 $ roundUserId round_
       ((result, _), _) <- runFormPost $ scoreForm hid rid
         (userName user) Nothing
-      liftIO $ print result
       formHandler result $ \res -> do
         -- check if the score already exists
         mScore <- runDB $ getBy $

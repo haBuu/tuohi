@@ -16,6 +16,7 @@
 
 /scores ScoresR GET
 /scores/#CompetitionId CompetitionScoresR GET
+/results/#CompetitionId ResultsR GET
 
 /profile ProfileR GET POST
 
@@ -46,5 +47,3 @@
 
 /admin/notifications NotificationsR GET POST
 /admin/notification/#NotificationId/remove RemoveNotificationR POST
-
-/test TestR GET POST

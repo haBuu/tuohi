@@ -12,6 +12,7 @@ import Data.Traversable(sequenceA)
 import qualified Database.Esqueleto as E
 
 import Handler.CompetitionState
+import DivisionMessages
 import qualified Handler.Division as D
 
 -- form handler with default action for FormFailure and FormMissing
@@ -210,10 +211,10 @@ signUpForm cid extra = do
   (emailRes, emailView) <- mreq emailField
     (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
       [("placeholder", mr MsgEmail)]) Nothing
-  (divisionRes, divisionView) <- mreq (radioFieldList (divisions mr))
+  (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
-  (botCheckRes, botCheckView) <- mreq checkBotField
+  (botCheckRes, botCheckView) <- mreq (checkBotField mr)
     (FieldSettings (SomeMessage MsgBotCheckField) Nothing Nothing Nothing
       [("placeholder", mr MsgBotCheckQuestion)]) Nothing
   let result = (,,,)
@@ -235,15 +236,13 @@ signUpForm cid extra = do
       |]
   return (result, widget)
   where
-    errorMessage :: Text
-    errorMessage = "Wrong answer..."
-    checkBotField = checkBool (==5) errorMessage intField
+    checkBotField mr = checkBool (==5) (mr MsgWrongAnswer) intField
 
 signUpFormLoggedIn :: CompetitionId -> User -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division, Int), Widget)
 signUpFormLoggedIn cid user extra = do
   mr <- getMessageRender
-  (divisionRes, divisionView) <- mreq (radioFieldList (divisions mr))
+  (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
   let name = userName user
@@ -262,7 +261,8 @@ signUpFormLoggedIn cid user extra = do
   return (result, widget)
 
 -- helper
-divisions mr = [(mr MsgMPO, D.MPO), (mr MsgFPO, D.FPO)]
+-- adds message renderer to divisions so that forms can display them
+divisionsRender mr = Import.map (\(d, msg) -> (mr msg, d)) divisions
 
 scoreForm :: HoleId -> RoundId -> Text -> Maybe Int
    -> Html -> MForm Handler (FormResult Score, Widget)
