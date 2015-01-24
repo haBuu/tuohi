@@ -4,6 +4,8 @@
   <div data-role="content">
     <div .content-primary>
 
+      <a href=@{AdminR} data-role="button">_{MsgBack}
+
       <ul data-role="listview" data-inset="true">
         <li data-role="list-divider">_{MsgHeadAdmins} (#{length $ filter superAdmin users})
         $forall Entity uid user <- users
@@ -24,5 +26,3 @@
           $if not (userSuperAdmin user) && not (userAdmin user)
             <li>
               <a href=@{UserR uid}>#{userName user}
-
-      <a href=@{AdminR} data-role="button">_{MsgBack}
