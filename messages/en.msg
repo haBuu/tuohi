@@ -64,3 +64,4 @@ Information: Information
 AdminPanel: Admin panel
 WrongAnswer: Wrong answer
 ReloadPage: Reload the page if the scores change
+DNF: DNF

@@ -63,4 +63,5 @@ Present: Paikalla
 Information: Tiedot
 AdminPanel: Hallinta
 WrongAnswer: Väärä vastaus
-ReloadPage: Lataa uudestaan sivu tulosten muuttuessa
+ReloadPage: Lataa sivu uudestaan tulosten muuttuessa
+DNF: DNF
