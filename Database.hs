@@ -216,6 +216,8 @@ nextRound cid = do
 finishCompetition :: CompetitionId -> Handler ()
 finishCompetition cid = do
   mroundNumber <- currentRound cid
+  -- finish competition
+  runDB $ update cid [CompetitionState =. Finished]
   case mroundNumber of
     Just roundNumber -> do
       -- finish rounds
@@ -224,8 +226,6 @@ finishCompetition cid = do
         , RoundRoundnumber ==. roundNumber
         , RoundState ==. R.Started]
         [RoundState =. R.Finished]
-      -- finish competition
-      runDB $ update cid [CompetitionState =. Finished]
     Nothing -> return ()
 
 -- returns highest round that has state started from
