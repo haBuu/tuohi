@@ -11,10 +11,13 @@
     // remove from db
     $.ajax({
       type: 'POST',
-      url: url
+      url: url,
+      success: function() {
+        // remove from page
+        item.remove();
+        listview.listview('refresh');
+      }
     });
-    // remove from page
-    item.remove();
   });
 
   confirmLinks.on("click", function() {
@@ -24,10 +27,13 @@
     // set to confirmed in db
     $.ajax({
       type: 'POST',
-      url: url
+      url: url,
+      success: function() {
+        // move to confirmed players
+        item.appendTo(listview);
+        listview.listview('refresh');
+      }
     });
-    // move to confirmed players
-    item.appendTo(listview);
   });
 
 })();

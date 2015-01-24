@@ -1,6 +1,7 @@
 (function() {
 
   var listview = $("ol");
+  var dnfList = $("ul#dnf-list");
   var dnfLinks = listview.find("a#dnf-round");
 
   dnfLinks.on("click", function() {
@@ -10,10 +11,17 @@
     // remove from db
     $.ajax({
       type: 'POST',
-      url: url
+      url: url,
+      success: function() {
+        // move to dnf players
+        item.remove();
+        $('<li/>', {
+          text: item.text()
+        }).appendTo(dnfList);
+        dnfList.listview('refresh');
+        listview.listview('refresh');
+      }
     });
-    // remove from page
-    item.remove();
   });
 
 })();

@@ -1,11 +1,13 @@
 <div data-role="page">
-  <div data-role="header">
-    <h1>#{competitionName competition}, #{showDay (competitionDate competition)}
+  ^{headerWidget}
 
   <div data-role="content">
     <div .content-primary>
       $maybe msg <- mmsg
         <div #message>#{msg}
+
+      <p .ui-bar  .ui-bar-a .ui-corner-all>
+        #{competitionName competition}, #{showDay (competitionDate competition)}
 
       $if full
         <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype} .ui-state-disabled>
@@ -15,7 +17,6 @@
           ^{formWidget}
 
       <ol data-role="listview" data-inset="true">
-
         $forall (d, msg) <- divisions
           <li data-role="list-divider">_{msg}
           $forall (_, _, E.Value division, E.Value name) <- signups

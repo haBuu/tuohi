@@ -116,9 +116,6 @@ executable         weeklyapp
     build-depends:     base
                      , weeklyapp
                      , yesod
-                     , warp-tls
-                     , warp
-                     , monad-logger
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
 

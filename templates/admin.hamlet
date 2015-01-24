@@ -6,7 +6,7 @@
       $maybe msg <- mmsg
         <div #message>#{msg}
 
-      <h5 .ui-bar  .ui-bar-a .ui-corner-all>
+      <p .ui-bar  .ui-bar-a .ui-corner-all>
         _{MsgPassword}: #{current}
 
       <a href=@{NewCompetitionR} .ui-btn>_{MsgNewCompetition}

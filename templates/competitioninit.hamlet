@@ -10,17 +10,17 @@
       <ol data-role="listview" data-inset="true" data-split-icon="delete">
 
         <li data-role="list-divider">_{MsgNotPresent}
-        $forall (E.Value sid, E.Value confirmed, E.Value _, E.Value name) <- signups
+        $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
           $if not confirmed
             <li>
-              <a data-url=@{ConfirmSignUpR sid} #confirm-signup >#{name}
-              <a data-url=@{RemoveSignUpR sid} #remove-signup data-rel="popup" data-position-to="window" data-transition="pop">#{name}
+              <a data-url=@{ConfirmSignUpR sid} #confirm-signup>#{name}
+              <a data-url=@{RemoveSignUpR sid} #remove-signup>#{name}
 
         <li data-role="list-divider" data-split-icon="delete">_{MsgPresent}
         $forall (E.Value sid, E.Value confirmed, E.Value _, E.Value name) <- signups
           $if confirmed
             <li>
               <a>#{name}
-              <a data-url=@{RemoveSignUpR sid} id="remove-signup" data-rel="popup" data-position-to="window" data-transition="pop">#{name}
+              <a data-url=@{RemoveSignUpR sid} #remove-signup>
 
       <a href=@{AdminR} data-role="button">_{MsgBack}
