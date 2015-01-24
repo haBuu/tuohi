@@ -26,7 +26,6 @@ initPage cid = do
     startCompetitionForm cid
   muser <- maybeAuthUser
   defaultLayout $ do
-    setTitle "Competition"
     let headerWidget = $(widgetFile "header")
     $(widgetFile "init")
     $(widgetFile "competitioninit")
@@ -45,7 +44,7 @@ startedPage cid = do
       currentRound = maybe 1 (\(_, E.Value r, _, _) -> r) mround
   muser <- maybeAuthUser
   defaultLayout $ do
-    setTitle "Competition"
+    mmsg <- getMessage
     let headerWidget = $(widgetFile "header")
     $(widgetFile "started")
 
@@ -54,41 +53,32 @@ finishedPage cid = do
   competition <- runDB $ get404 cid
   muser <- maybeAuthUser
   defaultLayout $ do
-    setTitle "Competition"
+    mmsg <- getMessage
     let headerWidget = $(widgetFile "header")
     $(widgetFile "finished")
 
 postCompetitionNextRoundR :: CompetitionId -> Handler Html
 postCompetitionNextRoundR cid = do
   ((result, _), _) <- runFormPost $ nextRoundForm cid
-  case result of
-    FormSuccess res -> do
-      nextRound res
-      setMessage "Kierros vaihdettiin onnistuneesti"
-    FormFailure err -> setMessage $ toHtml $ head err
-    FormMissing -> setMessage "No mitä vittua?"
+  formHandler result $ \res -> do
+    nextRound res
+    setMessageI MsgNextRoundChanged
   redirect $ CompetitionR cid
 
 postCompetitionFinishR :: CompetitionId -> Handler Html
 postCompetitionFinishR cid = do
   ((result, _), _) <- runFormPost $ finishCompetitionForm cid
-  case result of
-    FormSuccess res -> do
-      finishCompetition res
-      setMessage "Kisa lopetettiin onnistuneesti"
-    FormFailure err -> setMessage $ toHtml $ head err
-    FormMissing -> setMessage "No mitä vittua?"
+  formHandler result $ \res -> do
+    finishCompetition res
+    setMessageI MsgCompetitionFinished
   redirect $ CompetitionR cid
 
 postCompetitionR :: CompetitionId -> Handler Html
 postCompetitionR cid = do
   ((result, _), _) <- runFormPost $ startCompetitionForm cid
-  case result of
-    FormSuccess res -> do
-      startCompetition res
-      setMessage "Kisa aloitettiin onnistuneesti"
-    FormFailure err -> setMessage $ toHtml $ head err
-    FormMissing -> setMessage "No mitä vittua?"
+  formHandler result $ \res -> do
+    startCompetition res
+    setMessageI MsgCompetitionStarted
   redirect $ CompetitionR cid
 
 postConfirmSignUpR :: SignUpId -> Handler Html

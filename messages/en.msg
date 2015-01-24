@@ -65,3 +65,7 @@ AdminPanel: Admin panel
 WrongAnswer: Wrong answer
 ReloadPage: Reload the page if the scores change
 DNF: DNF
+CompetitionAdded: Competition added
+CompetitionStarted: Competition started
+CompetitionFinished: Competition finished
+NextRoundChanged: Next round changed

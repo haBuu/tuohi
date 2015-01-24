@@ -65,3 +65,7 @@ AdminPanel: Hallinta
 WrongAnswer: Väärä vastaus
 ReloadPage: Lataa sivu uudestaan tulosten muuttuessa
 DNF: DNF
+CompetitionAdded: Kilpailu lisätty
+CompetitionStarted: Kilpailu aloitettu
+CompetitionFinished: Kilpailu lopetettu
+NextRoundChanged: Seuraava kierros vaihdettu

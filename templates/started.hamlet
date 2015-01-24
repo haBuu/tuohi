@@ -3,6 +3,8 @@
 
   <div data-role="content">
     <div .content-primary>
+      $maybe msg <- mmsg
+        <div #message>#{msg}
 
       <p .ui-bar  .ui-bar-a .ui-corner-all>_{MsgRound}: #{currentRound}
 

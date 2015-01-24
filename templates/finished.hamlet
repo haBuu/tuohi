@@ -3,6 +3,8 @@
 
   <div data-role="content">
     <div .content-primary>
+      $maybe msg <- mmsg
+        <div #message>#{msg}
 
       <ul data-role="listview" data-inset="true">
         <li data-role="list-divider">_{MsgInformation}

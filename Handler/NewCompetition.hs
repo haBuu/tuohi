@@ -22,10 +22,7 @@ getNewCompetitionR = do
 postNewCompetitionR :: Handler Html
 postNewCompetitionR = do
   ((result, formWidget), formEnctype) <- runFormPost newCompetitionForm
-  case result of
-    FormSuccess res -> do
-      runDB $ insert_ res
-      setMessage "Kisa lisättiin onnistuneesti"
-    FormFailure err -> setMessage $ toHtml $ head err
-    FormMissing -> setMessage "No mitä vittua?"
+  formHandler result $ \res -> do
+    runDB $ insert_ res
+    setMessageI MsgCompetitionAdded
   redirect AdminR
