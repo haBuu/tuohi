@@ -68,6 +68,7 @@ addPlacements holes (x:xs) = loop 2 (1, x) xs
     loop index previous [] = [previous]
     loop index previous (x:xs) =
       if countToPar holes (thd x) == countToPar holes (thd $ snd previous)
+        && not (dnf $ thd x)
         -- placement remains the same
         then [previous] ++ loop (index + 1) (fst previous, x) xs
         -- next placement from index
