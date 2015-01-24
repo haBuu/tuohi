@@ -69,3 +69,5 @@ CompetitionAdded: Competition added
 CompetitionStarted: Competition started
 CompetitionFinished: Competition finished
 NextRoundChanged: Next round changed
+ProfileUpdated: Profile updated
+ProfileUpdateFailure: Profile update failed

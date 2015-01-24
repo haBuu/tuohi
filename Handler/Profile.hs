@@ -11,7 +11,6 @@ import Database
 
 getProfileR :: Handler Html
 getProfileR = do
-  maid <- maybeAuthId
   muser <- maybeAuthUser
   case muser of
     Just user -> do
@@ -36,8 +35,8 @@ postProfileR = do
         case maid of
           Just aid -> do
             updateUser aid name email
-            setMessage "Profiilin päivitys onnistui"
-          Nothing -> setMessage "Profiilin päivitys epäonnistui"
+            setMessageI MsgProfileUpdated
+          Nothing -> setMessageI MsgProfileUpdateFailure
     -- see getProfileR
     Nothing -> return ()
   redirect ProfileR

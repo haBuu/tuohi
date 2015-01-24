@@ -69,3 +69,5 @@ CompetitionAdded: Kilpailu lisätty
 CompetitionStarted: Kilpailu aloitettu
 CompetitionFinished: Kilpailu lopetettu
 NextRoundChanged: Seuraava kierros vaihdettu
+ProfileUpdated: Profiili päivitetty
+ProfileUpdateFailure: Profiilin päivitys epäonnistui
