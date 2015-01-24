@@ -4,18 +4,24 @@
   <div data-role="content">
     <div .content-primary>
 
+      <p .ui-bar  .ui-bar-a .ui-corner-all>_{MsgRound}: #{currentRound}
+
       <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
         ^{nextRoundFormWidget}
 
       <ol data-role="listview" data-inset="true" data-split-icon="delete">
-
         $forall group <- groups
           <li data-role="list-divider">#{group}
           $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
             $if group == groupNumber
               <li>
                 <a>#{name}
-                <a data-url=@{DnfRoundR rid} #dnf-round data-rel="popup" data-position-to="window" data-transition="pop">#{name}
+                <a data-url=@{DnfRoundR rid} #dnf-round>#{name}
+
+      <ul #dnf-list data-role="listview" data-inset="true">
+        <li data-role="list-divider">_{MsgDNF}
+        $forall (E.Value rid, E.Value name) <- dnf
+          <li>#{name}
 
       <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishCompetitionFormEnctype}>
         ^{finishCompetitionFormWidget}

@@ -38,8 +38,11 @@ startedPage cid = do
   (finishCompetitionFormWidget, finishCompetitionFormEnctype) <- generateFormPost $
     identifyForm "finish" $ finishCompetitionForm cid
   rounds <- roundsWithNames cid
+  dnf <- dnfRoundsWithNames cid
   -- for hamlet so it can put dividers between groups
   let groups = nub $ for rounds $ \(_,_,E.Value g,_) -> g
+      mround = safeHead rounds
+      currentRound = maybe 1 (\(_, E.Value r, _, _) -> r) mround
   muser <- maybeAuthUser
   defaultLayout $ do
     setTitle "Competition"
