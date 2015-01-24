@@ -46,7 +46,8 @@ getNotifications :: Handler [Entity Notification]
 getNotifications = runDB $ selectList []
   [Desc NotificationDate, LimitTo 5]
 
--- select competitions with state Init and corresponding sign ups with user names for each competition
+-- select competitions with state Init and corresponding sign ups
+-- with user names for each competition
 competitionsAndSignUps :: Handler [(Entity Competition, [(E.Value (Key SignUp), E.Value Bool, E.Value Division, E.Value Text)])]
 competitionsAndSignUps = do
   competitions <- runDB $ selectList [CompetitionState ==. Init]
@@ -131,7 +132,7 @@ insertLayout layout holes = do
     Just lid -> forM_ [1..holes] $ \n -> runDB $ insertUnique $ Hole lid n 3
     Nothing -> return ()
 
--- select rounds for given competition with user names
+-- select started rounds for given competition with user names
 roundsWithNames :: CompetitionId
   -> Handler [(E.Value (Key Round), E.Value Int, E.Value Int, E.Value Text)]
 roundsWithNames cid = runDB $ E.select $
@@ -144,6 +145,20 @@ roundsWithNames cid = runDB $ E.select $
       ( round_ ^. RoundId
       , round_ ^. RoundRoundnumber
       , round_ ^. RoundGroupnumber
+      , user ^. UserName
+      )
+
+-- select dnf rounds with user names
+dnfRoundsWithNames :: CompetitionId
+  -> Handler [(E.Value (Key Round), E.Value Text)]
+dnfRoundsWithNames cid = runDB $ E.select $
+  E.from $ \(round_ `E.InnerJoin` user) -> do
+    E.on $ round_ ^. RoundUserId E.==. user ^. UserId
+    E.where_ $ round_ ^. RoundCompetitionId E.==. E.val cid
+    E.where_ $ round_ ^. RoundState E.==. E.val R.DidNotFinish
+    E.orderBy [E.asc (round_ ^. RoundGroupnumber)]
+    return
+      ( round_ ^. RoundId
       , user ^. UserName
       )
 
