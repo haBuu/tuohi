@@ -231,8 +231,8 @@ instance YesodAuth App where
   type AuthId App = UserId
 
   renderAuthMessage _ langs =
-    case safeHead langs of
-      Just "fi" -> finnishMessage
+    case any (isInfixOf "fi") langs of
+      True -> finnishMessage
       _ -> defaultMessage
 
   -- Where to send a user after successful login
