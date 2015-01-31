@@ -8,3 +8,6 @@
     <form action=@{LanguageR} method=post>
       <input type="hidden" value="fi" name="lang">
       <input type="submit" data-icon="none" data-iconpos="notext" data-wrapper-class="flag-icon-fi">
+
+  <div style="float:right">
+    <a href=@{InfoR} .ui-btn .ui-corner-all .ui-icon-info .ui-btn-icon-notext>

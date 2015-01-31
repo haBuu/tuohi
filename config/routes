@@ -21,6 +21,7 @@
 /profile ProfileR GET POST
 
 /language LanguageR POST
+/info InfoR GET
 
 /admin AdminR GET
 

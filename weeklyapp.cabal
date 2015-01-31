@@ -42,6 +42,7 @@ library
                      Handler.Division
                      Handler.Language
                      Handler.Results
+                     Handler.Info
                      Helpers
                      Database
                      Competition.Competition
