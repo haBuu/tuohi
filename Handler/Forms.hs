@@ -277,15 +277,15 @@ scoreForm hid rid name score extra = do
         , ("data-mini","true")
         , ("data-inline","true")
         , ("data-url", r (ScoreR rid hid))
+        , ("class", "form-control")
         ])
   (scoreRes, scoreView) <- mreq (selectFieldList scores) set score
   let result = Score <$> (pure rid) <*> (pure hid) <*> scoreRes
   let widget = [whamlet|
       #{extra}
-      <fieldset .ui-grid-a>
-        <div .ui-block-a>
-          <p>#{name}
-        <div .ui-block-b>
+      <div .form-group>
+        <label .col-sm-1 .control-label>#{name}
+        <div .col-sm-2 .pull-right>
           ^{fvInput scoreView}
     |]
   return (result, widget)

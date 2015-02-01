@@ -78,3 +78,4 @@ CourseAdded: Rata lisätty
 LayoutAdded: Layout lisätty
 LayoutUpdated: Layout päivitetty
 Group: Ryhmä
+Send: Lähetä

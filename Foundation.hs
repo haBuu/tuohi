@@ -33,6 +33,8 @@ import Data.Text(Text, isInfixOf)
 import Control.Monad (join)
 import Helpers
 
+import qualified Yesod.Auth.Message as Msg
+
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
 -- starts running, such as database connections. Every handler will have
@@ -337,7 +339,8 @@ instance YesodAuthEmail App where
 
   getEmail = runDB . fmap (fmap userEmail) . get
 
-  registerHandler = defaultRegisterHandler
+  registerHandler = myRegisterHandler
+  confirmationEmailSentResponse = myConfirmationEmailSentResponse
 
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.
@@ -356,3 +359,34 @@ getExtra = fmap (appExtra . settings) getYesod
 -- https://github.com/yesodweb/yesod/wiki/Sending-email
 
 instance YesodJquery App
+
+-- own implementations for nicer ui
+myRegisterHandler :: YesodAuthEmail master => AuthHandler master Html
+myRegisterHandler = do
+  tp <- getRouteToParent
+  lift $ authLayout $ do
+    setTitleI Msg.RegisterLong
+    [whamlet|
+      <div .container>
+        <p>_{Msg.EnterEmail}
+        <form method="post" action="@{tp registerR}">
+          <div .form-group>
+            <label .control-label>_{Msg.Email}:
+            <input .form-control type="email" name="email" autofocus>
+          <div .form-group>
+            <input type=submit .btn .btn-default .btn-block value=_{Msg.Register}>
+    |]
+
+myConfirmationEmailSentResponse :: Text -> HandlerT App IO TypedContent
+myConfirmationEmailSentResponse identifier = do
+  mr <- getMessageRender
+  selectRep $ do
+    provideJsonMessage (mr msg)
+    provideRep $ authLayout $ do
+      setTitleI Msg.ConfirmationEmailSentTitle
+      [whamlet|
+        <div .container>
+          <p>_{msg}
+      |]
+  where
+    msg = Msg.ConfirmationEmailSent identifier

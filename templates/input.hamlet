@@ -1,26 +1,32 @@
-$forall (hole, forms) <- holesAndForms
-  <div data-role="page" #hole-#{show hole}>
-    <div data-role="header">
-      <h1>Väylä #{show hole}
-      <a href=@{HomeR} .ui-btn-left .ui-btn .ui-corner-all .ui-icon-home .ui-btn-icon-notext>
-      $maybe user <- muser
-        $if userAdmin user || userSuperAdmin user
-          <a href=@{AdminR} .ui-btn-right .ui-btn .ui-corner-all .ui-icon-gear .ui-btn-icon-notext>
+<div .container>
+  <div role="tabpanel">
+    <div class="tab-content">
+      $forall (hole, forms) <- holesAndForms
 
-    <div data-role="content">
-      <div .content-primary>
+        $if hole == 1
+          <div role="tabpanel" .tab-pane .active #hole-#{show hole}>
+            <h3 .page-header>Väylä #{show hole}
+            $forall (formWidget, formEnctype) <- forms
+              <form .form-horizontal method=post enctype=#{formEnctype}>
+                ^{formWidget}
+            <footer class="footer">
+              <div .btn-group .btn-group-lg .btn-group-justified>
+                $if hole == 1
+                  <a href=#hole-#{length holesAndForms} #prev .btn .btn-default role="tab" data-toggle="tab">Edellinen
+                $else
+                  <a href=#hole-#{show (hole - 1)} #prev .btn .btn-default role="tab" data-toggle="tab">Edellinen
+                <a href=#hole-#{mod hole (length holesAndForms) + 1} #next .btn .btn-default role="tab" data-toggle="tab">Seuraava
 
-        $forall (formWidget, formEnctype) <- forms
-          <form method=post enctype=#{formEnctype}>
-            ^{formWidget}
-
-    <div data-role="footer" data-position="fixed">
-      <div data-role="navbar">
-        <ul>
-          <li>
-            $if hole == 1
-              <a href=#hole-#{length holesAndForms} #prev data-role="button" data-icon="arrow-l">Edellinen
-            $else
-              <a href=#hole-#{show (hole - 1)} #prev data-role="button" data-icon="arrow-l">Edellinen
-          <li>
-            <a href=#hole-#{mod hole (length holesAndForms) + 1} #next data-role="button" data-icon="arrow-r">Seuraava
+        $else
+          <div role="tabpanel" .tab-pane #hole-#{show hole}>
+            <h3 .page-header>Väylä #{show hole}
+            $forall (formWidget, formEnctype) <- forms
+              <form .form-horizontal method=post enctype=#{formEnctype}>
+                ^{formWidget}
+            <footer class="footer">
+              <div .btn-group .btn-group-lg .btn-group-justified>
+                $if hole == 1
+                  <a href=#hole-#{length holesAndForms} #prev .btn .btn-default .btn-block role="tab" data-toggle="tab">Edellinen
+                $else
+                  <a href=#hole-#{show (hole - 1)} #prev .btn .btn-default .btn-block role="tab" data-toggle="tab">Edellinen
+                <a href=#hole-#{mod hole (length holesAndForms) + 1} #next .btn .btn-default .btn-block role="tab" data-toggle="tab">Seuraava

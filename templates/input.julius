@@ -39,14 +39,4 @@ window.onload = function() {
       }
     });
   }
-
-  body.on("swipeleft", function(e) {
-    var nextpage = $('div.ui-page-active').find("a#next").attr("href");
-    $(":mobile-pagecontainer").pagecontainer("change", nextpage);
-  });
-
-  body.on("swiperight", function(e) {
-    var prevpage = $('div.ui-page-active').find("a#prev").attr("href");
-    $(":mobile-pagecontainer").pagecontainer("change", prevpage);
-  });
 }
