@@ -262,6 +262,12 @@ instance YesodAuth App where
 
   authHttpManager = httpManager
 
+  loginHandler = do
+    tp <- getRouteToParent
+    lift $ authLayout $ do
+      setTitleI Msg.LoginTitle
+      myLoginHandler tp
+
 instance YesodAuthPersist App
 
 instance YesodAuthEmail App where
@@ -341,6 +347,8 @@ instance YesodAuthEmail App where
 
   registerHandler = myRegisterHandler
   confirmationEmailSentResponse = myConfirmationEmailSentResponse
+  setPasswordHandler = mySetPasswordHandler
+  forgotPasswordHandler = myForgotPasswordHandler
 
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.
@@ -368,7 +376,7 @@ myRegisterHandler = do
     setTitleI Msg.RegisterLong
     [whamlet|
       <div .container>
-        <p>_{Msg.EnterEmail}
+        <h3>_{Msg.EnterEmail}
         <form method="post" action="@{tp registerR}">
           <div .form-group>
             <label .control-label>_{Msg.Email}:
@@ -386,7 +394,65 @@ myConfirmationEmailSentResponse identifier = do
       setTitleI Msg.ConfirmationEmailSentTitle
       [whamlet|
         <div .container>
-          <p>_{msg}
+          <h3>_{msg}
       |]
   where
     msg = Msg.ConfirmationEmailSent identifier
+
+-- TODO: type?
+-- mySetPasswordHandler :: YesodAuthEmail master => Bool -> AuthHandler master TypedContent
+mySetPasswordHandler needOld = do
+  tp <- getRouteToParent
+  mr <- lift getMessageRender
+  selectRep $ do
+    provideJsonMessage $ mr Msg.SetPass
+    provideRep $ lift $ authLayout $ do
+      setTitleI Msg.SetPassTitle
+      [whamlet|
+        <div .container>
+          <h3>_{Msg.SetPass}
+          <form method="post" action="@{tp setpassR}">
+            $if needOld
+              <div .form-group>
+                <label .control-label>_{MsgCurrentPassword}
+                <input .form-control type="password" name="current" autofocus>
+            <div .form-group>
+              <label .control-label>_{Msg.NewPass}
+              <input .form-control type="password" name="new" :not needOld:autofocus>
+            <div .form-group>
+              <label .control-label>_{Msg.ConfirmPass}
+              <input .form-control type="password" name="confirm">
+            <div .form-group>
+              <input type="submit" .btn .btn-default .btn-block value=_{Msg.SetPassTitle}>
+      |]
+
+myForgotPasswordHandler :: YesodAuthEmail master => AuthHandler master Html
+myForgotPasswordHandler = do
+  tp <- getRouteToParent
+  lift $ authLayout $ do
+    setTitleI Msg.PasswordResetTitle
+    [whamlet|
+      <div .container>
+        <h3>_{Msg.PasswordResetPrompt}
+        <form method="post" action="@{tp forgotPasswordR}">
+          <div .form-group>
+            <label .control-label>_{Msg.ProvideIdentifier}
+            <input .form-control type="text" name="email" autofocus>
+          <div .form-group>
+            <input type=submit .btn .btn-default .btn-block value=_{Msg.SendPasswordResetEmail}>
+    |]
+
+myLoginHandler tm =
+  [whamlet|
+    <div .container>
+      <form method="post" action="@{tm loginR}">
+        <div .form-group>
+          <label .control-label>_{Msg.Email}
+          <input .form-control type="email" name="email" required>
+        <div .form-group>
+          <label .control-label>_{Msg.Password}
+          <input .form-control type="password" name="password" required>
+        <div .form-group>
+          <input type=submit .btn .btn-success .btn-block value=_{Msg.LoginViaEmail}>
+      <a href="@{tm registerR}" .btn .btn-default .btn-block>_{Msg.RegisterLong}
+  |]

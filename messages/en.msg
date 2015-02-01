@@ -79,3 +79,4 @@ LayoutAdded: Layout added
 LayoutUpdated: Layout updated
 Group: Group
 Send: Send
+CurrentPassword: Current password

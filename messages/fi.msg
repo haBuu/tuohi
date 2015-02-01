@@ -79,3 +79,4 @@ LayoutAdded: Layout lisätty
 LayoutUpdated: Layout päivitetty
 Group: Ryhmä
 Send: Lähetä
+CurrentPassword: Nykyinen salasana

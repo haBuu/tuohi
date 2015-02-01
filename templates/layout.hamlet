@@ -1,7 +1,7 @@
 <div .container>
 
   <h3>_{MsgPars}
-  <form method=post action=@{LayoutR cid lid}#form enctype=#{formEnctype}>
+  <form .form-horizontal method=post action=@{LayoutR cid lid}#form enctype=#{formEnctype}>
     ^{formWidget}
 
   <a href=@{CourseR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

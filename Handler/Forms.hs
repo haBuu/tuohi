@@ -155,8 +155,9 @@ holesForm holes extra = do
         #{extra}
         $forall holeView <- holeViews
           <div .form-group>
-            <label .control-label>^{fvLabel holeView}
-            ^{fvInput holeView}
+            <label .col-sm-1 .control-label>^{fvLabel holeView}
+            <div .col-sm-2>
+              ^{fvInput holeView}
         <div .form-group>
           <input type=submit .btn .btn-default .btn-block value=_{MsgUpdateLayout}>
       |]

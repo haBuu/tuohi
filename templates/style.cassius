@@ -49,20 +49,8 @@ table#score-table tr th
 .other
   background-color: #ff8979
 
-.flag-icon-en:after
-  background-image: url(@{StaticR img_gb_png})
-  background-size: 18px 18px
-
-.flag-icon-fi:after
-  background-image: url(@{StaticR img_fi_png})
-  background-size: 18px 18px
-
 .result
   min-width: 80px
-
-div#score-page
-  width: auto
-  min-width: 100%
 
 .flag-icon
   height: 15px

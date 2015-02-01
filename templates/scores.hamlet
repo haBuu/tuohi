@@ -1,4 +1,4 @@
-<div .container #score-page>
+<div .container>
 
   <a href=@{GroupsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
