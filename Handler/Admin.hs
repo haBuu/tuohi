@@ -16,9 +16,6 @@ getAdminR = do
     [CompetitionState !=. Finished] [Asc CompetitionDate]
   finished <- runDB $ selectList [CompetitionState ==. Finished]
     [Asc CompetitionDate, LimitTo 10]
-  muser <- maybeAuthUser
   defaultLayout $ do
-    mmsg <- getMessage
-    setTitle "Admin"
-    let headerWidget = $(widgetFile "header")
+    setTitleI MsgAdminPanel
     $(widgetFile "admin")

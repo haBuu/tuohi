@@ -20,8 +20,5 @@ getResultsR cid = do
   -- for hamlet template so it will create list only for
   -- divisions which had competitors
   let divisions = map (\d -> (d, D.divisionMsg d)) $ nub $ for sortedPlayers $ \(_, d, _) -> d
-  muser <- maybeAuthUser
   defaultLayout $ do
-    $(widgetFile "style")
-    let headerWidget = $(widgetFile "header")
     $(widgetFile "results")

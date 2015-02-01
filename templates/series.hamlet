@@ -1,19 +1,12 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
+  <ul .list-group>
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgSeries}
+      $forall Entity _ serie <- series
+        <li .list-group-item>#{serieName serie}
 
-      $maybe msg <- mmsg
-        <div #message>#{msg}
+  <form method=post action=@{SeriesR}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
-      <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider">_{MsgSeries}
-        $forall Entity _ serie <- series
-          <li>
-            #{serieName serie}
-
-      <form method=post action=@{SeriesR}#form enctype=#{formEnctype}>
-        ^{formWidget}
-
-      <a href=@{AdminR} data-role="button">_{MsgBack}
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

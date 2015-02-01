@@ -1,13 +1,6 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
+  <form .form-horizontal method=post enctype=#{formEnctype}>
+    ^{formWidget}
 
-      $maybe msg <- mmsg
-        <div #message>#{msg}
-
-      <form method=post enctype=#{formEnctype}>
-        ^{formWidget}
-
-      <a href=@{UsersR} data-role="button">_{MsgBack}
+  <a href=@{UsersR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

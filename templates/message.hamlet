@@ -1,0 +1,6 @@
+$maybe msg <- mmsg
+  <div .container>
+    <div .alert .alert-info .alert-dismissible role="alert">
+      <button type="button" .close data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;
+      #{msg}

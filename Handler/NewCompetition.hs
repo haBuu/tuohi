@@ -9,14 +9,12 @@ import Database
 getNewCompetitionR :: Handler Html
 getNewCompetitionR = do
   (formWidget, formEnctype) <- generateFormPost newCompetitionForm
-  muser <- maybeAuthUser
   defaultLayout $ do
+    -- TODO: bootstrapper datepicker or something?
     -- jquery datepicker
-    addScript $ StaticR js_jquery_mobile_datepicker_js
-    addStylesheet $ StaticR css_jquery_mobile_datepicker_css
-    setTitle "Add new competition"
-    mmsg <- getMessage
-    let headerWidget = $(widgetFile "header")
+    -- addScript $ StaticR js_jquery_mobile_datepicker_js
+    -- addStylesheet $ StaticR css_jquery_mobile_datepicker_css
+    setTitleI MsgAddCompetition
     $(widgetFile "newcompetition")
 
 postNewCompetitionR :: Handler Html

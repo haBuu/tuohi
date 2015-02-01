@@ -22,7 +22,7 @@ getHomeR = do
   muser <- maybeAuthUser
   defaultLayout $ do
     setTitle "WeeklyApp"
-    let loginWidget = $(widgetFile "signin-signup")
-    let headerWidget = $(widgetFile "header")
+    -- let loginWidget = $(widgetFile "signin-signup")
+    -- let headerWidget = $(widgetFile "header")
     let languageWidget = $(widgetFile "language")
     $(widgetFile "home")

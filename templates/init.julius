@@ -1,12 +1,10 @@
 (function() {
 
-  var listview = $("ol");
-  var removeLinks = listview.find("a#remove-signup");
-  var confirmLinks = listview.find("a#confirm-signup");
+  var confirmed = $("table#confirmed");
 
-  removeLinks.on("click", function() {
+  $('body').on("click", "button#remove-signup", function() {
     var self = $(this);
-    var item = self.parent();
+    var item = self.parent().parent().parent();
     var url = self.data("url");
     // remove from db
     $.ajax({
@@ -15,14 +13,14 @@
       success: function() {
         // remove from page
         item.remove();
-        listview.listview('refresh');
       }
     });
   });
 
-  confirmLinks.on("click", function() {
+  $('body').on("click", "button#confirm-signup", function() {
     var self = $(this);
-    var item = self.parent();
+    var item = self.parent().parent().parent();
+    var rmUrl = item.find('#remove-signup').data("url");
     var url = self.data("url");
     // set to confirmed in db
     $.ajax({
@@ -30,8 +28,8 @@
       url: url,
       success: function() {
         // move to confirmed players
-        item.appendTo(listview);
-        listview.listview('refresh');
+        item.remove();
+        confirmed.append('<tr><td>' + item.find('#name').text() + '</td><td><div class="pull-right"><button data-url=' + rmUrl + ' id="remove-signup" type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span></button></div></td> ');
       }
     });
   });

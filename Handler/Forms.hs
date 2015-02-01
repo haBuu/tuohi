@@ -27,20 +27,19 @@ formHandler result f =
 newCompetitionForm :: Html
   -> MForm Handler (FormResult Competition, Widget)
 newCompetitionForm extra = do
-  mr <- lift getMessageRender
+  mr <- getMessageRender
   (layoutRes, layoutView) <- mreq (selectField layouts)
     (FieldSettings (SomeMessage MsgLayout) Nothing Nothing Nothing
-      []) Nothing
+      [("class", "form-control")]) Nothing
   (dayRes, dayView) <- mreq dayField
     (FieldSettings (SomeMessage MsgDate) Nothing Nothing Nothing
-      [ ("placeholder", mr MsgDate)
-      , ("data-role","date"),("readonly","true")]) Nothing
+      [("placeholder", mr MsgDate), ("class", "form-control")]) Nothing
   (nameRes, nameView) <- mreq textField
     (FieldSettings (SomeMessage MsgCompetitionName) Nothing Nothing Nothing
-      [("placeholder", mr MsgCompetitionName)]) Nothing
-  (playersRes, playersView) <- mreq rangeField
+      [("placeholder", mr MsgCompetitionName), ("class", "form-control")]) Nothing
+  (playersRes, playersView) <- mreq intField
     (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
-      [("min","1"),("max", "200")]) (Just 54)
+      [("min","1"),("max", "200"), ("class", "form-control")]) (Just 54)
   let competitionRes = Competition
                         <$> layoutRes
                         <*> dayRes
@@ -49,21 +48,20 @@ newCompetitionForm extra = do
                         <*> (pure Init)
   let widget = [whamlet|
         #{extra}
-        <ul data-role="listview" data-inset="true">
-          <li .ui-field-contain>
-            <label>^{fvLabel layoutView}
-            ^{fvInput layoutView}
-          <li .ui-field-contain>
-            <label>^{fvLabel dayView}
-            ^{fvInput dayView}
-          <li .ui-field-contain>
-            <label>^{fvLabel nameView}
-            ^{fvInput nameView}
-          <li .ui-field-contain>
-            <label>^{fvLabel playersView}
-            ^{fvInput playersView}
-          <li .ui-field-contain>
-            <input type=submit value=_{MsgAddCompetition}>
+        <div .form-group>
+          <label .control-label>^{fvLabel layoutView}
+          ^{fvInput layoutView}
+        <div .form-group>
+          <label .control-label>^{fvLabel dayView}
+          ^{fvInput dayView}
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <label .control-label>^{fvLabel playersView}
+          ^{fvInput playersView}
+        <div .form-group>
+            <input type=submit .btn .btn-default .btn-block value=_{MsgAddCompetition}>
       |]
   return (competitionRes, widget)
   where
@@ -76,37 +74,35 @@ newCompetitionForm extra = do
 
 newCourseForm :: Html -> MForm Handler (FormResult Course, Widget)
 newCourseForm extra = do
-  mr <- lift getMessageRender
+  mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (FieldSettings (SomeMessage MsgAddCourse) Nothing Nothing Nothing
-      [("placeholder", mr MsgAddCourse)]) Nothing
+      [("placeholder", mr MsgAddCourse), ("class", "form-control")]) Nothing
   let courseRes = Course <$> nameRes
   let widget = [whamlet|
         #{extra}
-        <ul data-role="listview" data-inset="true">
-          <li .ui-field-contain>
-            <label>^{fvLabel nameView}
-            ^{fvInput nameView}
-          <li .ui-field-contain>
-            <input type=submit value=_{MsgAddCourse}>
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgAddCourse}>
       |]
   return (courseRes, widget)
 
 newSerieForm :: Html -> MForm Handler (FormResult Serie, Widget)
 newSerieForm extra = do
-  mr <- lift getMessageRender
+  mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (FieldSettings (SomeMessage MsgSerieName) Nothing Nothing Nothing
-      [("placeholder", mr MsgSerieName)]) Nothing
+      [("placeholder", mr MsgSerieName), ("class", "form-control")]) Nothing
   let serieRes = Serie <$> nameRes
   let widget = [whamlet|
         #{extra}
-        <ul data-role="listview" data-inset="true">
-          <li .ui-field-contain>
-            <label>^{fvLabel nameView}
-            ^{fvInput nameView}
-          <li .ui-field-contain>
-            <input type=submit value=_{MsgAddSerie}>
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgAddSerie}>
       |]
   return (serieRes, widget)
 
@@ -116,13 +112,13 @@ newLayoutForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (FieldSettings (SomeMessage MsgLayoutName) Nothing Nothing Nothing
-      [("placeholder", mr MsgLayoutName)]) Nothing
+      [("placeholder", mr MsgLayoutName), ("class", "form-control")]) Nothing
   (descRes, descView) <- mreq textField
     (FieldSettings (SomeMessage MsgLayoutDesc) Nothing Nothing Nothing
-      [("placeholder", mr MsgLayoutDesc)]) Nothing
-  (holesRes, holesView) <- mreq rangeField
+      [("placeholder", mr MsgLayoutDesc), ("class", "form-control")]) Nothing
+  (holesRes, holesView) <- mreq intField
     (FieldSettings (SomeMessage MsgNumberOfHoles) Nothing Nothing Nothing
-      [("min","1"),("max", "50")]) (Just 9)
+      [("min","1"), ("max", "50"), ("class", "form-control")]) (Just 9)
   let layoutRes = Layout
                     <$> (pure cid)
                     <*> nameRes
@@ -130,56 +126,55 @@ newLayoutForm cid extra = do
   let res = (,) <$> layoutRes <*> holesRes
   let widget = [whamlet|
         #{extra}
-        <ul data-role="listview" data-inset="true">
-          <li .ui-field-contain>
-            <label>^{fvLabel nameView}
-            ^{fvInput nameView}
-          <li .ui-field-contain>
-            <label>^{fvLabel descView}
-            ^{fvInput descView}
-          <li .ui-field-contain>
-            <label>^{fvLabel holesView}
-            ^{fvInput holesView}
-          <li .ui-field-contain>
-            <input type=submit value=_{MsgAddLayout}>
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <label .control-label>^{fvLabel descView}
+          ^{fvInput descView}
+        <div .form-group>
+          <label .control-label>^{fvLabel holesView}
+          ^{fvInput holesView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgAddLayout}>
       |]
   return (res, widget)
 
 holesForm :: [Entity Hole] -> Html
   -> MForm Handler (FormResult [(HoleId, Int)], Widget)
 holesForm holes extra = do
+  mr <- getMessageRender
   -- select field for every hole
   holeFields <- forM holes $ \(Entity hid hole) ->
-    mreq (selectFieldList pars) set $ Just $ holePar hole
+    mreq (selectFieldList pars) (set (mr MsgHole) (holeNumber hole)) $ Just $ holePar hole
   let (holeResults, holeViews) = unzip holeFields
   -- add holeids
   let result = sequenceA $ Import.for (Import.zip holes holeResults) $
         \((Entity hid _), res) -> (,) <$> (pure hid) <*> res
   let widget = [whamlet|
         #{extra}
-        <ul data-role="listview" data-inset="true">
-          <li .ui-field-contain>
-            <label>_{MsgPars}
-            <fieldset data-role="controlgroup" data-type="horizontal">
-              $forall holeView <- holeViews
-                ^{fvInput holeView}
-          <li .ui-field-contain>
-            <input type=submit value=_{MsgUpdateLayout}>
+        $forall holeView <- holeViews
+          <div .form-group>
+            <label .control-label>^{fvLabel holeView}
+            ^{fvInput holeView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgUpdateLayout}>
       |]
   return (result, widget)
   where
     pars :: [(Text, Int)]
     pars = [("2", 2),("3", 3),("4", 4),("5", 5),("6", 6)]
-    set :: FieldSettings App
-    set = FieldSettings (SomeMessage MsgPars)
-      Nothing Nothing Nothing [("data-icon","false")]
+    set :: Text -> Int -> FieldSettings App
+    set hole n = FieldSettings
+      (SomeMessage (pack ((unpack hole) ++ " " ++ (show n))))
+      Nothing Nothing Nothing [("class", "form-control")]
 
 startCompetitionForm :: CompetitionId -> Html
   -> MForm Handler (FormResult CompetitionId, Widget)
 startCompetitionForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit value=_{MsgStartCompetition}>
+        <input type=submit .btn .btn-default .btn-block value=_{MsgStartCompetition}>
       |]
   return (pure cid, widget)
 
@@ -188,7 +183,7 @@ nextRoundForm :: CompetitionId -> Html
 nextRoundForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit value=_{MsgNextRound}>
+        <input type=submit .btn .btn-default .btn-block value=_{MsgNextRound}>
       |]
   return (pure cid, widget)
 
@@ -197,7 +192,7 @@ finishCompetitionForm :: CompetitionId -> Html
 finishCompetitionForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit value=_{MsgFinishCompetition}>
+        <input type=submit .btn .btn-default .btn-block value=_{MsgFinishCompetition}>
       |]
   return (pure cid, widget)
 
@@ -207,16 +202,16 @@ signUpForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
-      [("placeholder", mr MsgName)]) Nothing
+      [("placeholder", mr MsgName), ("class", "form-control")]) Nothing
   (emailRes, emailView) <- mreq emailField
     (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
-      [("placeholder", mr MsgEmail)]) Nothing
+      [("placeholder", mr MsgEmail), ("class", "form-control")]) Nothing
   (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
   (botCheckRes, botCheckView) <- mreq (checkBotField mr)
     (FieldSettings (SomeMessage MsgBotCheckField) Nothing Nothing Nothing
-      [("placeholder", mr MsgBotCheckQuestion)]) Nothing
+      [("placeholder", mr MsgBotCheckQuestion), ("class", "form-control")]) Nothing
   let result = (,,,)
                 <$> nameRes
                 <*> emailRes
@@ -224,15 +219,21 @@ signUpForm cid extra = do
                 <*> botCheckRes
   let widget = [whamlet|
         #{extra}
-        <label>^{fvLabel nameView}
-        ^{fvInput nameView}
-        <label>^{fvLabel emailView}
-        ^{fvInput emailView}
-        <label>^{fvLabel divisionView}
-        ^{fvInput divisionView}
-        <label>^{fvLabel botCheckView}
-        ^{fvInput botCheckView}
-        <input type=submit value=_{MsgSignUp}>
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <label .control-label>^{fvLabel emailView}
+          ^{fvInput emailView}
+        <div .form-group>
+          <label>^{fvLabel divisionView}
+          <div .radio>
+            ^{fvInput divisionView}
+        <div .form-group>
+          <label .control-label>^{fvLabel botCheckView}
+          ^{fvInput botCheckView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgSignUp}>
       |]
   return (result, widget)
   where
@@ -254,9 +255,12 @@ signUpFormLoggedIn cid user extra = do
                 <*> (pure 0)
   let widget = [whamlet|
         #{extra}
-        <label>^{fvLabel divisionView}
-        ^{fvInput divisionView}
-        <input type=submit value=_{MsgSignUp}>
+        <div .form-group>
+          <label>^{fvLabel divisionView}
+          <div .radio>
+            ^{fvInput divisionView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgSignUp}>
       |]
   return (result, widget)
 
@@ -294,50 +298,71 @@ profileForm user extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
-      [("placeholder", mr MsgName)]) (Just $ userName user)
+      [("placeholder", mr MsgName), ("class", "form-control")]) (Just $ userName user)
   (emailRes, emailView) <- mreq emailField
     (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
-      [("placeholder", mr MsgEmail)]) (Just $ userEmail user)
+      [("placeholder", mr MsgEmail), ("class", "form-control")]) (Just $ userEmail user)
   let result = (,) <$> nameRes <*> emailRes
   let widget = [whamlet|
         #{extra}
-        <label>^{fvLabel nameView}
-        ^{fvInput nameView}
-        <label>^{fvLabel emailView}
-        ^{fvInput emailView}
-        <input type=submit value=_{MsgUpdate}>
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <label .control-label>^{fvLabel emailView}
+          ^{fvInput emailView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgUpdate}>
       |]
   return (result, widget)
 
-userForm :: User -> Html -> MForm Handler (FormResult Bool, Widget)
+userForm :: User -> Html -> MForm Handler (FormResult (Text, Text, Bool), Widget)
 userForm user extra = do
+  mr <- getMessageRender
+  (nameRes, nameView) <- mreq textField
+    (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
+      [("placeholder", mr MsgName), ("class", "form-control")]) (Just $ userName user)
+  (emailRes, emailView) <- mreq emailField
+    (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
+      [("placeholder", mr MsgEmail), ("class", "form-control")]) (Just $ userEmail user)
   (adminRes, adminView) <- mreq checkBoxField
-    (FieldSettings (SomeMessage MsgAdmin) Nothing Nothing Nothing
+    (FieldSettings "" Nothing Nothing Nothing
       []) (Just $ userAdmin user)
+  let result = (,,) <$> nameRes <*> emailRes <*> adminRes
   let widget = [whamlet|
         #{extra}
-        <ul data-role="listview" data-inset="true">
-          <li>_{MsgName}: #{userName user}
-          <li>_{MsgEmail}: #{userEmail user}
-          <li .ui-field-contain>
-            <label>^{fvLabel adminView}
-              ^{fvInput adminView}
-          <li .ui-field-contain>
-            <input type=submit value=_{MsgUpdate}>
+        <div .form-group>
+          <label .col-sm-3 .control-label>^{fvLabel nameView}
+          <div .col-sm-6>
+            ^{fvInput nameView}
+        <div .form-group>
+          <label .col-sm-3 .control-label>^{fvLabel emailView}
+          <div .col-sm-6>
+            ^{fvInput emailView}
+        <div .form-group>
+          <div .col-sm-offset-3 .col-sm-6>
+            <div .checkbox>
+              <label>
+                ^{fvInput adminView}_{MsgAdmin}
+        <div .form-group>
+          <div .col-sm-offset-3 .col-sm-6>
+            <input type=submit .btn .btn-default .btn-block value=_{MsgUpdate}>
       |]
-  return (adminRes, widget)
+  return (result, widget)
 
 tempAuthForm :: Html -> MForm Handler (FormResult Text, Widget)
 tempAuthForm extra = do
   mr <- getMessageRender
   (pwRes, pwView) <- mreq passwordField
     (FieldSettings (SomeMessage MsgPassword) Nothing Nothing Nothing
-      [("placeholder", mr MsgPassword)]) Nothing
+      [("placeholder", mr MsgPassword), ("class", "form-control")]) Nothing
   let widget = [whamlet|
         #{extra}
-        <label>^{fvLabel pwView}
-        ^{fvInput pwView}
-        <input type=submit value=_{MsgLogIn}>
+        <div .form-group>
+          <label .control-label>^{fvLabel pwView}
+          ^{fvInput pwView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgLogIn}>
       |]
   return (pwRes, widget)
 
@@ -347,19 +372,18 @@ notificationForm uid time extra = do
   mr <- getMessageRender
   (contentRes, contentView) <- mreq textareaField
     (FieldSettings (SomeMessage MsgNotification) Nothing Nothing Nothing
-      [("placeholder", mr MsgNotification)]) Nothing
+      [("placeholder", mr MsgNotification), ("class", "form-control")]) Nothing
   let result = Notification
                 <$> contentRes
                 <*> pure uid
                 <*> pure time
   let widget = [whamlet|
         #{extra}
-        <ul data-role="listview" data-inset="true">
-          <li .ui-field-contain>
-            <label>^{fvLabel contentView}
-            ^{fvInput contentView}
-          <li .ui-field-contain>
-            <input type=submit value=_{MsgAddNotification}>
+        <div .form-group>
+          <label .control-label>^{fvLabel contentView}
+          ^{fvInput contentView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{MsgAddNotification}>
       |]
   return (result, widget)
 

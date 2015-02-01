@@ -1,37 +1,33 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
-      $maybe msg <- mmsg
-        <div #message>#{msg}
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgPassword}: #{current}
 
-      <p .ui-bar  .ui-bar-a .ui-corner-all>
-        _{MsgPassword}: #{current}
+  <a href=@{NewCompetitionR} .btn .btn-default .btn-block .btn-lg>_{MsgNewCompetition}
 
-      <a href=@{NewCompetitionR} .ui-btn>_{MsgNewCompetition}
+  <ul .list-group>
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgActiveCompetitions}
+      $forall Entity cid competition <- competitions
+        $if competitionState competition == Started
+          <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
 
-      <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider">_{MsgActiveCompetitions}
-        $forall Entity cid competition <- competitions
-          $if competitionState competition == Started
-            <li>
-              <a href=@{CompetitionR cid}>#{competitionName competition}
+  <ul .list-group>
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgFutureCompetitions}
+      $forall Entity cid competition <- competitions
+        $if competitionState competition == Init
+          <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
 
-        <li data-role="list-divider">_{MsgFutureCompetitions}
-        $forall Entity cid competition <- competitions
-          $if competitionState competition == Init
-            <li>
-              <a href=@{CompetitionR cid}>#{competitionName competition}
+  <ul .list-group>
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgPastCompetitions}
+      $forall Entity cid competition <- finished
+        <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
 
-        <li data-role="list-divider">_{MsgPastCompetitions}
-        $forall Entity cid competition <- finished
-          <li>
-            <a href=@{CompetitionR cid}>#{competitionName competition}
-
-      $if superAdmin
-        <a href=@{UsersR} .ui-btn>_{MsgUsers}
-
-      <a href=@{NotificationsR} .ui-btn>_{MsgNotifications}
-      <a href=@{CoursesR} .ui-btn>_{MsgCourses}
-      <a href=@{SeriesR} .ui-btn>_{MsgSeries}
+  <div .btn-group .btn-group-vertical .btn-block .btn-group-lg>
+    $if superAdmin
+      <a href=@{UsersR} .btn .btn-default>_{MsgUsers}
+    <a href=@{NotificationsR} .btn .btn-default>_{MsgNotifications}
+    <a href=@{CoursesR} .btn .btn-default>_{MsgCourses}
+    <a href=@{SeriesR} .btn .btn-default>_{MsgSeries}

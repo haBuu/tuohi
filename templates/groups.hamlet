@@ -1,17 +1,12 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
+  <a href=@{CompetitionScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgResults}
+  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-      <a href=@{CompetitionScoresR cid} data-role="button">_{MsgResults}
-      <a href=@{HomeR} data-role="button">_{MsgBack}
-
-      <ol data-role="listview" data-inset="true">
-
-        $forall group <- groups
-          <li data-role="list-divider"> #{group}
-          $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
-            $if group == groupNumber
-              <li data-icon="false">
-                <a href=@{InputR cid groupNumber}>#{name}
+  <ul .list-group>
+    $forall group <- groups
+      <div .panel .panel-default>
+        <div .panel-heading>#{group}
+        $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
+          $if group == groupNumber
+            <a href=@{InputR cid groupNumber} .list-group-item>#{name}

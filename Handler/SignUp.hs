@@ -22,8 +22,6 @@ getSignUpR cid = do
     Nothing -> runFormPost $ signUpForm cid
   signups <- signUpsWithName cid
   defaultLayout $ do
-    mmsg <- getMessage
-    let headerWidget = $(widgetFile "header")
     $(widgetFile "signup")
 
 postSignUpR :: CompetitionId -> Handler Html

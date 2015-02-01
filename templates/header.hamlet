@@ -1,6 +1,23 @@
-<div data-role="header">
-  <h1>WeeklyApp
-  <a href=@{HomeR} .ui-btn-left .ui-btn .ui-corner-all .ui-icon-home .ui-btn-icon-notext>
-  $maybe user <- muser
-    $if userAdmin user || userSuperAdmin user
-      <a href=@{AdminR} .ui-btn-right .ui-btn .ui-corner-all .ui-icon-gear .ui-btn-icon-notext>
+<nav .navbar .navbar-default .navbar-static-top>
+  <div .container-fluid .container>
+    <div .navbar-header>
+      <button type="button" .navbar-toggle .collapsed data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span .sr-only>Toggle navigation
+        <span .icon-bar>
+        <span .icon-bar>
+        <span .icon-bar>
+      <a .navbar-brand href=@{HomeR}>WeeklyApp
+
+    <div #navbar .navbar-collapse .collapse .navbar-right>
+      $maybe user <- muser
+        <a .btn .btn-default .navbar-btn href=@{ProfileR}>_{MsgProfile}
+        $if userAdmin user || userSuperAdmin user
+          <a .btn .btn-default .navbar-btn href=@{AdminR}>_{MsgAdminPanel}
+        <a .btn .btn-default .navbar-btn href=@{AuthR LogoutR}>_{MsgLogOut}
+      $nothing
+        <form .navbar-form method=post action=@{AuthR loginR}>
+          <div .form-group>
+            <input type="email" name="email" .form-control placeholder=_{MsgEmail} required>
+            <input type="password" name="password" .form-control placeholder=_{MsgPassword} required>
+          <button type="submit" .btn .btn-success>_{MsgLogIn}
+          <a .btn .btn-default href=@{AuthR registerR}>_{MsgRegister}

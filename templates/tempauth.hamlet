@@ -1,8 +1,6 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
-      <form method=post action=@{TempAuthR}#form enctype=#{formEnctype}>
-        ^{formWidget}
-      <a href=@{HomeR} data-role="button">_{MsgBack}
+  <form method=post action=@{TempAuthR}#form enctype=#{formEnctype}>
+    ^{formWidget}
+
+  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

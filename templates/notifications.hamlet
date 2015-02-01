@@ -1,19 +1,13 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
-      $maybe msg <- mmsg
-        <div #message>#{msg}
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-      <form method=post action=@{NotificationsR}#form enctype=#{formEnctype}>
-        ^{formWidget}
+  <form method=post action=@{NotificationsR}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
-      <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider">_{MsgNotifications}
-        $forall Entity nid notification <- notifications
-          <li>
-            <a>#{notificationContent notification}
-            <a data-url=@{RemoveNotificationR nid} #notification .ui-icon-delete>Poista
-
-      <a href=@{AdminR} data-role="button">_{MsgBack}
+  <ul .list-group>
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgNotifications}
+      $forall Entity nid notification <- notifications
+        <li .list-group-item>#{notificationContent notification}
+            <button data-url=@{RemoveNotificationR nid} type="button" .close aria-label="Close"><span aria-hidden="true">&times;

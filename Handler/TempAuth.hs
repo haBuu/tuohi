@@ -16,7 +16,6 @@ getTempAuthR = do
   muser <- maybeAuthUser
   defaultLayout $ do
     setTitle "WeeklyApp"
-    let headerWidget = $(widgetFile "header")
     $(widgetFile "tempauth")
 
 postTempAuthR :: Handler Html

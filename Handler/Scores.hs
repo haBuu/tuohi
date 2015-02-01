@@ -30,8 +30,6 @@ getCompetitionScoresR cid = do
   let roundCount = maybe 1 id curRound
   players <- playersAndScores cid
   let sortedPlayers = addPlacements holes $ playerSort holes players
-  muser <- maybeAuthUser
-  let headerWidget = $(widgetFile "header")
   -- Accept: application/json will return JSON
   -- Accept: text/html will return HTML
   defaultLayoutJson

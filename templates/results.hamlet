@@ -1,27 +1,24 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
+  <ol .list-group>
+    $forall (d, msg) <- divisions
+      <div .panel .panel-default>
+        <div .panel-heading>_{msg}
+        $forall (user, division, rounds) <- sortedPlayers
+          $if division == d
+            <li .list-group-item>
+              #{userName user}
+              <span .badge .result>
+                $if dnf rounds
+                  DNF
+                $else
+                  #{countTotal rounds} (
+                  $if countToPar holes rounds == 0
+                    E
+                  $else
+                    $if countToPar holes rounds > 0
+                      +
+                    #{countToPar holes rounds}
+                  )
 
-      $forall (d, msg) <- divisions
-        <ol data-role="listview" data-inset="true">
-          <li data-role="list-divider">_{msg}
-            $forall (user, division, rounds) <- sortedPlayers
-              $if division == d
-                <li>
-                  #{userName user}
-                  <span .ui-li-count .result>
-                    $if dnf rounds
-                      DNF
-                    $else
-                      #{countTotal rounds} (
-                      $if countToPar holes rounds == 0
-                        E
-                      $else
-                        $if countToPar holes rounds > 0
-                          +
-                        #{countToPar holes rounds}
-                      )
-
-      <a href=@{HomeR} data-role="button">_{MsgBack}
+  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

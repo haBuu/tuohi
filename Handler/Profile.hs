@@ -17,8 +17,7 @@ getProfileR = do
       ((_, formWidget), formEnctype) <- runFormPost $ profileForm user
       defaultLayout $ do
         mmsg <- getMessage
-        setTitle "WeeklyApp"
-        let headerWidget = $(widgetFile "header")
+        setTitleI MsgProfile
         $(widgetFile "profile")
     -- this can't never happen because this handler
     -- is never reached if the user is not authenticated

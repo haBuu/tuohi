@@ -1,13 +1,11 @@
 <fieldset>
-  <div style="float:right">
-    <form action=@{LanguageR} method=post>
-      <input type="hidden" value="en" name="lang">
-      <input type="submit" data-icon="none" data-iconpos="notext" data-wrapper-class="flag-icon-en">
 
   <div style="float:right">
     <form action=@{LanguageR} method=post>
       <input type="hidden" value="fi" name="lang">
-      <input type="submit" data-icon="none" data-iconpos="notext" data-wrapper-class="flag-icon-fi">
+      <input type="image" src=@{StaticR img_fi_png} .flag-icon>
 
   <div style="float:right">
-    <a href=@{InfoR} .ui-btn .ui-corner-all .ui-icon-info .ui-btn-icon-notext>
+    <form action=@{LanguageR} method=post>
+      <input type="hidden" value="en" name="lang">
+      <input type="image" src=@{StaticR img_gb_png} .flag-icon>

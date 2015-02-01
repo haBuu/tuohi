@@ -1,26 +1,36 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
+  <form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
-      <form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
-        ^{formWidget}
-
-      <ol data-role="listview" data-inset="true" data-split-icon="delete">
-
-        <li data-role="list-divider">_{MsgNotPresent}
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgNotPresent}
+    <table .table #not-confirmed>
+      <tbody>
         $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
           $if not confirmed
-            <li>
-              <a data-url=@{ConfirmSignUpR sid} #confirm-signup>#{name}
-              <a data-url=@{RemoveSignUpR sid} #remove-signup>#{name}
+            <tr>
+              <td #name>
+                #{name}
+              <td>
+                <div .pull-right>
+                  <button data-url=@{ConfirmSignUpR sid} #confirm-signup type="button" class="btn btn-success btn-sm">
+                    <span class="glyphicon glyphicon-ok">
+                  <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-remove">
 
-        <li data-role="list-divider" data-split-icon="delete">_{MsgPresent}
-        $forall (E.Value sid, E.Value confirmed, E.Value _, E.Value name) <- signups
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgPresent}
+    <table .table #confirmed>
+      <tbody>
+        $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
           $if confirmed
-            <li>
-              <a>#{name}
-              <a data-url=@{RemoveSignUpR sid} #remove-signup>
+            <tr>
+              <td>
+                <p>#{name}
+              <td>
+                <div .pull-right>
+                  <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
+                    <span class="glyphicon glyphicon-remove">
 
-      <a href=@{AdminR} data-role="button">_{MsgBack}
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

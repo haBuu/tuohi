@@ -24,9 +24,7 @@ initPage cid = do
   signups <- signUpsWithName cid
   (formWidget, formEnctype) <- generateFormPost $
     startCompetitionForm cid
-  muser <- maybeAuthUser
   defaultLayout $ do
-    let headerWidget = $(widgetFile "header")
     $(widgetFile "init")
     $(widgetFile "competitioninit")
 
@@ -42,19 +40,13 @@ startedPage cid = do
   let groups = nub $ for rounds $ \(_,_,E.Value g,_) -> g
       mround = safeHead rounds
       currentRound = maybe 1 (\(_, E.Value r, _, _) -> r) mround
-  muser <- maybeAuthUser
   defaultLayout $ do
-    mmsg <- getMessage
-    let headerWidget = $(widgetFile "header")
     $(widgetFile "started")
 
 finishedPage :: CompetitionId -> Handler Html
 finishedPage cid = do
   competition <- runDB $ get404 cid
-  muser <- maybeAuthUser
   defaultLayout $ do
-    mmsg <- getMessage
-    let headerWidget = $(widgetFile "header")
     $(widgetFile "finished")
 
 postCompetitionNextRoundR :: CompetitionId -> Handler Html

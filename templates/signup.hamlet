@@ -1,27 +1,24 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
-      $maybe msg <- mmsg
-        <div #message>#{msg}
+  <div .panel .panel-default>
+    <div .panel-heading>
+      #{competitionName competition}, #{showDay (competitionDate competition)}
 
-      <p .ui-bar  .ui-bar-a .ui-corner-all>
-        #{competitionName competition}, #{showDay (competitionDate competition)}
+  $if full
+    <fieldset disabled>
+      <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
+        ^{formWidget}
+  $else
+    <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
+      ^{formWidget}
 
-      $if full
-        <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype} .ui-state-disabled>
-          ^{formWidget}
-      $else
-        <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
-          ^{formWidget}
+  <ol .list-group>
+    $forall (d, msg) <- divisions
+      <div .panel .panel-default>
+        <div .panel-heading>_{msg}
+        $forall (_, _, E.Value division, E.Value name) <- signups
+          $if division == d
+            <li .list-group-item>#{name}
 
-      <ol data-role="listview" data-inset="true">
-        $forall (d, msg) <- divisions
-          <li data-role="list-divider">_{msg}
-          $forall (_, _, E.Value division, E.Value name) <- signups
-            $if division == d
-              <li data-icon="false">#{name}
-
-      <a href=@{HomeR} data-role="button">_{MsgBack}
+  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 

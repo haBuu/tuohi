@@ -13,14 +13,17 @@ getUserR uid = do
   defaultLayout $ do
     mmsg <- getMessage
     setTitle "WeeklyApp"
-    let headerWidget = $(widgetFile "header")
     $(widgetFile "user")
 
 postUserR :: UserId -> Handler Html
 postUserR uid = do
   user <- runDB $ get404 uid
   ((result, _), _) <- runFormPost $ userForm user
-  formHandler result $ \res -> do
-    runDB $ update uid [UserAdmin =. res]
-    setMessage "Käyttäjän tiedot päivitettiin onnistuneesti"
+  formHandler result $ \(name, email, admin) -> do
+    runDB $ update uid
+      [ UserName =. name
+      , UserEmail =. email
+      , UserAdmin =. admin
+      ]
+    setMessageI MsgUserUpdatedSuccess
   redirect $ UserR uid

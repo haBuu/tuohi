@@ -1,31 +1,34 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
-      $maybe msg <- mmsg
-        <div #message>#{msg}
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgRound}: #{currentRound}
 
-      <p .ui-bar  .ui-bar-a .ui-corner-all>_{MsgRound}: #{currentRound}
+  <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
+    ^{nextRoundFormWidget}
 
-      <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
-        ^{nextRoundFormWidget}
-
-      <ol data-role="listview" data-inset="true" data-split-icon="delete">
-        $forall group <- groups
-          <li data-role="list-divider">#{group}
+  $forall group <- groups
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgGroup} #{group}
+      <table .table>
+        <tbody>
           $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
             $if group == groupNumber
-              <li>
-                <a>#{name}
-                <a data-url=@{DnfRoundR rid} #dnf-round>#{name}
+              <tr>
+                <td>
+                  <p>#{name}
+                <td>
+                  <div .pull-right>
+                    <button data-url=@{DnfRoundR rid} #dnf-round type="button" class="btn btn-danger btn-sm">
+                      <span class="glyphicon glyphicon-remove">
 
-      <ul #dnf-list data-role="listview" data-inset="true">
-        <li data-role="list-divider">_{MsgDNF}
-        $forall (E.Value rid, E.Value name) <- dnf
-          <li>#{name}
 
-      <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishCompetitionFormEnctype}>
-        ^{finishCompetitionFormWidget}
+  <ul .list-group #dnf-list>
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgDNF}
+      $forall (E.Value rid, E.Value name) <- dnf
+        <li .list-group-item>#{name}
 
-      <a href=@{AdminR} data-role="button">_{MsgBack}
+  <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishCompetitionFormEnctype}>
+    ^{finishCompetitionFormWidget}
+
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

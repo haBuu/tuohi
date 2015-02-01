@@ -1,19 +1,12 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
+  <ul .list-group>
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgCourses}
+      $forall Entity cid course <- courses
+        <a .list-group-item href=@{CourseR cid}>#{courseName course}
 
-      $maybe msg <- mmsg
-        <div #message>#{msg}
+  <form method=post action=@{CoursesR}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
-      <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider">_{MsgCourses}
-        $forall Entity cid course <- courses
-          <li>
-            <a href=@{CourseR cid}>#{courseName course}
-
-      <form method=post action=@{CoursesR}#form enctype=#{formEnctype}>
-        ^{formWidget}
-
-      <a href=@{AdminR} data-role="button">_{MsgBack}
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

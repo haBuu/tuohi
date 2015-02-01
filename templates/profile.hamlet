@@ -1,11 +1,6 @@
-<div data-role="page">
-  ^{headerWidget}
-    <div data-role="content">
-      <div .content-primary>
-        $maybe msg <- mmsg
-          <div #message>#{msg}
+<div .container>
 
-        <form method=post action=@{ProfileR}#form enctype=#{formEnctype}>
-          ^{formWidget}
+  <form method=post action=@{ProfileR}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
-        <a href=@{HomeR} data-role="button">_{MsgBack}
+  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

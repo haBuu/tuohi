@@ -20,9 +20,7 @@ getNotificationsR = do
       ((_, formWidget), formEnctype) <- runFormPost $
         notificationForm aid time
       defaultLayout $ do
-        setTitle "WeeklyApp"
-        mmsg <- getMessage
-        let headerWidget = $(widgetFile "header")
+        setTitleI MsgNotifications
         $(widgetFile "notifications")
     Nothing -> notAuthenticated -- this can't be reached
 
@@ -35,7 +33,7 @@ postNotificationsR = do
       ((result, _), _) <- runFormPost $ notificationForm aid time
       formHandler result $ \notification -> do
         runDB $ insert_ notification
-        setMessage "Ilmoitus lisätty"
+        setMessageI MsgNotificationAdded
     Nothing -> return ()
   redirect NotificationsR
 

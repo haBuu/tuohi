@@ -1,19 +1,21 @@
 (function() {
 
-  var listview = $("ul");
-  var notificationLinks = listview.find("a#notification");
+  var list = $("ul");
+  var removeButtons = list.find("li button");
 
-  notificationLinks.on("click", function() {
+  removeButtons.on("click", function() {
     var self = $(this);
     var item = self.parent();
     var url = self.data("url");
     // remove from db
     $.ajax({
       type: 'POST',
-      url: url
+      url: url,
+      success: function() {
+        // remove from page
+        item.remove();
+      }
     });
-    // remove from page
-    item.remove();
   });
 
 })();

@@ -1,12 +1,11 @@
 (function() {
 
-  var listview = $("ol");
-  var dnfList = $("ul#dnf-list");
-  var dnfLinks = listview.find("a#dnf-round");
+  var dnfListPanel = $("ul#dnf-list div.panel");
+  var dnfButtons = $("table button#dnf-round");
 
-  dnfLinks.on("click", function() {
+  dnfButtons.on("click", function() {
     var self = $(this);
-    var item = self.parent();
+    var item = self.parent().parent().parent();
     var url = self.data("url");
     // remove from db
     $.ajax({
@@ -16,10 +15,10 @@
         // move to dnf players
         item.remove();
         $('<li/>', {
+          class: "list-group-item",
           text: item.text()
-        }).appendTo(dnfList);
-        dnfList.listview('refresh');
-        listview.listview('refresh');
+        }).appendTo(dnfListPanel);
+        console.log("success");
       }
     });
   });

@@ -11,11 +11,8 @@ getLayoutR :: CourseId -> LayoutId -> Handler Html
 getLayoutR cid lid = do
   holes <- runDB $ selectList [HoleLayoutId ==. lid] [Asc HoleNumber]
   ((_, formWidget), formEnctype) <- runFormPost $ holesForm holes
-  muser <- maybeAuthUser
   defaultLayout $ do
-    setTitle "Layout"
-    mmsg <- getMessage
-    let headerWidget = $(widgetFile "header")
+    setTitleI MsgLayout
     $(widgetFile "layout")
 
 postLayoutR :: CourseId -> LayoutId -> Handler Html
@@ -25,5 +22,5 @@ postLayoutR cid lid = do
   formHandler result $ \res -> do
     forM_ res $ \(hid, par) -> do
       runDB $ update hid [HolePar =. par]
-    setMessage "Layout päivitettiin onnistuneesti"
+    setMessageI MsgLayoutUpdated
   redirect $ LayoutR cid lid

@@ -1,13 +1,7 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
+  <h3>_{MsgPars}
+  <form method=post action=@{LayoutR cid lid}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
-      $maybe msg <- mmsg
-        <div #message>#{msg}
-
-      <form method=post action=@{LayoutR cid lid}#form enctype=#{formEnctype}>
-        ^{formWidget}
-
-      <a href=@{CourseR cid} data-role="button">_{MsgBack}
+  <a href=@{CourseR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

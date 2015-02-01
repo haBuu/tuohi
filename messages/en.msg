@@ -71,3 +71,10 @@ CompetitionFinished: Competition finished
 NextRoundChanged: Next round changed
 ProfileUpdated: Profile updated
 ProfileUpdateFailure: Profile update failed
+Profile: Profile
+NotificationAdded: Notification added
+SerieAdded: Serie added
+CourseAdded: Course added
+LayoutAdded: Layout added
+LayoutUpdated: Layout updated
+Group: Group

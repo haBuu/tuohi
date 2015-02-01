@@ -10,7 +10,6 @@ getUsersR = do
   muser <- maybeAuthUser
   defaultLayout $ do
     setTitle "WeeklyApp"
-    let headerWidget = $(widgetFile "header")
     $(widgetFile "users")
 
 -- helpers

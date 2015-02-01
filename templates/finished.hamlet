@@ -1,14 +1,9 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
-      $maybe msg <- mmsg
-        <div #message>#{msg}
+  <ul .list-group>
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgInformation}
+      <li .list-group-item>Nimi: #{competitionName competition}
+      <li .list-group-item> Aika: #{show $ competitionDate competition}
 
-      <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider">_{MsgInformation}
-          <li>Nimi: #{competitionName competition}
-          <li>Aika: #{show $ competitionDate competition}
-
-      <a href=@{AdminR} data-role="button">_{MsgBack}
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

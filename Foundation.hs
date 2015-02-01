@@ -85,7 +85,7 @@ instance Yesod App where
 
   defaultLayout widget = do
     master <- getYesod
-    --mmsg <- getMessage
+    mmsg <- getMessage
 
     -- We break up the default layout into two components:
     -- default-layout is the contents of the body tag, and
@@ -93,15 +93,24 @@ instance Yesod App where
     -- value passed to hamletToRepHtml cannot be a widget, this allows
     -- you to use normal widget features in default-layout.
 
+    maid <- maybeAuthId
+    muser <- case maid of
+      Just aid -> runDB $ get aid
+      Nothing -> return Nothing
+
     pc <- widgetToPageContent $ do
       addStylesheet $ StaticR css_bootstrap_css
+      -- addStylesheet $ StaticR css_awesome_bootstrap_checkbox_css
       $(widgetFile "style")
       -- jquery
       addScriptRemote "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
       addScriptRemote "//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"
-      addScriptRemote "//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js"
-      addStylesheetRemote "//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.css"
-      $(widgetFile "mobileinit")
+      -- addScriptRemote "//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js"
+      -- addStylesheetRemote "//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.css"
+      addScript $ StaticR js_bootstrap_js
+      -- $(widgetFile "mobileinit")
+      $(widgetFile "header")
+      $(widgetFile "message")
       $(widgetFile "default-layout")
     withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
@@ -112,7 +121,7 @@ instance Yesod App where
   urlRenderOverride _ _ = Nothing
 
   -- The page to be redirected to when authentication is required.
-  authRoute _ = Just $ AuthR LoginR
+  authRoute _ = Just $ HomeR
 
   -- Routes not requiring authentication.
   isAuthorized (AuthR _) _ = return Authorized

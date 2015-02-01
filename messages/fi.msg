@@ -71,3 +71,10 @@ CompetitionFinished: Kilpailu lopetettu
 NextRoundChanged: Seuraava kierros vaihdettu
 ProfileUpdated: Profiili päivitetty
 ProfileUpdateFailure: Profiilin päivitys epäonnistui
+Profile: Profiili
+NotificationAdded: Ilmoitus lisätty
+SerieAdded: Sarja lisätty
+CourseAdded: Rata lisätty
+LayoutAdded: Layout lisätty
+LayoutUpdated: Layout päivitetty
+Group: Ryhmä

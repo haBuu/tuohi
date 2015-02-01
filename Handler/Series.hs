@@ -12,14 +12,14 @@ getSeriesR = do
   ((_, formWidget), formEnctype) <- runFormPost newSerieForm
   muser <- maybeAuthUser
   defaultLayout $ do
-    mmsg <- getMessage
-    setTitle "WeeklyApp"
-    let headerWidget = $(widgetFile "header")
+    setTitleI MsgSeries
     $(widgetFile "series")
 
 postSeriesR :: Handler Html
 postSeriesR = do
   series <- runDB $ selectList [] [Asc SerieName]
   ((result, _), _) <- runFormPost newSerieForm
-  formHandler result $ \res -> runDB $ insert_ res
+  formHandler result $ \res -> do
+    runDB $ insert_ res
+    setMessageI MsgSerieAdded
   redirect SeriesR

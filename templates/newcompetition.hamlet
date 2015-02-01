@@ -1,12 +1,6 @@
-<div data-role="page">
-  ^{headerWidget}
+<div .container>
 
-  <div data-role="content">
-    <div .content-primary>
-      $maybe msg <- mmsg
-        <div #message>#{msg}
+  <form method=post action=@{NewCompetitionR}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
-      <form method=post action=@{NewCompetitionR}#form enctype=#{formEnctype}>
-        ^{formWidget}
-
-      <a href=@{AdminR} data-role="button">_{MsgBack}
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
