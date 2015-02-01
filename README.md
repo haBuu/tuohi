@@ -25,8 +25,8 @@ Sovellus käyttää tiedon tallentamiseen SQLite-tietokantaa. Sovellusta ei ole 
 ##### jQuery
 JavaScript-kirjasto HTML-dokumentin muokkaamiseen, tapahtumine käsittelyyn, animointiin ja Ajax:iin (Asynchronous JavaScript and XML). Useat sovelluksen osat käyttävät jQuery kirjastoa asiakaspäässä mahdollisimman hyvän käyttettävyyden saavuttamiseen. Esimerkiksi tulosten syöttäminen.
 
-##### jQuery Mobile
-JavaScript-kirjasto responsiivisten nettisivujen tekemiseen, jotka ovat käytettäviä kaikilla laitteilla. Käyttöliittymä on toteutettu kokonaan käyttäen jQuery Mobile kirjastoa.
+##### Bootstrap
+HTML-, CSS- ja JavaScript-kehys responsiivisten web-sovellusten tekoon.
 
 
 Ominaisuudet
