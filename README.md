@@ -45,7 +45,7 @@ Rata koostuu aina vähintään yhdestä layoutista. Ylläpitäjä voi lisätä u
 ##### Ilmoittautuminen
 Kun kilpailu luodaan, sille tehdään automaattisesti ilmoittautumis-sivu, jonka kautta käyttäjät voivat ilmoittautua kilpailuun.
 
-##### Käyttäjien hallinta (TODO)
+##### Käyttäjien hallinta
 Pääylläpitäjä voi katsella ja muokata käyttäjien tietoja sekä luoda tavallisia ylläpitäjä.
 
 ##### Sarja (TODO)
