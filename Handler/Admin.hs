@@ -9,8 +9,6 @@ import Database
 
 getAdminR :: Handler Html
 getAdminR = do
-  -- current password
-  (current, _) <- passwords
   superAdmin <- Database.isSuperAdmin
   competitions <- runDB $ selectList
     [CompetitionState !=. Finished] [Asc CompetitionDate]

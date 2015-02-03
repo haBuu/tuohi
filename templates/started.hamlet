@@ -1,6 +1,9 @@
 <div .container>
 
   <div .panel .panel-default>
+    <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
+
+  <div .panel .panel-default>
     <div .panel-heading>_{MsgRound}: #{currentRound}
 
   <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
@@ -20,7 +23,6 @@
                   <div .pull-right>
                     <button data-url=@{DnfRoundR rid} #dnf-round type="button" class="btn btn-danger btn-sm">
                       <span class="glyphicon glyphicon-remove">
-
 
   <ul .list-group #dnf-list>
     <div .panel .panel-default>

@@ -40,12 +40,14 @@ newCompetitionForm extra = do
   (playersRes, playersView) <- mreq intField
     (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
       [("min","1"),("max", "200"), ("class", "form-control")]) (Just 54)
+  -- TODO: password
   let competitionRes = Competition
                         <$> layoutRes
                         <*> dayRes
                         <*> nameRes
                         <*> playersRes
                         <*> (pure Init)
+                        <*> (pure "1234")
   let widget = [whamlet|
         #{extra}
         <div .form-group>
@@ -303,15 +305,15 @@ signUpFormLoggedIn cid user extra = do
 -- adds message renderer to divisions so that forms can display them
 divisionsRender mr = Import.map (\(d, msg) -> (mr msg, d)) divisions
 
-scoreForm :: HoleId -> RoundId -> Text -> Maybe Int
+scoreForm :: CompetitionId -> HoleId -> RoundId -> Text -> Maybe Int
    -> Html -> MForm Handler (FormResult Score, Widget)
-scoreForm hid rid name score extra = do
+scoreForm cid hid rid name score extra = do
   r <- getUrlRender
   let set = (FieldSettings "" Nothing Nothing Nothing
         [ ("data-icon","false")
         , ("data-mini","true")
         , ("data-inline","true")
-        , ("data-url", r (ScoreR rid hid))
+        , ("data-url", r (ScoreR cid rid hid))
         , ("class", "form-control")
         ])
   (scoreRes, scoreView) <- mreq (selectFieldList scores) set score

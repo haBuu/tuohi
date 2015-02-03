@@ -10,18 +10,17 @@ import Control.Monad
 import Handler.Forms
 import Database
 
-getTempAuthR :: Handler Html
-getTempAuthR = do
+getTempAuthR :: CompetitionId -> Handler Html
+getTempAuthR cid = do
   ((_, formWidget), formEnctype) <- runFormPost tempAuthForm
-  muser <- maybeAuthUser
   defaultLayout $ do
     setTitle "WeeklyApp"
     $(widgetFile "tempauth")
 
-postTempAuthR :: Handler Html
-postTempAuthR = do
+postTempAuthR :: CompetitionId -> Handler Html
+postTempAuthR cid = do
   ((result, _), _) <- runFormPost tempAuthForm
-  formHandler result tempAuth
+  formHandler result $ tempAuth cid
   -- redirect to ultimate destination what should be
   -- the input page where the user wanted to go
   -- default to HomeR if destination is not set
@@ -32,24 +31,21 @@ postTempAuthR = do
 sessionName :: Text
 sessionName = "_TMP"
 
--- sets temp auth sessions if password is correct
-tempAuth :: Text -> Handler ()
-tempAuth pw = do
+tempAuth :: CompetitionId -> Text -> Handler ()
+tempAuth cid pw = do
   -- session can be created only with the current password
-  (current, _) <- passwords
-  when (pw == current) $ do
+  competition <- runDB $ get404 cid
+  let password = competitionPassword competition
+  when (pw == password) $ do
     setSession sessionName pw
 
--- return false if the user does not have temp session auth
--- or the password in the sessions is wrong
-isTempAuth :: Handler Bool
-isTempAuth = do
-  -- session is valid if the password is either the current or
-  -- the previous
-  (current, previous) <- passwords
+isTempAuth :: CompetitionId -> Handler Bool
+isTempAuth cid = do
+  competition <- runDB $ get404 cid
+  let password = competitionPassword competition
   mSession <- lookupSession sessionName
   return $ case mSession of
-    Just pw -> if pw == current || pw == previous then True else False
+    Just pw -> if pw == password then True else False
     _ -> False
 
 -- TODO: change from 4-digit passwords to some standard words that

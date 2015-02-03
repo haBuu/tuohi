@@ -36,14 +36,14 @@ getCompetitionScoresR cid = do
     $(widgetFile "scores") -- html
     (returnJson sortedPlayers) -- json
 
-postScoreR :: RoundId -> HoleId -> Handler Html
-postScoreR rid hid = do
-  tempAuth <- isTempAuth
-  if tempAuth || True
+postScoreR :: CompetitionId -> RoundId -> HoleId -> Handler Html
+postScoreR cid rid hid = do
+  tempAuth <- isTempAuth cid
+  if tempAuth
     then do
       round_ <- runDB $ get404 rid
       user <- runDB $ get404 $ roundUserId round_
-      ((result, _), _) <- runFormPost $ scoreForm hid rid
+      ((result, _), _) <- runFormPost $ scoreForm cid hid rid
         (userName user) Nothing
       formHandler result $ \res -> do
         -- check if the score already exists
@@ -56,4 +56,5 @@ postScoreR rid hid = do
           Nothing -> runDB $ insert_ res
       redirect $ InputR (roundCompetitionId round_)
         (roundGroupnumber round_)
-    else redirect TempAuthR
+    else
+      redirect $ TempAuthR cid

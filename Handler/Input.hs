@@ -13,7 +13,7 @@ import Database
 getInputR :: CompetitionId -> Int -> Handler Html
 getInputR cid groupNumber = do
   -- render input site only if user has temp auth
-  tempAuth <- isTempAuth
+  tempAuth <- isTempAuth cid
   if tempAuth
     then do
       competition <- runDB $ get404 cid
@@ -33,7 +33,7 @@ getInputR cid groupNumber = do
           let value = case mScore of
                 Just (Entity _ score) -> Just $ scoreScore score
                 Nothing -> Nothing
-          generateFormPost $ scoreForm hid rid name value
+          generateFormPost $ scoreForm cid hid rid name value
         return (holeNumber hole, forms)
       muser <- maybeAuthUser
       defaultLayout $ do
@@ -43,4 +43,4 @@ getInputR cid groupNumber = do
       -- so that the user is redirected back to this
       -- url after he has given the correct password
       setUltDestCurrent
-      redirect TempAuthR
+      redirect $ TempAuthR cid

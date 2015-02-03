@@ -1,8 +1,5 @@
 <div .container>
 
-  <div .panel .panel-default>
-    <div .panel-heading>_{MsgPassword}: #{current}
-
   <a href=@{NewCompetitionR} .btn .btn-default .btn-block .btn-lg>_{MsgNewCompetition}
 
   <ul .list-group>

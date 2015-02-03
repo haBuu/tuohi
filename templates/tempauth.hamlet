@@ -1,6 +1,6 @@
 <div .container>
 
-  <form method=post action=@{TempAuthR}#form enctype=#{formEnctype}>
+  <form method=post action=@{TempAuthR cid}#form enctype=#{formEnctype}>
     ^{formWidget}
 
   <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

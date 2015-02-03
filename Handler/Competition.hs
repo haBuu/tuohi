@@ -30,6 +30,7 @@ initPage cid = do
 
 startedPage :: CompetitionId -> Handler Html
 startedPage cid = do
+  competition <- runDB $ get404 cid
   (nextRoundFormWidget, nextRoundFormEnctype) <- generateFormPost $
     identifyForm "nextround" $ nextRoundForm cid
   (finishCompetitionFormWidget, finishCompetitionFormEnctype) <- generateFormPost $
