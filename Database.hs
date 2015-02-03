@@ -70,12 +70,13 @@ signUpsWithName cid = runDB $ E.select $
       , user ^. UserName
       )
 
-maybeInsertSignUp :: CompetitionId -> Text -> Text -> Division
+maybeInsertSignUp :: Bool -> CompetitionId -> Text -> Text -> Division
   -> Handler (Maybe SignUpId)
-maybeInsertSignUp cid name email division = do
-  -- if competition is full return Nothing
+maybeInsertSignUp checkFull cid name email division = do
+  -- if competition is full and checkFull is true return Nothing
   full <- competitionFull cid
-  if full then return Nothing
+  if checkFull && full
+    then return Nothing
     else insertSignUp cid name email division
 
 -- insert new user or get existing user's id and insert sign up

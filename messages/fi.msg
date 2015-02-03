@@ -80,3 +80,7 @@ LayoutUpdated: Layout päivitetty
 Group: Ryhmä
 Send: Lähetä
 CurrentPassword: Nykyinen salasana
+AddPlayer: Lisää pelaaja
+PlayerAdded: Pelaaja lisätty
+AddPlayerFail: Pelaajan lisääminen epäonnistui
+ChoosePlayer: Valitse pelaaja

@@ -33,7 +33,8 @@ postSignUpR cid = do
     -- user is not logged in
     Nothing -> runFormPost $ signUpForm cid
   formHandler result $ \(name, email, division, _) -> do
-    msid <- maybeInsertSignUp cid name email division
+    let checkFull = True
+    msid <- maybeInsertSignUp checkFull cid name email division
     case msid of
       Just _ -> setMessageI MsgSignUpSuccess
       Nothing -> setMessageI MsgSignUpFail

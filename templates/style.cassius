@@ -61,3 +61,9 @@ table#score-table tr th
 
 ol *.list-group-item
   display: list-item
+
+.middle
+  vertical-align: middle !important
+
+.margin-bottom
+  margin-bottom: 10px

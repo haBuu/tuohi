@@ -48,3 +48,5 @@
 
 /admin/notifications NotificationsR GET POST
 /admin/notification/#NotificationId/remove RemoveNotificationR POST
+
+/admin/addplayer/#CompetitionId AddPlayerR GET POST

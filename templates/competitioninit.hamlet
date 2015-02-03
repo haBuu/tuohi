@@ -3,6 +3,8 @@
   <form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
     ^{formWidget}
 
+  <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+
   <div .panel .panel-default>
     <div .panel-heading>_{MsgNotPresent}
     <table .table #not-confirmed>
@@ -10,7 +12,7 @@
         $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
           $if not confirmed
             <tr>
-              <td #name>
+              <td #name .middle>
                 #{name}
               <td>
                 <div .pull-right>
@@ -26,8 +28,8 @@
         $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
           $if confirmed
             <tr>
-              <td>
-                <p>#{name}
+              <td .middle>
+                #{name}
               <td>
                 <div .pull-right>
                   <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">

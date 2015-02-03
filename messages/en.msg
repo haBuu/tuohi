@@ -80,3 +80,7 @@ LayoutUpdated: Layout updated
 Group: Group
 Send: Send
 CurrentPassword: Current password
+AddPlayer: Add player
+PlayerAdded: Player added
+AddPlayerFail: Adding the player failed
+ChoosePlayer: Choose player

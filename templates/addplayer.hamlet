@@ -1,0 +1,12 @@
+<div .container>
+
+  <label .control-label>_{MsgChoosePlayer}
+  <select .form-control .margin-bottom>
+    <option>
+    $forall Entity uid user <- users
+      <option data-email=#{userEmail user}>#{userName user}
+
+  <form method=post action=@{AddPlayerR cid}#form enctype=#{formEnctype}>
+    ^{formWidget}
+
+  <a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

@@ -61,7 +61,7 @@ newCompetitionForm extra = do
           <label .control-label>^{fvLabel playersView}
           ^{fvInput playersView}
         <div .form-group>
-            <input type=submit .btn .btn-default .btn-block value=_{MsgAddCompetition}>
+            <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCompetition}>
       |]
   return (competitionRes, widget)
   where
@@ -85,7 +85,7 @@ newCourseForm extra = do
           <label .control-label>^{fvLabel nameView}
           ^{fvInput nameView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgAddCourse}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCourse}>
       |]
   return (courseRes, widget)
 
@@ -102,7 +102,7 @@ newSerieForm extra = do
           <label .control-label>^{fvLabel nameView}
           ^{fvInput nameView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgAddSerie}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddSerie}>
       |]
   return (serieRes, widget)
 
@@ -136,7 +136,7 @@ newLayoutForm cid extra = do
           <label .control-label>^{fvLabel holesView}
           ^{fvInput holesView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgAddLayout}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddLayout}>
       |]
   return (res, widget)
 
@@ -159,7 +159,7 @@ holesForm holes extra = do
             <div .col-sm-2>
               ^{fvInput holeView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgUpdateLayout}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdateLayout}>
       |]
   return (result, widget)
   where
@@ -175,7 +175,7 @@ startCompetitionForm :: CompetitionId -> Html
 startCompetitionForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit .btn .btn-default .btn-block value=_{MsgStartCompetition}>
+        <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgStartCompetition}>
       |]
   return (pure cid, widget)
 
@@ -184,7 +184,7 @@ nextRoundForm :: CompetitionId -> Html
 nextRoundForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit .btn .btn-default .btn-block value=_{MsgNextRound}>
+        <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgNextRound}>
       |]
   return (pure cid, widget)
 
@@ -193,9 +193,43 @@ finishCompetitionForm :: CompetitionId -> Html
 finishCompetitionForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit .btn .btn-default .btn-block value=_{MsgFinishCompetition}>
+        <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgFinishCompetition}>
       |]
   return (pure cid, widget)
+
+addPlayerForm :: CompetitionId -> Html
+  -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
+addPlayerForm cid extra = do
+  mr <- getMessageRender
+  (nameRes, nameView) <- mreq textField
+    (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
+      [("placeholder", mr MsgName), ("class", "form-control")]) Nothing
+  (emailRes, emailView) <- mreq emailField
+    (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
+      [("placeholder", mr MsgEmail), ("class", "form-control")]) Nothing
+  (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
+    (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
+      []) Nothing
+  let result = (,,)
+                <$> nameRes
+                <*> emailRes
+                <*> divisionRes
+  let widget = [whamlet|
+        #{extra}
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <label .control-label>^{fvLabel emailView}
+          ^{fvInput emailView}
+        <div .form-group>
+          <label>^{fvLabel divisionView}
+          <div .radio>
+            ^{fvInput divisionView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddPlayer}>
+      |]
+  return (result, widget)
 
 signUpForm :: CompetitionId -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division, Int), Widget)
@@ -234,7 +268,7 @@ signUpForm cid extra = do
           <label .control-label>^{fvLabel botCheckView}
           ^{fvInput botCheckView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgSignUp}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgSignUp}>
       |]
   return (result, widget)
   where
@@ -261,7 +295,7 @@ signUpFormLoggedIn cid user extra = do
           <div .radio>
             ^{fvInput divisionView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgSignUp}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgSignUp}>
       |]
   return (result, widget)
 
@@ -313,7 +347,7 @@ profileForm user extra = do
           <label .control-label>^{fvLabel emailView}
           ^{fvInput emailView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgUpdate}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdate}>
       |]
   return (result, widget)
 
@@ -347,7 +381,7 @@ userForm user extra = do
                 ^{fvInput adminView}_{MsgAdmin}
         <div .form-group>
           <div .col-sm-offset-3 .col-sm-6>
-            <input type=submit .btn .btn-default .btn-block value=_{MsgUpdate}>
+            <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdate}>
       |]
   return (result, widget)
 
@@ -363,7 +397,7 @@ tempAuthForm extra = do
           <label .control-label>^{fvLabel pwView}
           ^{fvInput pwView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgLogIn}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgLogIn}>
       |]
   return (pwRes, widget)
 
@@ -384,7 +418,7 @@ notificationForm uid time extra = do
           <label .control-label>^{fvLabel contentView}
           ^{fvInput contentView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block value=_{MsgAddNotification}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddNotification}>
       |]
   return (result, widget)
 

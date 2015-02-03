@@ -1,0 +1,16 @@
+(function() {
+
+  var playerSelect = $("select");
+  var nameInput = $("form input").eq(1);
+  var emailInput = $("form input").eq(2);
+
+  playerSelect.on("change", function() {
+    var self = $(this);
+    var name = self.val();
+    var option = self.find("option:selected");
+    var email = option.data("email");
+    nameInput.val(name);
+    emailInput.val(email);
+  });
+
+})();

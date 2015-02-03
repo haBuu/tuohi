@@ -22,6 +22,7 @@
     var item = self.parent().parent().parent();
     var rmUrl = item.find('#remove-signup').data("url");
     var url = self.data("url");
+    var name = item.find('td').eq(0).text();
     // set to confirmed in db
     $.ajax({
       type: 'POST',
@@ -29,7 +30,7 @@
       success: function() {
         // move to confirmed players
         item.remove();
-        confirmed.append('<tr><td>' + item.find('#name').text() + '</td><td><div class="pull-right"><button data-url=' + rmUrl + ' id="remove-signup" type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span></button></div></td> ');
+        confirmed.append('<tr><td class="middle">' + name + '</td><td><div class="pull-right"><button data-url=' + rmUrl + ' id="remove-signup" type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span></button></div></td> ');
       }
     });
   });

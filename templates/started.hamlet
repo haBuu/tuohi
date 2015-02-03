@@ -14,8 +14,8 @@
           $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
             $if group == groupNumber
               <tr>
-                <td>
-                  <p>#{name}
+                <td .middle>
+                  #{name}
                 <td>
                   <div .pull-right>
                     <button data-url=@{DnfRoundR rid} #dnf-round type="button" class="btn btn-danger btn-sm">
