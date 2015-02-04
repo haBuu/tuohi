@@ -53,7 +53,7 @@ table#score-table tr th
   min-width: 80px
 
 .flag-icon
-  height: 15px
+  height: 20px
   margin-left: 5px
 
 .btn-block

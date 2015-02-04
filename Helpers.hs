@@ -4,12 +4,15 @@ module Helpers
 , textualScore
 , safeHead
 , thd
+, language
 )
 where
 
 import Prelude
 import Data.Time
+import Data.List(find)
 import Data.Text(Text)
+import qualified Data.Text
 
 thd :: (t1,t2,t3) -> t3
 thd (_, _, x) = x
@@ -40,3 +43,8 @@ textualScore par score =
     2 -> "double-bogey"
     3 -> "triple-bogey"
     _ -> "other"
+
+-- choose first 2 letter language
+language :: [Text] -> String
+language langs = maybe "en" Data.Text.unpack $
+  find (\l -> (Data.Text.length l) == 2) langs

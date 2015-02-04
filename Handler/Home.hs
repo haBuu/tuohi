@@ -2,8 +2,6 @@
 module Handler.Home where
 
 import Import
-import Yesod.Auth
-import Yesod.Auth.Email
 
 import Handler.CompetitionState
 import Database
@@ -19,10 +17,7 @@ getHomeR :: Handler Html
 getHomeR = do
   competitions <- runDB $ selectList [] [Asc CompetitionDate]
   notifications <- getNotifications
-  muser <- maybeAuthUser
   defaultLayout $ do
     setTitle "WeeklyApp"
-    -- let loginWidget = $(widgetFile "signin-signup")
-    -- let headerWidget = $(widgetFile "header")
     let languageWidget = $(widgetFile "language")
     $(widgetFile "home")

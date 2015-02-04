@@ -5,16 +5,15 @@ import Import
 
 import Data.List(find)
 import qualified Data.Text
+import Control.Monad(liftM)
 
 import Handler.Forms
 import Database
 
 getNewCompetitionR :: Handler Html
 getNewCompetitionR = do
-  -- choose first 2 letter language for datepicker
-  langs <- languages
-  let lang = maybe "en" Data.Text.unpack $
-        find (\l -> (Data.Text.length l) == 2) langs
+  -- language for datepicker
+  lang <- liftM language languages
   (formWidget, formEnctype) <- generateFormPost newCompetitionForm
   defaultLayout $ do
     addScript $ StaticR js_bootstrap_datepicker_js

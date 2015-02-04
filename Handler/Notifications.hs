@@ -32,9 +32,8 @@ postNotificationsR = do
       ((result, _), _) <- runFormPost $ notificationForm aid time
       formHandler result $ \notification -> do
         -- TODO: broken
-        liftIO $ print notification
         -- runDB $ insert_ notification
-        -- setMessageI MsgNotificationAdded
+        setMessageI MsgNotificationAdded
     Nothing -> return ()
   redirect NotificationsR
 

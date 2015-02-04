@@ -37,7 +37,7 @@ countRoundToPar holes scores =
   let
     toPar = foldl (\n score -> n + holePar' holes score) 0 scores
   in
-    (countRoundTotal scores) -  toPar
+    (countRoundTotal scores) - toPar
 
 holePar' :: [Entity Hole] -> Score -> Int
 holePar' holes score = maybe 0 (\(Entity _ hole) -> holePar hole) $
