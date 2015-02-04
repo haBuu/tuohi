@@ -1,13 +1,18 @@
 <div .container>
 
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+  <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
+    ^{nextRoundFormWidget}
+
+  <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishCompetitionFormEnctype}>
+    ^{finishCompetitionFormWidget}
+
   <div .panel .panel-default>
     <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
 
   <div .panel .panel-default>
     <div .panel-heading>_{MsgRound}: #{currentRound}
-
-  <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
-    ^{nextRoundFormWidget}
 
   $forall group <- groups
     <div .panel .panel-default>
@@ -29,8 +34,3 @@
       <div .panel-heading>_{MsgDNF}
       $forall (E.Value rid, E.Value name) <- dnf
         <li .list-group-item>#{name}
-
-  <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishCompetitionFormEnctype}>
-    ^{finishCompetitionFormWidget}
-
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

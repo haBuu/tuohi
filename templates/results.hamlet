@@ -1,6 +1,8 @@
 <div .container>
 
-  <ol .list-group>
+  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+  <ul .list-group>
     $forall (d, msg) <- divisions
       <div .panel .panel-default>
         <div .panel-heading>_{msg}
@@ -21,4 +23,3 @@
                     #{countToPar holes rounds}
                   )
 
-  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

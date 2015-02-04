@@ -33,10 +33,15 @@ newCompetitionForm extra = do
       [("class", "form-control")]) Nothing
   (dayRes, dayView) <- mreq dayField
     (FieldSettings (SomeMessage MsgDate) Nothing Nothing Nothing
-      [("placeholder", mr MsgDate), ("class", "form-control")]) Nothing
+      [ ("placeholder", mr MsgDate)
+      , ("class", "form-control")
+      ])
+      Nothing
   (nameRes, nameView) <- mreq textField
     (FieldSettings (SomeMessage MsgCompetitionName) Nothing Nothing Nothing
-      [("placeholder", mr MsgCompetitionName), ("class", "form-control")]) Nothing
+      [ ("placeholder", mr MsgCompetitionName)
+      , ("class", "form-control")
+      ]) Nothing
   (playersRes, playersView) <- mreq intField
     (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
       [("min","1"),("max", "200"), ("class", "form-control")]) (Just 54)
@@ -63,7 +68,7 @@ newCompetitionForm extra = do
           <label .control-label>^{fvLabel playersView}
           ^{fvInput playersView}
         <div .form-group>
-            <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCompetition}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCompetition}>
       |]
   return (competitionRes, widget)
   where
@@ -157,9 +162,8 @@ holesForm holes extra = do
         #{extra}
         $forall holeView <- holeViews
           <div .form-group>
-            <label .col-sm-1 .control-label>^{fvLabel holeView}
-            <div .col-sm-2>
-              ^{fvInput holeView}
+            <label .control-label>^{fvLabel holeView}
+            ^{fvInput holeView}
         <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdateLayout}>
       |]
@@ -369,21 +373,17 @@ userForm user extra = do
   let widget = [whamlet|
         #{extra}
         <div .form-group>
-          <label .col-sm-3 .control-label>^{fvLabel nameView}
-          <div .col-sm-6>
-            ^{fvInput nameView}
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
         <div .form-group>
-          <label .col-sm-3 .control-label>^{fvLabel emailView}
-          <div .col-sm-6>
-            ^{fvInput emailView}
+          <label .control-label>^{fvLabel emailView}
+          ^{fvInput emailView}
         <div .form-group>
-          <div .col-sm-offset-3 .col-sm-6>
-            <div .checkbox>
-              <label>
-                ^{fvInput adminView}_{MsgAdmin}
+          <div .checkbox>
+            <label>
+              ^{fvInput adminView}_{MsgAdmin}
         <div .form-group>
-          <div .col-sm-offset-3 .col-sm-6>
-            <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdate}>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdate}>
       |]
   return (result, widget)
 

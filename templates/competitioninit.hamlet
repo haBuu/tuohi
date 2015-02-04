@@ -1,5 +1,7 @@
 <div .container>
 
+  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
   <form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
     ^{formWidget}
 
@@ -34,5 +36,3 @@
                 <div .pull-right>
                   <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
                     <span class="glyphicon glyphicon-remove">
-
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

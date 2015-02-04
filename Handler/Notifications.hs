@@ -13,7 +13,6 @@ getNotificationsR :: Handler Html
 getNotificationsR = do
   notifications <- getNotifications
   maid <- maybeAuthId
-  muser <- maybeAuthUser
   case maid of
     Just aid -> do
       time <- liftIO getCurrentTime
@@ -32,8 +31,10 @@ postNotificationsR = do
       time <- liftIO getCurrentTime
       ((result, _), _) <- runFormPost $ notificationForm aid time
       formHandler result $ \notification -> do
-        runDB $ insert_ notification
-        setMessageI MsgNotificationAdded
+        -- TODO: broken
+        liftIO $ print notification
+        -- runDB $ insert_ notification
+        -- setMessageI MsgNotificationAdded
     Nothing -> return ()
   redirect NotificationsR
 

@@ -18,7 +18,6 @@
           class: "list-group-item",
           text: item.text()
         }).appendTo(dnfListPanel);
-        console.log("success");
       }
     });
   });

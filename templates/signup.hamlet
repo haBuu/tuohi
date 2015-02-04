@@ -1,8 +1,6 @@
 <div .container>
 
-  <div .panel .panel-default>
-    <div .panel-heading>
-      #{competitionName competition}, #{showDay (competitionDate competition)}
+  <h3 .page-header>#{competitionName competition}, #{showDay (competitionDate competition)}
 
   $if full
     <fieldset disabled>
@@ -12,7 +10,9 @@
     <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
       ^{formWidget}
 
-  <ol .list-group>
+  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+  <ul .list-group>
     $forall (d, msg) <- divisions
       <div .panel .panel-default>
         <div .panel-heading>_{msg}
@@ -20,5 +20,4 @@
           $if division == d
             <li .list-group-item>#{name}
 
-  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 

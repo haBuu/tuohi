@@ -5,6 +5,7 @@
 
         $if hole == 1
           <div role="tabpanel" .tab-pane .active #hole-#{show hole}>
+            <a href=@{GroupsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
             <h3 .page-header>Väylä #{show hole}
             $forall (formWidget, formEnctype) <- forms
               <form .form-horizontal method=post enctype=#{formEnctype}>
@@ -17,8 +18,10 @@
                   <a href=#hole-#{show (hole - 1)} #prev .btn .btn-default role="tab" data-toggle="tab">Edellinen
                 <a href=#hole-#{mod hole (length holesAndForms) + 1} #next .btn .btn-default role="tab" data-toggle="tab">Seuraava
 
+
         $else
           <div role="tabpanel" .tab-pane #hole-#{show hole}>
+            <a href=@{GroupsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
             <h3 .page-header>Väylä #{show hole}
             $forall (formWidget, formEnctype) <- forms
               <form .form-horizontal method=post enctype=#{formEnctype}>

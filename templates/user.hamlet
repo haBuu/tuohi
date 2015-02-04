@@ -1,6 +1,6 @@
 <div .container>
 
-  <form .form-horizontal method=post enctype=#{formEnctype}>
+  <form method=post enctype=#{formEnctype}>
     ^{formWidget}
 
   <a href=@{UsersR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
