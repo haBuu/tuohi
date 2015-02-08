@@ -39,6 +39,7 @@
 /admin/competition/signup/#SignUpId/confirm ConfirmSignUpR POST
 /admin/competition/signup/#SignUpId/remove RemoveSignUpR POST
 /admin/competition/round/#RoundId/dnf DnfRoundR POST
+/admin/competition/#CompetitionId/round/#RoundId/group/change ChangeGroupR POST
 
 /admin/competition/#CompetitionId/nextround CompetitionNextRoundR POST
 /admin/competition/#CompetitionId/finish CompetitionFinishR POST

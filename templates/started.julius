@@ -3,6 +3,46 @@
   var dnfListPanel = $("ul#dnf-list div.panel");
   var dnfButtons = $("table button#dnf-round");
 
+  var selectedPlayer = undefined;
+
+  $('body').on("click", "table td#player-name", function() {
+    var self = $(this);
+    if (selectedPlayer) {
+      // disable old
+      selectedPlayer.css("background-color", "white");
+      // check if we clicked already selected
+      if (selectedPlayer.data("rid") == self.parent().data("rid")) {
+        selectedPlayer = undefined;
+      } else {
+        // set new
+        selectedPlayer = self.parent();
+        selectedPlayer.css("background-color", "lightgreen");
+      }
+    } else {
+      // set new if selectedPlayer was undefined
+      selectedPlayer = self.parent();
+      selectedPlayer.css("background-color", "lightgreen");
+    }
+  });
+
+  $('body').on("click", "div#group", function() {
+    var self = $(this);
+    if (selectedPlayer) {
+      var group = self.data("group");
+      var url = selectedPlayer.data("url");
+      $.ajax({
+        type: 'POST',
+        data: { "group" : group },
+        url: url,
+        success: function() {
+          selectedPlayer.appendTo(self.next());
+          selectedPlayer.css("background-color", "white");
+          selectedPlayer = undefined;
+        }
+      });
+    }
+  });
+
   dnfButtons.on("click", function() {
     var self = $(this);
     var item = self.parent().parent().parent();

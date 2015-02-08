@@ -37,6 +37,7 @@ getInputR cid groupNumber = do
         return (holeNumber hole, forms)
       muser <- maybeAuthUser
       defaultLayout $ do
+        setTitleI $ MsgGroupNumber groupNumber
         $(widgetFile "input")
     else do
       -- set ultimate destination to current url

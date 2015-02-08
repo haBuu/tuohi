@@ -1,5 +1,7 @@
 <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
+<h3 .page-header>#{displayCompetition competition}
+
 <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
   ^{nextRoundFormWidget}
 
@@ -11,13 +13,14 @@
 
 $forall group <- groups
   <div .panel .panel-default>
-    <div .panel-heading>_{MsgGroup} #{group}
+    <div .panel-heading #group data-group=#{show group}>
+      _{MsgGroup} #{group}
     <table .table>
       <tbody>
         $forall ((E.Value rid, E.Value _, E.Value groupNumber, E.Value name), scoreCount) <- roundsAndScores
           $if group == groupNumber
-            <tr>
-              <td .middle>
+            <tr data-rid=#{show rid} data-url=@{ChangeGroupR cid rid}>
+              <td .middle #player-name>
                 #{name}
               <td>
                 <div .pull-right>

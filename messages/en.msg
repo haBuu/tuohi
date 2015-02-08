@@ -91,3 +91,4 @@ HandicapResults: Handicapped results
 Serie: Serie
 Groups: Groups
 HoleScores: Hole scores
+GroupNumber group@Int: Group #{show group}

@@ -91,3 +91,4 @@ HandicapResults: Tasoitetut tulokset
 Serie: Sarja
 Groups: Ryhmät
 HoleScores: Väylätulokset
+GroupNumber group@Int: Ryhmä #{show group}
