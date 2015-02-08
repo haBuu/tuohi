@@ -21,8 +21,16 @@ import Helpers
 share [mkPersist sqlSettings, mkMigrate "migrateAll"]
   $(persistFileWith lowerCaseSettings "config/models")
 
-data Player = Player
+data CompetitionPlayer = CompetitionPlayer
   { name :: Text
+  , division :: Division
+  , rounds :: [CompetitionRound]
+  }
+  deriving (Show)
+
+data CompetitionRound = CompetitionRound
+  { info :: Round
+  , scores :: [Score]
   }
   deriving (Show)
 

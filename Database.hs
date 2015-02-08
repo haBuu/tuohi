@@ -264,23 +264,18 @@ playerRoundsAndScores uid cid = selectList
 -- returns list where each item is one competition for the player
 -- and that competition consist of par of the layout that was played
 -- rounds and corresponding scores
-handicapScores :: UserId -> CourseId -> Day -> Handler [(Int, [(Round, [Score])])]
-handicapScores uid coid date = runDB $ do
-  layouts <- selectList [LayoutCourseId ==. coid] []
-  -- layout ids
-  let lids = map entityKey layouts
-  holes <- selectList [HoleLayoutId <-. lids] []
-  -- competitions with given course and before date
+handicapScores :: UserId -> SerieId -> Day -> Handler [(Int, [(Round, [Score])])]
+handicapScores uid sid date = runDB $ do
+  -- competitions with given serie and before date
   competitions <- selectList
-    [ CompetitionLayoutId <-. lids
+    [ CompetitionSerieId ==. Just sid
     , CompetitionDate <=. date]
     []
   forM competitions $ \(Entity cid competition) -> do
     -- layout id for this competion
     let lid = competitionLayoutId competition
-        -- holes matching that layout
-        holes_ = filter (\(Entity _ hole) -> holeLayoutId hole == lid) holes
-        par = countPar holes_
+    holes <- selectList [HoleLayoutId ==. lid] []
+    let par = countPar holes
     rounds <- finishedRounds uid cid
     return (par, rounds)
 

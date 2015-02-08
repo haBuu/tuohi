@@ -88,3 +88,4 @@ Previous: Previous
 Next: Next
 Handicaps: Handicaps
 HandicapResults: Handicapped results
+Serie: Serie

@@ -11,7 +11,7 @@
     if (live) {
       fetch();
     }
-  }, 15000);
+  }, 20000);
 
   // get rid of this
   function fetch() {

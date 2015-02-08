@@ -17,6 +17,7 @@ Competition
   playerLimit Int
   state CompetitionState default=Init
   password Text
+  serieId SerieId Maybe
   UniqueCompetition layoutId date name
   deriving Show
 

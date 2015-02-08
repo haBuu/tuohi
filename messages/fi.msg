@@ -88,3 +88,4 @@ Previous: Edellinen
 Next: Seuraava
 Handicaps: Tasoitukset
 HandicapResults: Tasoitetut tulokset
+Serie: Sarja

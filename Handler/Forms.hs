@@ -50,6 +50,9 @@ newCompetitionForm extra = do
       [ ("placeholder", mr MsgPassword)
       , ("class", "form-control")
       ]) Nothing
+  (serieRes, serieView) <- mopt (selectField series)
+    (FieldSettings (SomeMessage MsgSerie) Nothing Nothing Nothing
+      [("class", "form-control")]) Nothing
   let competitionRes = Competition
                         <$> layoutRes
                         <*> dayRes
@@ -57,6 +60,7 @@ newCompetitionForm extra = do
                         <*> playersRes
                         <*> (pure Init)
                         <*> pwRes
+                        <*> serieRes
   let widget = [whamlet|
         #{extra}
         <div .form-group>
@@ -75,6 +79,9 @@ newCompetitionForm extra = do
           <label .control-label>^{fvLabel pwView}
           ^{fvInput pwView}
         <div .form-group>
+          <label .control-label>^{fvLabel serieView}
+          ^{fvInput serieView}
+        <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCompetition}>
       |]
   return (competitionRes, widget)
@@ -85,6 +92,12 @@ newCompetitionForm extra = do
       entities <- runDB $ selectList [] [Asc LayoutName]
       optionsPairs $ for entities $
         \(Entity lid layout) -> (layoutName layout, lid)
+    -- get series from db
+    series :: Handler (OptionList SerieId)
+    series = do
+      entities <- runDB $ selectList [] [Asc SerieName]
+      optionsPairs $ for entities $
+        \(Entity sid serie) -> (serieName serie, sid)
 
 newCourseForm :: Html -> MForm Handler (FormResult Course, Widget)
 newCourseForm extra = do

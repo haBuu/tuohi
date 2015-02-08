@@ -22,15 +22,23 @@ getResultsR cid = do
   players <- playersAndScores cid
   let sortedPlayers = playerSort holes players
   let date = competitionDate competition
-  handicaps <- forM sortedPlayers $ \u@(user, _, r) -> do
-    entity <- runDB $ getBy404 $ UniqueUser $ userEmail user
-    handicapScores <- handicapScores (entityKey entity)
-      (layoutCourseId layout) date
-    let hc = H.handicap handicapScores
-    return (u, H.countHandicapTotal (r, hc))
+
+  -- <handicap>
+  -- not tested yet
+  -- filter out dnfs
+  let finished = filter (\(_, _, rounds) -> not $ dnf rounds) players
+  handicaps <- case competitionSerieId competition of
+    Just sid ->
+      forM finished $ \u@(user, _, r) -> do
+        entity <- runDB $ getBy404 $ UniqueUser $ userEmail user
+        handicapScores <- handicapScores (entityKey entity) sid date
+        let hc = H.handicap handicapScores
+        return (u, H.countHandicapTotal (r, hc))
+    Nothing -> return []
   -- sort by handicap results
   let sortedHandicaps = sortBy (comparing snd) handicaps
-      filtered = filter (\((_, _, rounds), _) -> not $ dnf rounds) sortedHandicaps
+  -- </handicap>
+
   -- for hamlet template so it will create list only for
   -- divisions which had competitors
   let divisions = map (\d -> (d, D.divisionMsg d)) $ nub $

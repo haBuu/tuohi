@@ -26,12 +26,12 @@ $forall (d, msg) <- divisions
                       #{countToPar holes rounds}
                     )
 
-$if length filtered > 0
+$if length sortedHandicaps > 0
   <div .panel .panel-default>
     <div .panel-heading>_{MsgHandicapResults}
     <table .table>
       <tbody>
-        $forall ((user, _, rounds), hc) <- filtered
+        $forall ((user, _, rounds), hc) <- sortedHandicaps
           <tr>
             <td .middle>
               #{userName user}

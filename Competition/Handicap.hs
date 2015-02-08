@@ -29,10 +29,10 @@ avg [] = 0.0
 avg l = (fromIntegral $ sum l) / (fromIntegral $ length l)
 
 hcFilter :: [Int] -> [Int]
-hcFilter roundTotals =
-  case length roundTotals of
-    0 -> roundTotals
-    1 -> roundTotals
+hcFilter handicaps =
+  case length handicaps of
+    0 -> handicaps
+    1 -> handicaps
     2 -> drop 1 reversed
     3 -> drop 1 reversed
     4 -> drop 1 reversed
@@ -43,5 +43,5 @@ hcFilter roundTotals =
     9 -> drop 3 reversed
     _ -> take 7 sorted
   where
-    sorted = sort roundTotals
+    sorted = sort handicaps
     reversed = reverse sorted
