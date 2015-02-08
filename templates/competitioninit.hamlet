@@ -1,5 +1,7 @@
 <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
+<h3 .page-header>#{displayCompetition competition}
+
 <form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
   ^{formWidget}
 

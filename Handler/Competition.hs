@@ -22,10 +22,12 @@ getCompetitionR cid = do
 
 initPage :: CompetitionId -> Handler Html
 initPage cid = do
+  competition <- runDB $ get404 cid
   signups <- signUpsWithName cid
   ((_, formWidget), formEnctype) <- runFormPost $
     startCompetitionForm cid
   defaultLayout $ do
+    setTitleI MsgAdminPanel
     $(widgetFile "init")
     $(widgetFile "competitioninit")
 
@@ -52,6 +54,7 @@ startedPage cid = do
   -- compine rounds and score counts
   let roundsAndScores = zip rounds scoreCounts
   defaultLayout $ do
+    setTitleI MsgAdminPanel
     $(widgetFile "started")
 
 finishedPage :: CompetitionId -> Handler Html
@@ -59,6 +62,7 @@ finishedPage cid = do
   competition <- runDB $ get404 cid
   layout <- runDB $ get404 $ competitionLayoutId competition
   defaultLayout $ do
+    setTitleI MsgAdminPanel
     $(widgetFile "finished")
 
 postCompetitionNextRoundR :: CompetitionId -> Handler Html
