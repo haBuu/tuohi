@@ -201,7 +201,7 @@ startCompetitionForm :: CompetitionId -> Html
 startCompetitionForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgStartCompetition}>
+        <input type=submit .btn .btn-success .btn-block .btn-lg value=_{MsgStartCompetition}>
       |]
   return (pure cid, widget)
 
@@ -210,7 +210,7 @@ nextRoundForm :: CompetitionId -> Html
 nextRoundForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgNextRound}>
+        <input type=submit .btn .btn-success .btn-block .btn-lg value=_{MsgNextRound}>
       |]
   return (pure cid, widget)
 
@@ -219,7 +219,7 @@ finishCompetitionForm :: CompetitionId -> Html
 finishCompetitionForm cid extra = do
   let widget = [whamlet|
         #{extra}
-        <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgFinishCompetition}>
+        <input type=submit .btn .btn-danger .btn-block .btn-lg value=_{MsgFinishCompetition}>
       |]
   return (pure cid, widget)
 

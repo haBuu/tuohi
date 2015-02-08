@@ -3,9 +3,6 @@
 <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
   ^{nextRoundFormWidget}
 
-<form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
-  ^{finishFormWidget}
-
 <div .panel .panel-default>
   <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
 
@@ -36,3 +33,6 @@ $forall group <- groups
     <div .panel-heading>_{MsgDNF}
     $forall (E.Value rid, E.Value name) <- dnf
       <li .list-group-item>#{name}
+
+<form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
+  ^{finishFormWidget}

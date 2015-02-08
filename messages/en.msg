@@ -89,3 +89,5 @@ Next: Next
 Handicaps: Handicaps
 HandicapResults: Handicapped results
 Serie: Serie
+Groups: Groups
+HoleScores: Hole scores

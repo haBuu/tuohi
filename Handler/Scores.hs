@@ -33,7 +33,10 @@ getCompetitionScoresR cid = do
   -- Accept: application/json will return JSON
   -- Accept: text/html will return HTML
   defaultLayoutJson
-    $(widgetFile "scores") -- html
+    (do
+      setTitleI MsgHoleScores
+      $(widgetFile "scores")
+    ) --html
     (returnJson sortedPlayers) -- json
 
 postScoreR :: CompetitionId -> RoundId -> HoleId -> Handler Html

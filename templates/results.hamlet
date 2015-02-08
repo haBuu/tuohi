@@ -1,5 +1,7 @@
 <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
+<a href=@{CompetitionScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgHoleScores}
+
 <h3.page-header>#{displayCompetition competition}
 
 $forall (d, msg) <- divisions

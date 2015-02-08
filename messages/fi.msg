@@ -89,3 +89,5 @@ Next: Seuraava
 Handicaps: Tasoitukset
 HandicapResults: Tasoitetut tulokset
 Serie: Sarja
+Groups: Ryhmät
+HoleScores: Väylätulokset
