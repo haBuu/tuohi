@@ -31,8 +31,7 @@ postNotificationsR = do
       time <- liftIO getCurrentTime
       ((result, _), _) <- runFormPost $ notificationForm aid time
       formHandler result $ \notification -> do
-        -- TODO: broken
-        -- runDB $ insert_ notification
+        runDB $ insert_ notification
         setMessageI MsgNotificationAdded
     Nothing -> return ()
   redirect NotificationsR
