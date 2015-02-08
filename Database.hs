@@ -46,16 +46,6 @@ getNotifications :: Handler [Entity Notification]
 getNotifications = runDB $ selectList []
   [Desc NotificationDate, LimitTo 5]
 
--- select competitions with state Init and corresponding sign ups
--- with user names for each competition
-competitionsAndSignUps :: Handler [(Entity Competition, [(E.Value (Key SignUp), E.Value Bool, E.Value Division, E.Value Text)])]
-competitionsAndSignUps = do
-  competitions <- runDB $ selectList [CompetitionState ==. Init]
-    [Asc CompetitionDate]
-  forM competitions $ \competition -> do
-    signUps <- signUpsWithName $ entityKey competition
-    return (competition, signUps)
-
 -- select sign ups for given competition with user name
 signUpsWithName :: CompetitionId
   -> Handler [(E.Value (Key SignUp), E.Value Bool, E.Value Division, E.Value Text)]
@@ -110,19 +100,20 @@ startCompetition cid = do
   -- set state to started
   runDB $ update cid [CompetitionState =. Started]
   -- get sign ups for the competition that are confirmed
-  confirmedSignUps <- runDB $ selectList
+  confirmed <- runDB $ selectList
     [SignUpConfirmed ==. True, SignUpCompetitionId ==. cid] []
   -- get competition
   competition <- runDB $ get404 cid
   -- competiton layout id
   let lid = competitionLayoutId competition
   -- count holes in the layout
-  holes <- runDB $ count [HoleLayoutId ==. lid]
+  holes <- holeCount lid
   -- make groups
-  let groups_ = groups holes (length confirmedSignUps)
+  let groups_ = groups holes $ length confirmed
   -- make a round for each confirmed sign up
-  forM_ (zip confirmedSignUps groups_ ) $ \((Entity _ signup), groupNumber) ->
-    runDB $ insertBy $ Round (signUpUserId signup) cid R.Started 1 groupNumber
+  forM_ (zip confirmed groups_) $ \((Entity _ signup), groupNumber) ->
+    runDB $ insertBy $
+      Round (signUpUserId signup) cid R.Started 1 groupNumber
 
 insertLayout :: Layout -> Int -> Handler ()
 insertLayout layout holes = do
@@ -213,7 +204,6 @@ nextRound cid = do
         runDB $ insertBy $ Round pid cid R.Started
           (roundNumber + 1) groupNumber
 
--- TODO: handicaps, final results etc.
 finishCompetition :: CompetitionId -> Handler ()
 finishCompetition cid = do
   mroundNumber <- currentRound cid
