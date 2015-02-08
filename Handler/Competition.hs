@@ -3,6 +3,7 @@ module Handler.Competition where
 
 import Import
 import Data.List(nub)
+import Control.Monad(forM)
 
 import qualified Database.Esqueleto as E
 
@@ -22,7 +23,7 @@ getCompetitionR cid = do
 initPage :: CompetitionId -> Handler Html
 initPage cid = do
   signups <- signUpsWithName cid
-  (formWidget, formEnctype) <- generateFormPost $
+  ((_, formWidget), formEnctype) <- runFormPost $
     startCompetitionForm cid
   defaultLayout $ do
     $(widgetFile "init")
@@ -31,9 +32,9 @@ initPage cid = do
 startedPage :: CompetitionId -> Handler Html
 startedPage cid = do
   competition <- runDB $ get404 cid
-  (nextRoundFormWidget, nextRoundFormEnctype) <- generateFormPost $
+  ((_, nextRoundFormWidget), nextRoundFormEnctype) <- runFormPost $
     identifyForm "nextround" $ nextRoundForm cid
-  (finishCompetitionFormWidget, finishCompetitionFormEnctype) <- generateFormPost $
+  ((_, finishFormWidget), finishFormEnctype) <- runFormPost $
     identifyForm "finish" $ finishCompetitionForm cid
   rounds <- roundsWithNames cid
   dnf <- dnfRoundsWithNames cid
@@ -41,12 +42,22 @@ startedPage cid = do
   let groups = nub $ for rounds $ \(_,_,E.Value g,_) -> g
       mround = safeHead rounds
       currentRound = maybe 1 (\(_, E.Value r, _, _) -> r) mround
+  -- get score count for each player so we can display
+  -- labels for how many holes they have played
+  -- this could be done with the same query where we get the rounds
+  scoreCounts <- forM rounds $ \(E.Value rid, _, _, _) -> do
+    scoreCount rid
+  -- how many holes does the layout have
+  count <- holeCount $ competitionLayoutId competition
+  -- compine rounds and score counts
+  let roundsAndScores = zip rounds scoreCounts
   defaultLayout $ do
     $(widgetFile "started")
 
 finishedPage :: CompetitionId -> Handler Html
 finishedPage cid = do
   competition <- runDB $ get404 cid
+  layout <- runDB $ get404 $ competitionLayoutId competition
   defaultLayout $ do
     $(widgetFile "finished")
 

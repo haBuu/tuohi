@@ -1,12 +1,10 @@
-<div .container>
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgLayouts}
+    $forall Entity lid layout <- layouts
+      <a .list-group-item href=@{LayoutR cid lid}>#{layoutName layout}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgLayouts}
-      $forall Entity lid layout <- layouts
-        <a .list-group-item href=@{LayoutR cid lid}>#{layoutName layout}
+<form method=post action=@{CourseR cid}#form enctype=#{formEnctype}>
+  ^{formWidget}
 
-  <form method=post action=@{CourseR cid}#form enctype=#{formEnctype}>
-    ^{formWidget}
-
-  <a href=@{CoursesR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{CoursesR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

@@ -1,30 +1,28 @@
-<div .container>
+<a href=@{NewCompetitionR} .btn .btn-default .btn-block .btn-lg>_{MsgNewCompetition}
 
-  <a href=@{NewCompetitionR} .btn .btn-default .btn-block .btn-lg>_{MsgNewCompetition}
-
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgActiveCompetitions}
-      $forall Entity cid competition <- competitions
-        $if competitionState competition == Started
-          <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
-
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgFutureCompetitions}
-      $forall Entity cid competition <- competitions
-        $if competitionState competition == Init
-          <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
-
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgPastCompetitions}
-      $forall Entity cid competition <- finished
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgActiveCompetitions}
+    $forall Entity cid competition <- competitions
+      $if competitionState competition == Started
         <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
 
-  <div .btn-group .btn-group-vertical .btn-block .btn-group-lg>
-    $if superAdmin
-      <a href=@{UsersR} .btn .btn-default>_{MsgUsers}
-    <a href=@{NotificationsR} .btn .btn-default>_{MsgNotifications}
-    <a href=@{CoursesR} .btn .btn-default>_{MsgCourses}
-    <a href=@{SeriesR} .btn .btn-default>_{MsgSeries}
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgFutureCompetitions}
+    $forall Entity cid competition <- competitions
+      $if competitionState competition == Init
+        <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
+
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgPastCompetitions}
+    $forall Entity cid competition <- finished
+      <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
+
+<div .btn-group .btn-group-vertical .btn-block .btn-group-lg>
+  $if superAdmin
+    <a href=@{UsersR} .btn .btn-default>_{MsgUsers}
+  <a href=@{NotificationsR} .btn .btn-default>_{MsgNotifications}
+  <a href=@{CoursesR} .btn .btn-default>_{MsgCourses}
+  <a href=@{SeriesR} .btn .btn-default>_{MsgSeries}

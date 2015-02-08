@@ -1,23 +1,19 @@
-<div .container>
+<h3 .page-header>#{displayCompetition competition}
 
-  <h3 .page-header>#{competitionName competition}, #{showDay (competitionDate competition)}
-
-  $if full
-    <fieldset disabled>
-      <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
-        ^{formWidget}
-  $else
+$if full
+  <fieldset disabled>
     <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
       ^{formWidget}
+$else
+  <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
-  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-  <ul .list-group>
-    $forall (d, msg) <- divisions
-      <div .panel .panel-default>
-        <div .panel-heading>_{msg}
-        $forall (_, _, E.Value division, E.Value name) <- signups
-          $if division == d
-            <li .list-group-item>#{name}
-
-
+<ul .list-group>
+  $forall (d, msg) <- divisions
+    <div .panel .panel-default>
+      <div .panel-heading>_{msg}
+      $forall (_, _, E.Value division, E.Value name) <- signups
+        $if division == d
+          <li .list-group-item>#{name}

@@ -84,3 +84,7 @@ AddPlayer: Add player
 PlayerAdded: Player added
 AddPlayerFail: Adding the player failed
 ChoosePlayer: Choose player
+Previous: Previous
+Next: Next
+Handicaps: Handicaps
+HandicapResults: Handicapped results

@@ -1,5 +1,6 @@
 module Competition.Handicap
 ( handicap
+, countHandicapTotal
 )
 where
 
@@ -7,6 +8,13 @@ import Import
 import Data.List(sort)
 import Competition.Competition
 import Helpers
+
+countHandicapTotal :: ([(Round, [Score])], Double) -> Double
+countHandicapTotal (rounds, hc) =
+  let
+    total = foldl (\n (_, scores) -> n + countRoundTotal scores) 0 rounds
+  in
+    (fromIntegral total) - (fromIntegral (length rounds) * hc)
 
 handicap :: [(Int, [(Round, [Score])])] -> Double
 handicap roundsAndPars =
@@ -17,6 +25,7 @@ handicap roundsAndPars =
     avg $ hcFilter $ concat toPars
 
 avg :: [Int] -> Double
+avg [] = 0.0
 avg l = (fromIntegral $ sum l) / (fromIntegral $ length l)
 
 hcFilter :: [Int] -> [Int]

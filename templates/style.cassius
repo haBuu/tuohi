@@ -5,6 +5,7 @@ table#score-table
   text-align: center
   border-collapse: collapse
   width: 100%
+  margin-bottom: 20px
 
 table#score-table tr th
   border: 1px solid #bab7a8
@@ -50,7 +51,7 @@ table#score-table tr th
   background-color: #ff8979
 
 .result
-  min-width: 80px
+  min-width: 60px
 
 .flag-icon
   height: 20px
@@ -67,3 +68,6 @@ ol *.list-group-item
 
 .margin-bottom
   margin-bottom: 10px
+
+.label-lg
+  font-size: 100%

@@ -292,3 +292,6 @@ finishedRounds uid cid = selectList
   >>= mapM (\entity@(Entity rid round_) -> do
     scores <- selectList [ScoreRoundId ==. rid] []
     return (round_, map entityVal scores))
+
+holeCount lid = runDB $ count [HoleLayoutId ==. lid]
+scoreCount rid = runDB $ count [ScoreRoundId ==. rid]

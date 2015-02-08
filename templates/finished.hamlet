@@ -1,9 +1,8 @@
-<div .container>
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgInformation}
+    <li .list-group-item>_{MsgName}: #{competitionName competition}
+    <li .list-group-item>_{MsgDate}: #{showDay $ competitionDate competition}
+    <li .list-group-item>_{MsgLayout}: #{layoutName layout}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgInformation}
-      <li .list-group-item>Nimi: #{competitionName competition}
-      <li .list-group-item> Aika: #{show $ competitionDate competition}
-
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

@@ -1,13 +1,11 @@
-<div .container>
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<form method=post action=@{NotificationsR}#form enctype=#{formEnctype}>
+  ^{formWidget}
 
-  <form method=post action=@{NotificationsR}#form enctype=#{formEnctype}>
-    ^{formWidget}
-
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgNotifications}
-      $forall Entity nid notification <- notifications
-        <li .list-group-item>#{notificationContent notification}
-            <button data-url=@{RemoveNotificationR nid} type="button" .close aria-label="Close"><span aria-hidden="true">&times;
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgNotifications}
+    $forall Entity nid notification <- notifications
+      <li .list-group-item>#{notificationContent notification}
+          <button data-url=@{RemoveNotificationR nid} type="button" .close aria-label="Close"><span aria-hidden="true">&times;

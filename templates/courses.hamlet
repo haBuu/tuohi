@@ -1,12 +1,10 @@
-<div .container>
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgCourses}
+    $forall Entity cid course <- courses
+      <a .list-group-item href=@{CourseR cid}>#{courseName course}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgCourses}
-      $forall Entity cid course <- courses
-        <a .list-group-item href=@{CourseR cid}>#{courseName course}
+<form method=post action=@{CoursesR}#form enctype=#{formEnctype}>
+  ^{formWidget}
 
-  <form method=post action=@{CoursesR}#form enctype=#{formEnctype}>
-    ^{formWidget}
-
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

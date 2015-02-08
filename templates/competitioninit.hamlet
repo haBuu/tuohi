@@ -1,38 +1,36 @@
-<div .container>
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
+  ^{formWidget}
 
-  <form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
-    ^{formWidget}
+<a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
 
-  <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+<div .panel .panel-default>
+  <div .panel-heading>_{MsgNotPresent}
+  <table .table #not-confirmed>
+    <tbody>
+      $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
+        $if not confirmed
+          <tr>
+            <td #name .middle>
+              #{name}
+            <td>
+              <div .pull-right>
+                <button data-url=@{ConfirmSignUpR sid} #confirm-signup type="button" class="btn btn-success btn-sm">
+                  <span class="glyphicon glyphicon-ok">
+                <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
+                  <span class="glyphicon glyphicon-remove">
 
-  <div .panel .panel-default>
-    <div .panel-heading>_{MsgNotPresent}
-    <table .table #not-confirmed>
-      <tbody>
-        $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
-          $if not confirmed
-            <tr>
-              <td #name .middle>
-                #{name}
-              <td>
-                <div .pull-right>
-                  <button data-url=@{ConfirmSignUpR sid} #confirm-signup type="button" class="btn btn-success btn-sm">
-                    <span class="glyphicon glyphicon-ok">
-                  <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
-                    <span class="glyphicon glyphicon-remove">
-
-  <div .panel .panel-default>
-    <div .panel-heading>_{MsgPresent}
-    <table .table #confirmed>
-      <tbody>
-        $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
-          $if confirmed
-            <tr>
-              <td .middle>
-                #{name}
-              <td>
-                <div .pull-right>
-                  <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
-                    <span class="glyphicon glyphicon-remove">
+<div .panel .panel-default>
+  <div .panel-heading>_{MsgPresent}
+  <table .table #confirmed>
+    <tbody>
+      $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
+        $if confirmed
+          <tr>
+            <td .middle>
+              #{name}
+            <td>
+              <div .pull-right>
+                <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
+                  <span class="glyphicon glyphicon-remove">

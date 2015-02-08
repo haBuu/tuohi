@@ -1,33 +1,31 @@
-<div .container>
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgNotifications}
+    $forall Entity _ notification <- notifications
+      <li .list-group-item>#{notificationContent notification}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgNotifications}
-      $forall Entity _ notification <- notifications
-        <li .list-group-item>#{notificationContent notification}
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgActiveCompetitions}
+    $forall Entity cid competition <- competitions
+      $if competitionState competition == Started
+        <a href=@{GroupsR cid} .list-group-item>
+          #{competitionName competition}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgActiveCompetitions}
-      $forall Entity cid competition <- competitions
-        $if competitionState competition == Started
-          <a href=@{GroupsR cid} .list-group-item>
-            #{competitionName competition}
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgOpenSignUps}
+    $forall Entity cid competition <- competitions
+      $if competitionState competition == Init
+        <a href=@{SignUpR cid} .list-group-item>
+          #{displayCompetition competition}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgOpenSignUps}
-      $forall Entity cid competition <- competitions
-        $if competitionState competition == Init
-          <a href=@{SignUpR cid} .list-group-item>
-            #{competitionName competition}, #{showDay (competitionDate competition)}
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgPastCompetitions}
+    $forall Entity cid competition <- competitions
+      $if competitionState competition == Finished
+        <a href=@{ResultsR cid} .list-group-item>
+          #{competitionName competition}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgPastCompetitions}
-      $forall Entity cid competition <- competitions
-        $if competitionState competition == Finished
-          <a href=@{ResultsR cid} .list-group-item>
-            #{competitionName competition}
-
-  ^{languageWidget}
+^{languageWidget}

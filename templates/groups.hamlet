@@ -1,12 +1,10 @@
-<div .container>
+<a href=@{CompetitionScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgResults}
+<a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-  <a href=@{CompetitionScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgResults}
-  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
-
-  <ul .list-group>
-    $forall group <- groups
-      <div .panel .panel-default>
-        <div .panel-heading>_{MsgGroup} #{group}
-        $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
-          $if group == groupNumber
-            <a href=@{InputR cid groupNumber} .list-group-item>#{name}
+<ul .list-group>
+  $forall group <- groups
+    <div .panel .panel-default>
+      <div .panel-heading>_{MsgGroup} #{group}
+      $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
+        $if group == groupNumber
+          <a href=@{InputR cid groupNumber} .list-group-item>#{name}

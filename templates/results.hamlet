@@ -1,25 +1,40 @@
-<div .container>
+<a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-  <a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<h3.page-header>#{displayCompetition competition}
 
-  <ul .list-group>
-    $forall (d, msg) <- divisions
-      <div .panel .panel-default>
-        <div .panel-heading>_{msg}
+$forall (d, msg) <- divisions
+  <div .panel .panel-default>
+    <div .panel-heading>_{msg}
+    <table .table>
+      <tbody>
         $forall (user, division, rounds) <- sortedPlayers
           $if division == d
-            <li .list-group-item>
-              #{userName user}
-              <span .badge .result>
-                $if dnf rounds
-                  DNF
-                $else
-                  #{countTotal rounds} (
-                  $if countToPar holes rounds == 0
-                    E
+            <tr>
+              <td .middle>
+                #{userName user}
+              <td>
+                <div .pull-right .result>
+                  $if dnf rounds
+                    DNF
                   $else
-                    $if countToPar holes rounds > 0
-                      +
-                    #{countToPar holes rounds}
-                  )
+                    #{countTotal rounds} (
+                    $if countToPar holes rounds == 0
+                      E
+                    $else
+                      $if countToPar holes rounds > 0
+                        +
+                      #{countToPar holes rounds}
+                    )
 
+$if length filtered > 0
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgHandicapResults}
+    <table .table>
+      <tbody>
+        $forall ((user, _, rounds), hc) <- filtered
+          <tr>
+            <td .middle>
+              #{userName user}
+            <td>
+              <div .pull-right .result>
+                #{hc}

@@ -1,12 +1,10 @@
-<div .container>
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgSeries}
+    $forall Entity _ serie <- series
+      <li .list-group-item>#{serieName serie}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgSeries}
-      $forall Entity _ serie <- series
-        <li .list-group-item>#{serieName serie}
+<form method=post action=@{SeriesR}#form enctype=#{formEnctype}>
+  ^{formWidget}
 
-  <form method=post action=@{SeriesR}#form enctype=#{formEnctype}>
-    ^{formWidget}
-
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

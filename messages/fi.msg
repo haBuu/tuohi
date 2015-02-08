@@ -84,3 +84,7 @@ AddPlayer: Lisää pelaaja
 PlayerAdded: Pelaaja lisätty
 AddPlayerFail: Pelaajan lisääminen epäonnistui
 ChoosePlayer: Valitse pelaaja
+Previous: Edellinen
+Next: Seuraava
+Handicaps: Tasoitukset
+HandicapResults: Tasoitetut tulokset

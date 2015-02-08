@@ -1,36 +1,38 @@
-<div .container>
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
+  ^{nextRoundFormWidget}
 
-  <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
-    ^{nextRoundFormWidget}
+<form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
+  ^{finishFormWidget}
 
-  <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishCompetitionFormEnctype}>
-    ^{finishCompetitionFormWidget}
+<div .panel .panel-default>
+  <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
 
+<div .panel .panel-default>
+  <div .panel-heading>_{MsgRound}: #{currentRound}
+
+$forall group <- groups
   <div .panel .panel-default>
-    <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
+    <div .panel-heading>_{MsgGroup} #{group}
+    <table .table>
+      <tbody>
+        $forall ((E.Value rid, E.Value _, E.Value groupNumber, E.Value name), scoreCount) <- roundsAndScores
+          $if group == groupNumber
+            <tr>
+              <td .middle>
+                #{name}
+              <td>
+                <div .pull-right>
+                  $if scoreCount == count
+                    <span .label .label-success .label-lg>#{scoreCount}
+                  $else
+                    <span .label .label-warning .label-lg>#{scoreCount}
+                  <button data-url=@{DnfRoundR rid} #dnf-round type="button" .btn .btn-danger .btn-sm>
+                    <span class="glyphicon glyphicon-remove">
 
+<ul .list-group #dnf-list>
   <div .panel .panel-default>
-    <div .panel-heading>_{MsgRound}: #{currentRound}
-
-  $forall group <- groups
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgGroup} #{group}
-      <table .table>
-        <tbody>
-          $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
-            $if group == groupNumber
-              <tr>
-                <td .middle>
-                  #{name}
-                <td>
-                  <div .pull-right>
-                    <button data-url=@{DnfRoundR rid} #dnf-round type="button" class="btn btn-danger btn-sm">
-                      <span class="glyphicon glyphicon-remove">
-
-  <ul .list-group #dnf-list>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgDNF}
-      $forall (E.Value rid, E.Value name) <- dnf
-        <li .list-group-item>#{name}
+    <div .panel-heading>_{MsgDNF}
+    $forall (E.Value rid, E.Value name) <- dnf
+      <li .list-group-item>#{name}

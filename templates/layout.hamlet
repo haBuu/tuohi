@@ -1,9 +1,6 @@
-<div .container>
+<a href=@{CourseR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-  <a href=@{CourseR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<h3 .page-header>_{MsgPars}
 
-  <h3 .page-header>_{MsgPars}
-
-  <form method=post action=@{LayoutR cid lid}#form enctype=#{formEnctype}>
-    ^{formWidget}
-
+<form method=post action=@{LayoutR cid lid}#form enctype=#{formEnctype}>
+  ^{formWidget}

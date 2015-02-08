@@ -1,24 +1,22 @@
-<div .container>
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-  <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgHeadAdmins} (#{length $ filter superAdmin users})
+    $forall Entity uid user <- users
+      $if userSuperAdmin user
+        <a href=@{UserR uid} .list-group-item>#{userName user}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgHeadAdmins} (#{length $ filter superAdmin users})
-      $forall Entity uid user <- users
-        $if userSuperAdmin user
-          <a href=@{UserR uid} .list-group-item>#{userName user}
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgAdmins} (#{length $ filter admin users})
+    $forall Entity uid user <- users
+      $if userAdmin user && not (userSuperAdmin user)
+        <a href=@{UserR uid} .list-group-item>#{userName user}
 
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgAdmins} (#{length $ filter admin users})
-      $forall Entity uid user <- users
-        $if userAdmin user && not (userSuperAdmin user)
-          <a href=@{UserR uid} .list-group-item>#{userName user}
-
-  <ul .list-group>
-    <div .panel .panel-default>
-      <div .panel-heading>_{MsgUsers} (#{length $ filter user users})
-      $forall Entity uid user <- users
-        $if not (userSuperAdmin user) && not (userAdmin user)
-          <a href=@{UserR uid} .list-group-item>#{userName user}
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgUsers} (#{length $ filter user users})
+    $forall Entity uid user <- users
+      $if not (userSuperAdmin user) && not (userAdmin user)
+        <a href=@{UserR uid} .list-group-item>#{userName user}
