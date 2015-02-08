@@ -45,14 +45,18 @@ newCompetitionForm extra = do
   (playersRes, playersView) <- mreq intField
     (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
       [("min","1"),("max", "200"), ("class", "form-control")]) (Just 54)
-  -- TODO: password
+  (pwRes, pwView) <- mreq textField
+    (FieldSettings (SomeMessage MsgPassword) Nothing Nothing Nothing
+      [ ("placeholder", mr MsgPassword)
+      , ("class", "form-control")
+      ]) Nothing
   let competitionRes = Competition
                         <$> layoutRes
                         <*> dayRes
                         <*> nameRes
                         <*> playersRes
                         <*> (pure Init)
-                        <*> (pure "1234")
+                        <*> pwRes
   let widget = [whamlet|
         #{extra}
         <div .form-group>
@@ -67,6 +71,9 @@ newCompetitionForm extra = do
         <div .form-group>
           <label .control-label>^{fvLabel playersView}
           ^{fvInput playersView}
+        <div .form-group>
+          <label .control-label>^{fvLabel pwView}
+          ^{fvInput pwView}
         <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCompetition}>
       |]
