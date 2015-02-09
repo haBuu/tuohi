@@ -68,7 +68,10 @@ newCompetitionForm extra = do
           ^{fvInput layoutView}
         <div .form-group>
           <label .control-label>^{fvLabel dayView}
-          ^{fvInput dayView}
+          <div .input-group .date>
+            ^{fvInput dayView}
+            <span .input-group-addon>
+              <i .glyphicon .glyphicon-calendar>
         <div .form-group>
           <label .control-label>^{fvLabel nameView}
           ^{fvInput nameView}
