@@ -4,12 +4,12 @@
     format: "yyyy-mm-dd",
     weekStart: 1,
     startDate: "today",
-    endDate: "+2y",
+    endDate: "+1y",
     todayBtn: "linked",
     language: #{toJSON lang},
     calendarWeeks: true,
-    autoclose: true,
-    todayHighlight: true
+    todayHighlight: true,
+    disableTouchKeyboard: true
   });
 
 })();
