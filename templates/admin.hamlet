@@ -12,7 +12,7 @@
     <div .panel-heading>_{MsgFutureCompetitions}
     $forall Entity cid competition <- competitions
       $if competitionState competition == Init
-        <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
+        <a href=@{CompetitionR cid} .list-group-item>#{displayCompetition competition}
 
 <ul .list-group>
   <div .panel .panel-default>

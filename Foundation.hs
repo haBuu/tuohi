@@ -34,6 +34,7 @@ import Control.Monad (join)
 import Helpers
 
 import qualified Yesod.Auth.Message as Msg
+import qualified Yesod.Form.I18n.Finnish as FF
 
 -- | The site argument for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -102,15 +103,11 @@ instance Yesod App where
 
     pc <- widgetToPageContent $ do
       addStylesheet $ StaticR css_bootstrap_css
-      -- addStylesheet $ StaticR css_awesome_bootstrap_checkbox_css
       $(widgetFile "style")
       -- jquery
       addScriptRemote "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-      addScriptRemote "//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"
-      -- addScriptRemote "//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.js"
-      -- addStylesheetRemote "//ajax.googleapis.com/ajax/libs/jquerymobile/1.4.3/jquery.mobile.min.css"
+      -- addScriptRemote "//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"
       addScript $ StaticR js_bootstrap_js
-      -- $(widgetFile "mobileinit")
       $(widgetFile "header")
       $(widgetFile "message")
       $(widgetFile "default-layout")
@@ -243,8 +240,8 @@ instance YesodAuth App where
   type AuthId App = UserId
 
   renderAuthMessage _ langs =
-    case any (isInfixOf "fi") langs of
-      True -> finnishMessage
+    case fmap (isInfixOf "fi") (safeHead langs) of
+      Just True -> finnishMessage
       _ -> defaultMessage
 
   -- Where to send a user after successful login
@@ -354,7 +351,10 @@ instance YesodAuthEmail App where
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.
 instance RenderMessage App FormMessage where
-  renderMessage _ _ = defaultFormMessage
+  renderMessage _ langs =
+    case fmap (isInfixOf "fi") (safeHead langs) of
+      Just True -> FF.finnishMessage
+      _ -> defaultFormMessage
 
 -- | Get the 'Extra' value, used to hold data from the settings.yml file.
 getExtra :: Handler Extra

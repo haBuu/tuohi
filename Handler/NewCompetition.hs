@@ -27,7 +27,7 @@ getNewCompetitionR = do
 
 postNewCompetitionR :: Handler Html
 postNewCompetitionR = do
-  ((result, formWidget), formEnctype) <- runFormPost newCompetitionForm
+  ((result, _), _) <- runFormPost newCompetitionForm
   formHandler result $ \res -> do
     runDB $ insert_ res
     setMessageI MsgCompetitionAdded
