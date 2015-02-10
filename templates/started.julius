@@ -9,19 +9,19 @@
     var self = $(this);
     if (selectedPlayer) {
       // disable old
-      selectedPlayer.css("background-color", "white");
+      selectedPlayer.removeClass("list-group-item-success");
       // check if we clicked already selected
       if (selectedPlayer.data("rid") == self.parent().data("rid")) {
         selectedPlayer = undefined;
       } else {
         // set new
         selectedPlayer = self.parent();
-        selectedPlayer.css("background-color", "lightgreen");
+        selectedPlayer.addClass("list-group-item-success");
       }
     } else {
       // set new if selectedPlayer was undefined
       selectedPlayer = self.parent();
-      selectedPlayer.css("background-color", "lightgreen");
+      selectedPlayer.addClass("list-group-item-success");
     }
   });
 
@@ -36,7 +36,7 @@
         url: url,
         success: function() {
           selectedPlayer.appendTo(self.next());
-          selectedPlayer.css("background-color", "white");
+          selectedPlayer.removeClass("list-group-item-success");
           selectedPlayer = undefined;
         }
       });
