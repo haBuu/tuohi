@@ -14,7 +14,7 @@ getNewCompetitionR :: Handler Html
 getNewCompetitionR = do
   -- language for datepicker
   lang <- liftM language languages
-  (formWidget, formEnctype) <- generateFormPost newCompetitionForm
+  ((_, formWidget), formEnctype) <- runFormPost newCompetitionForm
   defaultLayout $ do
     addScript $ StaticR js_bootstrap_datepicker_js
     -- add more languages here (currently finnish and english)

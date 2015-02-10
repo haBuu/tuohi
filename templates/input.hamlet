@@ -1,34 +1,16 @@
 <div role="tabpanel">
   <div class="tab-content">
     $forall (hole, forms) <- holesAndForms
-
-      $if hole == 1
-        <div role="tabpanel" .tab-pane .active #hole-#{show hole}>
-          <a href=@{GroupsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
-          <h3 .page-header>_{MsgHole} #{show hole}
-          $forall (formWidget, formEnctype) <- forms
-            <form .form-horizontal method=post enctype=#{formEnctype}>
-              ^{formWidget}
-          <footer class="footer">
-            <div .btn-group .btn-group-lg .btn-group-justified>
-              $if hole == 1
-                <a href=#hole-#{length holesAndForms} #prev .btn .btn-default role="tab" data-toggle="tab">_{MsgPrevious}
-              $else
-                <a href=#hole-#{show (hole - 1)} #prev .btn .btn-default role="tab" data-toggle="tab">_{MsgPrevious}
-              <a href=#hole-#{mod hole (length holesAndForms) + 1} #next .btn .btn-default role="tab" data-toggle="tab">_{MsgNext}
-
-
-      $else
-        <div role="tabpanel" .tab-pane #hole-#{show hole}>
-          <a href=@{GroupsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
-          <h3 .page-header>_{MsgHole} #{show hole}
-          $forall (formWidget, formEnctype) <- forms
-            <form .form-horizontal method=post enctype=#{formEnctype}>
-              ^{formWidget}
-          <footer class="footer">
-            <div .btn-group .btn-group-lg .btn-group-justified>
-              $if hole == 1
-                <a href=#hole-#{length holesAndForms} #prev .btn .btn-default .btn-block role="tab" data-toggle="tab">_{MsgPrevious}
-              $else
-                <a href=#hole-#{show (hole - 1)} #prev .btn .btn-default .btn-block role="tab" data-toggle="tab">_{MsgPrevious}
-              <a href=#hole-#{mod hole (length holesAndForms) + 1} #next .btn .btn-default .btn-block role="tab" data-toggle="tab">_{MsgNext}
+      <div role="tabpanel" .tab-pane :(hole == 1):.active #hole-#{show hole}>
+        <a href=@{GroupsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+        <h3 .page-header>_{MsgHole} #{show hole}
+        $forall ((_, formWidget), formEnctype) <- forms
+          <form .form-horizontal method=post enctype=#{formEnctype}>
+            ^{formWidget}
+        <footer .footer>
+          <div .btn-group .btn-group-lg .btn-group-justified>
+            $if hole == 1
+              <a href=#hole-#{length holesAndForms} #prev .btn .btn-default role="tab" data-toggle="tab">_{MsgPrevious}
+            $else
+              <a href=#hole-#{show (hole - 1)} #prev .btn .btn-default role="tab" data-toggle="tab">_{MsgPrevious}
+            <a href=#hole-#{mod hole (length holesAndForms) + 1} #next .btn .btn-default role="tab" data-toggle="tab">_{MsgNext}

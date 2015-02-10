@@ -33,7 +33,7 @@ getInputR cid groupNumber = do
           let value = case mScore of
                 Just (Entity _ score) -> Just $ scoreScore score
                 Nothing -> Nothing
-          generateFormPost $ scoreForm cid hid rid name value
+          runFormPost $ scoreForm cid hid rid name value
         return (holeNumber hole, forms)
       muser <- maybeAuthUser
       defaultLayout $ do
