@@ -71,3 +71,10 @@ ol *.list-group-item
 
 .label-lg
   font-size: 100%
+
+.timestamp
+  color: grey
+  font-style: italic
+
+.notification
+  font-size: 1.2em

@@ -5,11 +5,13 @@ module Helpers
 , safeHead
 , thd
 , language
+, showTime
 )
 where
 
 import Prelude
 import Data.Time
+import Data.Time.LocalTime
 import Data.List(find)
 import Data.Text(Text)
 import qualified Data.Text
@@ -25,6 +27,17 @@ showDay date =
   (show d) ++ "." ++ (show m) ++ "." ++ (show y)
   where
     (y,m,d) = toGregorian date
+
+showTime :: TimeZone -> UTCTime -> String
+showTime tz time =
+  let
+    local = utcToLocalTime tz time
+    day = showDay $ localDay local
+    localTime = localTimeOfDay local
+    hour = todHour localTime
+    minutes = todMin localTime
+  in
+    day ++ " " ++ (show hour) ++ ":" ++ (show minutes)
 
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing

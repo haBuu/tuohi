@@ -5,6 +5,7 @@ import Import
 
 import Handler.CompetitionState
 import Database
+import Data.Time.LocalTime
 
 -- This is a handler function for the GET request method on the HomeR
 -- resource pattern. All of your resource patterns are defined in
@@ -15,6 +16,7 @@ import Database
 -- inclined, or create a single monolithic file.
 getHomeR :: Handler Html
 getHomeR = do
+  tz <- liftIO getCurrentTimeZone
   competitions <- runDB $ selectList [] [Asc CompetitionDate]
   notifications <- getNotifications
   defaultLayout $ do

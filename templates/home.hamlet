@@ -2,7 +2,11 @@
   <div .panel .panel-default>
     <div .panel-heading>_{MsgNotifications}
     $forall Entity _ notification <- notifications
-      <li .list-group-item>#{notificationContent notification}
+      <li .list-group-item .clearfix>
+        <p .list-group-item-heading .notification>
+          #{notificationContent notification}
+        <p .list-group-item-text .timestamp .pull-right>
+          #{showTime tz $ notificationDate notification}
 
 <ul .list-group>
   <div .panel .panel-default>
