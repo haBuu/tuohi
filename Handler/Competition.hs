@@ -24,8 +24,7 @@ initPage :: CompetitionId -> Handler Html
 initPage cid = do
   competition <- runDB $ get404 cid
   signups <- signUpsWithName cid
-  ((_, formWidget), formEnctype) <- runFormPost $
-    startCompetitionForm cid
+  ((_, formWidget), formEnctype) <- startCompetitionForm cid
   defaultLayout $ do
     setTitleI MsgAdminPanel
     $(widgetFile "init")
@@ -34,10 +33,8 @@ initPage cid = do
 startedPage :: CompetitionId -> Handler Html
 startedPage cid = do
   competition <- runDB $ get404 cid
-  ((_, nextRoundFormWidget), nextRoundFormEnctype) <- runFormPost $
-    identifyForm "nextround" $ nextRoundForm cid
-  ((_, finishFormWidget), finishFormEnctype) <- runFormPost $
-    identifyForm "finish" $ finishCompetitionForm cid
+  ((_, nextRoundFormWidget), nextRoundFormEnctype) <- nextRoundForm cid
+  ((_, finishFormWidget), finishFormEnctype) <- finishCompetitionForm cid
   rounds <- roundsWithNames cid
   dnf <- dnfRoundsWithNames cid
   -- for hamlet so it can put dividers between groups
@@ -67,7 +64,7 @@ finishedPage cid = do
 
 postCompetitionNextRoundR :: CompetitionId -> Handler Html
 postCompetitionNextRoundR cid = do
-  ((result, _), _) <- runFormPost $ nextRoundForm cid
+  ((result, _), _) <- nextRoundForm cid
   formHandler result $ \res -> do
     nextRound res
     setMessageI MsgNextRoundChanged
@@ -75,7 +72,7 @@ postCompetitionNextRoundR cid = do
 
 postCompetitionFinishR :: CompetitionId -> Handler Html
 postCompetitionFinishR cid = do
-  ((result, _), _) <- runFormPost $ finishCompetitionForm cid
+  ((result, _), _) <- finishCompetitionForm cid
   formHandler result $ \res -> do
     finishCompetition res
     setMessageI MsgCompetitionFinished
@@ -83,7 +80,7 @@ postCompetitionFinishR cid = do
 
 postCompetitionR :: CompetitionId -> Handler Html
 postCompetitionR cid = do
-  ((result, _), _) <- runFormPost $ startCompetitionForm cid
+  ((result, _), _) <- startCompetitionForm cid
   formHandler result $ \res -> do
     startCompetition res
     setMessageI MsgCompetitionStarted

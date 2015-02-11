@@ -96,3 +96,4 @@ Edit: Edit
 Save: Save
 Cancel: Cancel
 Remove: Delete
+HoleNumber hole@Int: Hole #{show hole}

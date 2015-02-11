@@ -8,7 +8,7 @@ import Database
 
 getCoursesR :: Handler Html
 getCoursesR = do
-  ((_, formWidget), formEnctype) <- runFormPost newCourseForm
+  ((_, formWidget), formEnctype) <- newCourseForm
   courses <- runDB $ selectList [] [Asc CourseName]
   defaultLayout $ do
     setTitleI MsgAddCourse
@@ -16,7 +16,7 @@ getCoursesR = do
 
 postCoursesR :: Handler Html
 postCoursesR = do
-  ((result, _), _) <- runFormPost newCourseForm
+  ((result, _), _) <- newCourseForm
   formHandler result $ \course -> do
     runDB $ insert_ course
     setMessageI MsgCourseAdded

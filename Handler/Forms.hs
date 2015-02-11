@@ -4,7 +4,7 @@ module Handler.Forms where
 import Import
 
 import Data.Time(Day, UTCTime, getCurrentTime)
-import Yesod.Form.Jquery
+import Yesod.Form.Bootstrap3
 import Data.Text hiding(count, head)
 import qualified Data.Text.Read
 import Control.Monad(forM, liftM)
@@ -24,35 +24,27 @@ formHandler result f =
       Data.Text.concat err
     FormMissing -> setMessageI MsgFormMissing
 
+-- default submit button
+submitButton :: a -> BootstrapSubmit a
+submitButton msg = BootstrapSubmit msg "btn btn-default btn-block btn-lg" []
+
 newCompetitionForm :: Html
   -> MForm Handler (FormResult Competition, Widget)
 newCompetitionForm extra = do
   mr <- getMessageRender
   (layoutRes, layoutView) <- mreq (selectField layouts)
-    (FieldSettings (SomeMessage MsgLayout) Nothing Nothing Nothing
-      [("class", "form-control")]) Nothing
+    (bfs MsgLayout) Nothing
   (dayRes, dayView) <- mreq dayField
-    (FieldSettings (SomeMessage MsgDate) Nothing Nothing Nothing
-      [ ("placeholder", mr MsgDate)
-      , ("class", "form-control")
-      ])
-      Nothing
+    (withPlaceholder (mr MsgDate) $ bfs MsgDate) Nothing
   (nameRes, nameView) <- mreq textField
-    (FieldSettings (SomeMessage MsgCompetitionName) Nothing Nothing Nothing
-      [ ("placeholder", mr MsgCompetitionName)
-      , ("class", "form-control")
-      ]) Nothing
+    (withPlaceholder (mr MsgCompetitionName) $ bfs MsgCompetitionName) Nothing
   (playersRes, playersView) <- mreq intField
     (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
       [("min","1"),("max", "200"), ("class", "form-control")]) (Just 54)
   (pwRes, pwView) <- mreq textField
-    (FieldSettings (SomeMessage MsgPassword) Nothing Nothing Nothing
-      [ ("placeholder", mr MsgPassword)
-      , ("class", "form-control")
-      ]) Nothing
+    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword) Nothing
   (serieRes, serieView) <- mopt (selectField series)
-    (FieldSettings (SomeMessage MsgSerie) Nothing Nothing Nothing
-      [("class", "form-control")]) Nothing
+    (bfs MsgSerie) Nothing
   let competitionRes = Competition
                         <$> layoutRes
                         <*> dayRes
@@ -102,50 +94,30 @@ newCompetitionForm extra = do
       optionsPairs $ for entities $
         \(Entity sid serie) -> (serieName serie, sid)
 
-newCourseForm :: Html -> MForm Handler (FormResult Course, Widget)
-newCourseForm extra = do
+newCourseForm :: Handler ((FormResult Course, Widget), Enctype)
+newCourseForm = do
   mr <- getMessageRender
-  (nameRes, nameView) <- mreq textField
-    (FieldSettings (SomeMessage MsgAddCourse) Nothing Nothing Nothing
-      [("placeholder", mr MsgAddCourse), ("class", "form-control")]) Nothing
-  let courseRes = Course <$> nameRes
-  let widget = [whamlet|
-        #{extra}
-        <div .form-group>
-          <label .control-label>^{fvLabel nameView}
-          ^{fvInput nameView}
-        <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCourse}>
-      |]
-  return (courseRes, widget)
+  let settings = withPlaceholder (mr MsgAddCourse) $ bfs MsgAddCourse
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $ Course
+    <$> areq textField settings Nothing
+    <*  bootstrapSubmit (submitButton MsgAddCourse)
 
-newSerieForm :: Html -> MForm Handler (FormResult Serie, Widget)
-newSerieForm extra = do
+newSerieForm :: Handler ((FormResult Serie, Widget), Enctype)
+newSerieForm = do
   mr <- getMessageRender
-  (nameRes, nameView) <- mreq textField
-    (FieldSettings (SomeMessage MsgSerieName) Nothing Nothing Nothing
-      [("placeholder", mr MsgSerieName), ("class", "form-control")]) Nothing
-  let serieRes = Serie <$> nameRes
-  let widget = [whamlet|
-        #{extra}
-        <div .form-group>
-          <label .control-label>^{fvLabel nameView}
-          ^{fvInput nameView}
-        <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddSerie}>
-      |]
-  return (serieRes, widget)
+  let settings = withPlaceholder (mr MsgSerieName) $ bfs MsgSerieName
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $ Serie
+    <$> areq textField settings Nothing
+    <*  bootstrapSubmit (submitButton MsgAddSerie)
 
 newLayoutForm :: CourseId -> Html
   -> MForm Handler (FormResult (Layout, Int), Widget)
 newLayoutForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
-    (FieldSettings (SomeMessage MsgLayoutName) Nothing Nothing Nothing
-      [("placeholder", mr MsgLayoutName), ("class", "form-control")]) Nothing
+    (withPlaceholder (mr MsgLayoutName) $ bfs MsgLayoutName) Nothing
   (descRes, descView) <- mreq textField
-    (FieldSettings (SomeMessage MsgLayoutDesc) Nothing Nothing Nothing
-      [("placeholder", mr MsgLayoutDesc), ("class", "form-control")]) Nothing
+    (withPlaceholder (mr MsgLayoutDesc) $ bfs MsgLayoutDesc) Nothing
   (holesRes, holesView) <- mreq intField
     (FieldSettings (SomeMessage MsgNumberOfHoles) Nothing Nothing Nothing
       [("min","1"), ("max", "50"), ("class", "form-control")]) (Just 9)
@@ -173,10 +145,9 @@ newLayoutForm cid extra = do
 holesForm :: [Entity Hole] -> Html
   -> MForm Handler (FormResult [(HoleId, Int)], Widget)
 holesForm holes extra = do
-  mr <- getMessageRender
   -- select field for every hole
   holeFields <- forM holes $ \(Entity hid hole) ->
-    mreq (selectFieldList pars) (set (mr MsgHole) (holeNumber hole)) $ Just $ holePar hole
+    mreq (selectFieldList pars) (set (holeNumber hole)) $ Just $ holePar hole
   let (holeResults, holeViews) = unzip holeFields
   -- add holeids
   let result = sequenceA $ Import.for (Import.zip holes holeResults) $
@@ -194,51 +165,39 @@ holesForm holes extra = do
   where
     pars :: [(Text, Int)]
     pars = [("2", 2),("3", 3),("4", 4),("5", 5),("6", 6)]
-    set :: Text -> Int -> FieldSettings App
-    set hole n = FieldSettings
-      (SomeMessage (pack ((unpack hole) ++ " " ++ (show n))))
-      Nothing Nothing Nothing [("class", "form-control")]
+    set :: Int -> FieldSettings App
+    set = bfs . MsgHoleNumber
 
-startCompetitionForm :: CompetitionId -> Html
-  -> MForm Handler (FormResult CompetitionId, Widget)
-startCompetitionForm cid extra = do
-  let widget = [whamlet|
-        #{extra}
-        <input type=submit .btn .btn-success .btn-block .btn-lg value=_{MsgStartCompetition}>
-      |]
-  return (pure cid, widget)
+startCompetitionForm :: CompetitionId
+  -> Handler ((FormResult CompetitionId, Widget), Enctype)
+startCompetitionForm cid = do
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $ (pure cid)
+    <* bootstrapSubmit (submitButton MsgStartCompetition)
 
-nextRoundForm :: CompetitionId -> Html
-  -> MForm Handler (FormResult CompetitionId, Widget)
-nextRoundForm cid extra = do
-  let widget = [whamlet|
-        #{extra}
-        <input type=submit .btn .btn-success .btn-block .btn-lg value=_{MsgNextRound}>
-      |]
-  return (pure cid, widget)
+nextRoundForm :: CompetitionId
+  -> Handler ((FormResult CompetitionId, Widget), Enctype)
+nextRoundForm cid = do
+  runFormPost $ identifyForm "nextround" $
+    renderBootstrap3 BootstrapBasicForm $ (pure cid)
+      <* bootstrapSubmit (submitButton MsgNextRound)
 
-finishCompetitionForm :: CompetitionId -> Html
-  -> MForm Handler (FormResult CompetitionId, Widget)
-finishCompetitionForm cid extra = do
-  let widget = [whamlet|
-        #{extra}
-        <input type=submit .btn .btn-danger .btn-block .btn-lg value=_{MsgFinishCompetition}>
-      |]
-  return (pure cid, widget)
+finishCompetitionForm :: CompetitionId
+  -> Handler ((FormResult CompetitionId, Widget), Enctype)
+finishCompetitionForm cid = do
+  runFormPost $ identifyForm "finish" $
+    renderBootstrap3 BootstrapBasicForm $ (pure cid)
+      <* bootstrapSubmit (submitButton MsgFinishCompetition)
 
 addPlayerForm :: CompetitionId -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
 addPlayerForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
-    (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
-      [("placeholder", mr MsgName), ("class", "form-control")]) Nothing
+    (withPlaceholder (mr MsgName) $ bfs MsgName) Nothing
   (emailRes, emailView) <- mreq emailField
-    (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
-      [("placeholder", mr MsgEmail), ("class", "form-control")]) Nothing
+    (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) Nothing
   (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
-    (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
-      []) Nothing
+    (bfs MsgDivision) Nothing
   let result = (,,)
                 <$> nameRes
                 <*> emailRes
@@ -265,17 +224,14 @@ signUpForm :: CompetitionId -> Html
 signUpForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
-    (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
-      [("placeholder", mr MsgName), ("class", "form-control")]) Nothing
+    (withPlaceholder (mr MsgName) $ bfs MsgName) Nothing
   (emailRes, emailView) <- mreq emailField
-    (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
-      [("placeholder", mr MsgEmail), ("class", "form-control")]) Nothing
+    (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) Nothing
   (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
   (botCheckRes, botCheckView) <- mreq (checkBotField mr)
-    (FieldSettings (SomeMessage MsgBotCheckField) Nothing Nothing Nothing
-      [("placeholder", mr MsgBotCheckQuestion), ("class", "form-control")]) Nothing
+    (withPlaceholder (mr MsgBotCheckQuestion) $ bfs MsgBotCheckField) Nothing
   let result = (,,,)
                 <$> nameRes
                 <*> emailRes
@@ -310,11 +266,9 @@ signUpFormLoggedIn cid user extra = do
   (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
-  let name = userName user
-      email = userEmail user
   let result = (,,,)
-                <$> pure name
-                <*> pure email
+                <$> pure (userName user)
+                <*> pure (userEmail user)
                 <*> divisionRes
                 <*> (pure 0)
   let widget = [whamlet|
@@ -333,14 +287,11 @@ signUpFormLoggedIn cid user extra = do
 divisionsRender mr = Import.map (\(d, msg) -> (mr msg, d)) divisions
 
 scoreForm :: CompetitionId -> HoleId -> RoundId -> Text -> Maybe Int
-   -> Html -> MForm Handler (FormResult Score, Widget)
+  -> Html -> MForm Handler (FormResult Score, Widget)
 scoreForm cid hid rid name score extra = do
   r <- getUrlRender
   let set = (FieldSettings "" Nothing Nothing Nothing
-        [ ("data-icon","false")
-        , ("data-mini","true")
-        , ("data-inline","true")
-        , ("data-url", r (ScoreR cid rid hid))
+        [ ("data-url", r (ScoreR cid rid hid))
         , ("class", "form-control")
         ])
   (scoreRes, scoreView) <- mreq (selectFieldList scores) set score
@@ -357,41 +308,25 @@ scoreForm cid hid rid name score extra = do
     scores :: [(Text, Int)]
     scores = ("#", 0) : [(pack (show i), i) | i <- [1..99]]
 
-profileForm :: User -> Html -> MForm Handler (FormResult (Text, Text), Widget)
-profileForm user extra = do
+profileForm :: User -> Handler ((FormResult (Text, Text), Widget), Enctype)
+profileForm user = do
   mr <- getMessageRender
-  (nameRes, nameView) <- mreq textField
-    (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
-      [("placeholder", mr MsgName), ("class", "form-control")]) (Just $ userName user)
-  (emailRes, emailView) <- mreq emailField
-    (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
-      [("placeholder", mr MsgEmail), ("class", "form-control")]) (Just $ userEmail user)
-  let result = (,) <$> nameRes <*> emailRes
-  let widget = [whamlet|
-        #{extra}
-        <div .form-group>
-          <label .control-label>^{fvLabel nameView}
-          ^{fvInput nameView}
-        <div .form-group>
-          <label .control-label>^{fvLabel emailView}
-          ^{fvInput emailView}
-        <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdate}>
-      |]
-  return (result, widget)
+  let settings1 = withPlaceholder (mr MsgName) $ bfs MsgName
+      settings2 = withPlaceholder (mr MsgEmail) $ bfs MsgEmail
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $ (,)
+    <$> areq textField settings1 (Just $ userName user)
+    <*> areq emailField settings2 (Just $ userEmail user)
+    <*  bootstrapSubmit (submitButton MsgUpdate)
 
 userForm :: User -> Html -> MForm Handler (FormResult (Text, Text, Bool), Widget)
 userForm user extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
-    (FieldSettings (SomeMessage MsgName) Nothing Nothing Nothing
-      [("placeholder", mr MsgName), ("class", "form-control")]) (Just $ userName user)
+    (withPlaceholder (mr MsgName) $ bfs MsgName) (Just $ userName user)
   (emailRes, emailView) <- mreq emailField
-    (FieldSettings (SomeMessage MsgEmail) Nothing Nothing Nothing
-      [("placeholder", mr MsgEmail), ("class", "form-control")]) (Just $ userEmail user)
+    (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) (Just $ userEmail user)
   (adminRes, adminView) <- mreq checkBoxField
-    (FieldSettings "" Nothing Nothing Nothing
-      []) (Just $ userAdmin user)
+    "" (Just $ userAdmin user)
   let result = (,,) <$> nameRes <*> emailRes <*> adminRes
   let widget = [whamlet|
         #{extra}
@@ -410,59 +345,21 @@ userForm user extra = do
       |]
   return (result, widget)
 
-tempAuthForm :: Html -> MForm Handler (FormResult Text, Widget)
-tempAuthForm extra = do
+tempAuthForm :: Handler ((FormResult Text, Widget), Enctype)
+tempAuthForm = do
   mr <- getMessageRender
-  (pwRes, pwView) <- mreq passwordField
-    (FieldSettings (SomeMessage MsgPassword) Nothing Nothing Nothing
-      [("placeholder", mr MsgPassword), ("class", "form-control")]) Nothing
-  let widget = [whamlet|
-        #{extra}
-        <div .form-group>
-          <label .control-label>^{fvLabel pwView}
-          ^{fvInput pwView}
-        <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgLogIn}>
-      |]
-  return (pwRes, widget)
+  let settings = withPlaceholder (mr MsgPassword) $ bfs MsgPassword
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $
+    areq passwordField settings Nothing
+    <* bootstrapSubmit (submitButton MsgLogIn)
 
-notificationForm :: UserId -> UTCTime -> Html
-  -> MForm Handler (FormResult Notification, Widget)
-notificationForm uid time extra = do
+notificationForm :: UserId -> UTCTime
+  -> Handler ((FormResult Notification, Widget), Enctype)
+notificationForm uid time = do
   mr <- getMessageRender
-  (contentRes, contentView) <- mreq textareaField
-    (FieldSettings (SomeMessage MsgNotification) Nothing Nothing Nothing
-      [("placeholder", mr MsgNotification), ("class", "form-control")]) Nothing
-  let result = Notification
-                <$> contentRes
-                <*> pure uid
-                <*> pure time
-  let widget = [whamlet|
-        #{extra}
-        <div .form-group>
-          <label .control-label>^{fvLabel contentView}
-          ^{fvInput contentView}
-        <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddNotification}>
-      |]
-  return (result, widget)
-
--- form helpers
-
--- this is a copy from intField but type is changed to range from number
-rangeField :: (Monad m, Integral i, RenderMessage (HandlerSite m) FormMessage) => Field m i
-rangeField = Field
-  { fieldParse = parseHelper $ \s ->
-      case Data.Text.Read.signed Data.Text.Read.decimal s of
-        Right (a, "") -> Right a
-        _ -> Left $ MsgInvalidInteger s
-
-  , fieldView = \theId name attrs val isReq -> toWidget [hamlet|
-$newline never
-<input id="#{theId}" name="#{name}" *{attrs} type="range" step=1 :isReq:required="" value="#{showVal val}">
-|]
-  , fieldEnctype = UrlEncoded
-  }
-  where
-    showVal = either id (pack . showI)
-    showI x = show (fromIntegral x :: Integer)
+  let settings = withPlaceholder (mr MsgNotification) $ bfs MsgNotification
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $ Notification
+    <$> areq textareaField settings Nothing
+    <*> pure uid
+    <*> pure time
+    <* bootstrapSubmit (submitButton MsgAddNotification)

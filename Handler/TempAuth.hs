@@ -12,14 +12,14 @@ import Database
 
 getTempAuthR :: CompetitionId -> Handler Html
 getTempAuthR cid = do
-  ((_, formWidget), formEnctype) <- runFormPost tempAuthForm
+  ((_, formWidget), formEnctype) <- tempAuthForm
   defaultLayout $ do
     setTitle "WeeklyApp"
     $(widgetFile "tempauth")
 
 postTempAuthR :: CompetitionId -> Handler Html
 postTempAuthR cid = do
-  ((result, _), _) <- runFormPost tempAuthForm
+  ((result, _), _) <- tempAuthForm
   formHandler result $ tempAuth cid
   -- redirect to ultimate destination what should be
   -- the input page where the user wanted to go

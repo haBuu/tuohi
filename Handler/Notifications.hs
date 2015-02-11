@@ -16,8 +16,7 @@ getNotificationsR = do
   case maid of
     Just aid -> do
       time <- liftIO getCurrentTime
-      ((_, formWidget), formEnctype) <- runFormPost $
-        notificationForm aid time
+      ((_, formWidget), formEnctype) <- notificationForm aid time
       defaultLayout $ do
         setTitleI MsgNotifications
         $(widgetFile "notifications")
@@ -29,7 +28,7 @@ postNotificationsR = do
   case maid of
     Just aid -> do
       time <- liftIO getCurrentTime
-      ((result, _), _) <- runFormPost $ notificationForm aid time
+      ((result, _), _) <- notificationForm aid time
       formHandler result $ \notification -> do
         runDB $ insert_ notification
         setMessageI MsgNotificationAdded

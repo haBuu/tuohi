@@ -96,3 +96,4 @@ Edit: Muokkaa
 Save: Tallenna
 Cancel: Peruuta
 Remove: Poista
+HoleNumber hole@Int: Väylä #{show hole}

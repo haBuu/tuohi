@@ -14,7 +14,7 @@ getProfileR = do
   muser <- maybeAuthUser
   case muser of
     Just user -> do
-      ((_, formWidget), formEnctype) <- runFormPost $ profileForm user
+      ((_, formWidget), formEnctype) <- profileForm user
       defaultLayout $ do
         mmsg <- getMessage
         setTitleI MsgProfile
@@ -29,7 +29,7 @@ postProfileR = do
   muser <- maybeAuthUser
   case muser of
     Just user -> do
-      ((result, _), _) <- runFormPost $ profileForm user
+      ((result, _), _) <- profileForm user
       formHandler result $ \(name, email) ->
         case maid of
           Just aid -> do

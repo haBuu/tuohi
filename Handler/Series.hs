@@ -9,7 +9,7 @@ import Database
 getSeriesR :: Handler Html
 getSeriesR = do
   series <- runDB $ selectList [] [Asc SerieName]
-  ((_, formWidget), formEnctype) <- runFormPost newSerieForm
+  ((_, formWidget), formEnctype) <- newSerieForm
   muser <- maybeAuthUser
   defaultLayout $ do
     setTitleI MsgSeries
@@ -18,7 +18,7 @@ getSeriesR = do
 postSeriesR :: Handler Html
 postSeriesR = do
   series <- runDB $ selectList [] [Asc SerieName]
-  ((result, _), _) <- runFormPost newSerieForm
+  ((result, _), _) <- newSerieForm
   formHandler result $ \res -> do
     runDB $ insert_ res
     setMessageI MsgSerieAdded
