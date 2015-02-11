@@ -42,6 +42,15 @@ deleteNotificationR nid = do
 
 putNotificationR :: NotificationId -> Handler Html
 putNotificationR nid = do
-  content <- runInputPost $ ireq textareaField "content"
-  runDB $ update nid [NotificationContent =. content]
+  maid <- maybeAuthId
+  case maid of
+    Just aid -> do
+      content <- runInputPost $ ireq textareaField "content"
+      time <- liftIO getCurrentTime
+      runDB $ update nid
+        [ NotificationContent =. content
+        , NotificationDate =. time
+        , NotificationUser =. aid
+        ]
+    Nothing -> notAuthenticated -- this can't be reached
   redirect NotificationsR
