@@ -48,6 +48,6 @@
 /admin/user/#UserId UserR GET POST
 
 /admin/notifications NotificationsR GET POST
-/admin/notification/#NotificationId/remove RemoveNotificationR POST
+/admin/notification/#NotificationId NotificationR PUT DELETE
 
 /admin/addplayer/#CompetitionId AddPlayerR GET POST

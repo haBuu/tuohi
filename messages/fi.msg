@@ -92,3 +92,7 @@ Serie: Sarja
 Groups: Ryhmät
 HoleScores: Väylätulokset
 GroupNumber group@Int: Ryhmä #{show group}
+Edit: Muokkaa
+Save: Tallenna
+Cancel: Peruuta
+Remove: Poista

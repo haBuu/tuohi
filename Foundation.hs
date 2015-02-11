@@ -152,7 +152,7 @@ instance Yesod App where
   isAuthorized (CompetitionNextRoundR _) _ = isAdmin
   isAuthorized (CompetitionFinishR _) _ = isAdmin
   isAuthorized NotificationsR _ = isAdmin
-  isAuthorized (RemoveNotificationR _) _ = isAdmin
+  isAuthorized (NotificationR _) _ = isAdmin
   isAuthorized (AddPlayerR _) _ = isAdmin
 
   -- super admin

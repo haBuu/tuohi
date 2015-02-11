@@ -1,7 +1,10 @@
 (function() {
 
   var list = $("ul");
-  var removeButtons = list.find("li button");
+  var removeButtons = list.find("li button#remove");
+  var editButtons = list.find("li button#edit");
+  var saveButtons = list.find("li button#save");
+  var cancelButtons = list.find("li button#cancel");
 
   removeButtons.on("click", function() {
     var self = $(this);
@@ -9,13 +12,56 @@
     var url = self.data("url");
     // remove from db
     $.ajax({
-      type: 'POST',
+      type: 'DELETE',
       url: url,
       success: function() {
         // remove from page
         item.remove();
       }
     });
+  });
+
+  saveButtons.on("click", function() {
+    var self = $(this);
+    var item = self.parent();
+    var url = self.data("url");
+    var text = item.find("textarea").val();
+    $.ajax({
+      type: 'PUT',
+      url: url,
+      data: { content: text },
+      success: function() {
+        self.toggleClass("hidden");
+        item.find("textarea").toggleClass("hidden");
+        item.find("button#edit").toggleClass("hidden");
+        item.find("button#cancel").toggleClass("hidden");
+        item.find("p").toggleClass("hidden");
+        item.find("p").text(text);
+      }
+    });
+  });
+
+  editButtons.on("click", function() {
+    var self = $(this);
+    var item = self.parent();
+    item.find("p").toggleClass("hidden");
+    self.toggleClass("hidden");
+    item.find("textarea").toggleClass("hidden");
+    item.find("button#save").toggleClass("hidden");
+    item.find("button#cancel").toggleClass("hidden");
+  });
+
+  cancelButtons.on("click", function() {
+    var self = $(this);
+    var item = self.parent();
+    var p = item.find("p");
+    var ta = item.find("textarea");
+    p.toggleClass("hidden");
+    self.toggleClass("hidden");
+    ta.toggleClass("hidden");
+    ta.val(p.text());
+    item.find("button#save").toggleClass("hidden");
+    item.find("button#edit").toggleClass("hidden");
   });
 
 })();

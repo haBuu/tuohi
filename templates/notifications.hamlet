@@ -7,5 +7,10 @@
   <div .panel .panel-default>
     <div .panel-heading>_{MsgNotifications}
     $forall Entity nid notification <- notifications
-      <li .list-group-item>#{notificationContent notification}
-          <button data-url=@{RemoveNotificationR nid} type="button" .close aria-label="Close"><span aria-hidden="true">&times;
+      <li .list-group-item .clearfix>
+        <p>#{notificationContent notification}
+        <textarea .margin-bottom .hidden .form-control>#{notificationContent notification}
+        <button #remove data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default>_{MsgRemove}
+        <button #edit .pull-right .margin-left .btn .btn-default>_{MsgEdit}
+        <button #cancel .pull-right .margin-left .btn .btn-default .hidden>_{MsgCancel}
+        <button #save data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default .hidden>_{MsgSave}

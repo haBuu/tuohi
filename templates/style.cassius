@@ -69,6 +69,9 @@ ol *.list-group-item
 .margin-bottom
   margin-bottom: 10px
 
+.margin-left
+  margin-left: 10px
+
 .label-lg
   font-size: 100%
 
@@ -78,3 +81,6 @@ ol *.list-group-item
 
 .notification
   font-size: 1.2em
+
+textarea
+  max-width: 100%

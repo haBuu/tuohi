@@ -92,3 +92,7 @@ Serie: Serie
 Groups: Groups
 HoleScores: Hole scores
 GroupNumber group@Int: Group #{show group}
+Edit: Edit
+Save: Save
+Cancel: Cancel
+Remove: Delete

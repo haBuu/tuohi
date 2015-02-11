@@ -36,7 +36,13 @@ postNotificationsR = do
     Nothing -> return ()
   redirect NotificationsR
 
-postRemoveNotificationR :: NotificationId -> Handler Html
-postRemoveNotificationR nid = do
+deleteNotificationR :: NotificationId -> Handler Html
+deleteNotificationR nid = do
   runDB $ delete nid
+  redirect NotificationsR
+
+putNotificationR :: NotificationId -> Handler Html
+putNotificationR nid = do
+  content <- runInputPost $ ireq textareaField "content"
+  runDB $ update nid [NotificationContent =. content]
   redirect NotificationsR
