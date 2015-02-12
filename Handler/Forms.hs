@@ -220,7 +220,7 @@ addPlayerForm cid extra = do
   return (result, widget)
 
 signUpForm :: CompetitionId -> Html
-  -> MForm Handler (FormResult (Text, Text, D.Division, Int), Widget)
+  -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
 signUpForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
@@ -230,13 +230,10 @@ signUpForm cid extra = do
   (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
-  (botCheckRes, botCheckView) <- mreq (checkBotField mr)
-    (withPlaceholder (mr MsgBotCheckQuestion) $ bfs MsgBotCheckField) Nothing
-  let result = (,,,)
+  let result = (,,)
                 <$> nameRes
                 <*> emailRes
                 <*> divisionRes
-                <*> botCheckRes
   let widget = [whamlet|
         #{extra}
         <div .form-group>
@@ -249,28 +246,23 @@ signUpForm cid extra = do
           <label>^{fvLabel divisionView}
           <div .radio>
             ^{fvInput divisionView}
-        <div .form-group>
-          <label .control-label>^{fvLabel botCheckView}
-          ^{fvInput botCheckView}
+        <div .margin-bottom .g-recaptcha data-sitekey="6Ldnwv4SAAAAAFJePhKQwFx7SP0tSiheSbp-7WME">
         <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgSignUp}>
       |]
   return (result, widget)
-  where
-    checkBotField mr = checkBool (==5) (mr MsgWrongAnswer) intField
 
 signUpFormLoggedIn :: CompetitionId -> User -> Html
-  -> MForm Handler (FormResult (Text, Text, D.Division, Int), Widget)
+  -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
 signUpFormLoggedIn cid user extra = do
   mr <- getMessageRender
   (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
-  let result = (,,,)
+  let result = (,,)
                 <$> pure (userName user)
                 <*> pure (userEmail user)
                 <*> divisionRes
-                <*> (pure 0)
   let widget = [whamlet|
         #{extra}
         <div .form-group>

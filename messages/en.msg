@@ -51,8 +51,6 @@ LayoutDesc: Layout description
 NumberOfHoles: Number of holes
 NotAdmin: You must be an admin
 NotSuperAdmin: You must be a super admin
-BotCheckQuestion: How much is two plus three?
-BotCheckField: Check
 SignUpSuccess: Signed up succesfully
 SignUpFail: Sign up failed
 UserUpdatedSuccess: User updated
@@ -97,3 +95,4 @@ Save: Save
 Cancel: Cancel
 Remove: Delete
 HoleNumber hole@Int: Hole #{show hole}
+RecaptchaError: reCAPTCHA error

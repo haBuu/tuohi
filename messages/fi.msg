@@ -51,8 +51,6 @@ LayoutDesc: Layoutin kuvaus
 NumberOfHoles: Väylien määrä
 NotAdmin: Sinun pitää olla ylläpitäjä
 NotSuperAdmin: Sinun pitää olla pääylläpitäjä
-BotCheckQuestion: Kuinka paljon on 2 plus 3?
-BotCheckField: Tarkistus
 SignUpSuccess: Ilmoittautuminen onnistui
 SignUpFail: Ilmoittautuminen epäonnistui
 UserUpdatedSuccess: Käyttäjän tiedot päivitetty
@@ -97,3 +95,4 @@ Save: Tallenna
 Cancel: Peruuta
 Remove: Poista
 HoleNumber hole@Int: Väylä #{show hole}
+RecaptchaError: reCAPTCHA virhe
