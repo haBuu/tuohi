@@ -14,7 +14,7 @@
     $forall Entity cid competition <- competitions
       $if competitionState competition == Started
         <a href=@{GroupsR cid} .list-group-item>
-          #{competitionName competition}
+          #{displayCompetition competition}
 
 <ul .list-group>
   <div .panel .panel-default>
@@ -27,14 +27,16 @@
 <ul .list-group>
   <div .panel .panel-default>
     <div .panel-heading>_{MsgPastCompetitions}
-    $forall Entity cid competition <- competitions
-      $if competitionState competition == Finished
-        <a href=@{ResultsR cid} .list-group-item>
-          #{competitionName competition}
+    $forall Entity cid competition <- take finishedLimit finished
+      <a href=@{ResultsR cid} .list-group-item>
+        #{displayCompetition competition}
+    $if length finished > finishedLimit
+      <a href=@{FinishedCompetitionsR} .list-group-item .list-group-item-info>
+        _{MsgAllCompetitions}
 
 <ul .list-group>
   <div .panel .panel-default>
-    <div .panel-heading>_{MsgSeries}
+    <div .panel-heading>_{MsgHandicaps}
     $forall Entity sid serie <- series
       <a href=@{HandicapsR sid} .list-group-item>
         #{serieName serie}

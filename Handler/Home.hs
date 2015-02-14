@@ -17,10 +17,16 @@ import Data.Time.LocalTime
 getHomeR :: Handler Html
 getHomeR = do
   tz <- liftIO getCurrentTimeZone
-  competitions <- runDB $ selectList [] [Asc CompetitionDate]
+  competitions <- runDB $ selectList [] [Desc CompetitionDate]
+  let finished = filter isFinished competitions
   notifications <- getNotifications
   series <- runDB $ selectList [] [Asc SerieName]
   defaultLayout $ do
     setTitle "WeeklyApp"
     let languageWidget = $(widgetFile "language")
     $(widgetFile "home")
+
+-- how many finished competitions gets displayed
+-- in the home page
+finishedLimit :: Int
+finishedLimit = 5

@@ -99,3 +99,4 @@ RecaptchaError: reCAPTCHA virhe
 User: Käyttäjä
 Permissions: Oikeudet
 MissingPermission: Sinulla ei ole riittäviä oikeuksia
+AllCompetitions: Kaikki kilpailut

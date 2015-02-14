@@ -14,6 +14,8 @@
 /competition/#CompetitionId/signup SignUpR GET POST
 /competition/#CompetitionId/groups GroupsR GET
 
+/competitions/finished FinishedCompetitionsR GET
+
 /scores ScoresR GET
 /scores/#CompetitionId CompetitionScoresR GET
 /results/#CompetitionId ResultsR GET
@@ -27,22 +29,22 @@
 
 /admin AdminR GET
 
-/admin/newcompetition NewCompetitionR GET POST
-
 /admin/series SeriesR GET POST
 
 /admin/courses CoursesR GET POST
 /admin/course/#CourseId CourseR GET POST
-
 /admin/course/#CourseId/layout/#LayoutId LayoutR GET POST
 
+/admin/newcompetition NewCompetitionR GET POST
+
 /admin/competition/#CompetitionId CompetitionR GET POST
+
+/admin/addplayer/#CompetitionId AddPlayerR GET POST
 
 /admin/competition/signup/#SignUpId/confirm ConfirmSignUpR POST
 /admin/competition/signup/#SignUpId/remove RemoveSignUpR POST
 /admin/competition/round/#RoundId/dnf DnfRoundR POST
 /admin/competition/#CompetitionId/round/#RoundId/group/change ChangeGroupR POST
-
 /admin/competition/#CompetitionId/nextround CompetitionNextRoundR POST
 /admin/competition/#CompetitionId/finish CompetitionFinishR POST
 
@@ -51,7 +53,5 @@
 
 /admin/notifications NotificationsR GET POST
 /admin/notification/#NotificationId NotificationR PUT DELETE
-
-/admin/addplayer/#CompetitionId AddPlayerR GET POST
 
 /admin/permissions PermissionsR GET POST

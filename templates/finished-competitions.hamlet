@@ -1,0 +1,8 @@
+<a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgPastCompetitions}
+    $forall Entity cid competition <- finished
+      <a href=@{ResultsR cid} .list-group-item>
+        #{displayCompetition competition}

@@ -47,6 +47,7 @@ library
                      Handler.ChangeGroup
                      Handler.Permissions
                      Handler.Handicaps
+                     Handler.FinishedCompetitions
                      Helpers
                      Database
                      Competition.Competition

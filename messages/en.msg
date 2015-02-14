@@ -99,3 +99,4 @@ RecaptchaError: reCAPTCHA error
 User: User
 Permissions: Permissions
 MissingPermission: You do not have enough permissions
+AllCompetitions: All competitions

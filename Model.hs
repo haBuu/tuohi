@@ -8,6 +8,7 @@ import Prelude
 
 import Handler.RoundState
 import Handler.CompetitionState
+import qualified Handler.CompetitionState as C
 import Handler.Division
 import Data.Time(Day, UTCTime)
 import Yesod.Form.Fields(Textarea)
@@ -21,6 +22,9 @@ import Permission
 -- http://www.yesodweb.com/book/persistent/
 share [mkPersist sqlSettings, mkMigrate "migrateAll"]
   $(persistFileWith lowerCaseSettings "config/models")
+
+isFinished :: Entity Competition -> Bool
+isFinished = (== C.Finished) . competitionState . entityVal
 
 data CompetitionPlayer = CompetitionPlayer
   { name :: Text
