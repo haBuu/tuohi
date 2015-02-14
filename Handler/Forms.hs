@@ -66,6 +66,9 @@ newCompetitionForm extra = do
             <span .input-group-addon>
               <i .glyphicon .glyphicon-calendar>
         <div .form-group>
+          <label .control-label>^{fvLabel serieView}
+          ^{fvInput serieView}
+        <div .form-group>
           <label .control-label>^{fvLabel nameView}
           ^{fvInput nameView}
         <div .form-group>
@@ -74,9 +77,6 @@ newCompetitionForm extra = do
         <div .form-group>
           <label .control-label>^{fvLabel pwView}
           ^{fvInput pwView}
-        <div .form-group>
-          <label .control-label>^{fvLabel serieView}
-          ^{fvInput serieView}
         <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCompetition}>
       |]

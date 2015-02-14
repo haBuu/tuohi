@@ -1,0 +1,14 @@
+(function() {
+
+  var serieSelect = $("form select").eq(1);
+  var nameInput = $("form input").eq(2);
+
+  serieSelect.on("change", function() {
+    var self = $(this);
+    if (self.val() != "none") {
+      var option = self.find("option:selected");
+      nameInput.val(option.text());
+    }
+  });
+
+})();
