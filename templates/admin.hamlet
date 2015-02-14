@@ -5,20 +5,23 @@
     <div .panel-heading>_{MsgActiveCompetitions}
     $forall Entity cid competition <- competitions
       $if competitionState competition == Started
-        <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
+        <a href=@{CompetitionR cid} .list-group-item>
+          #{displayCompetition competition}
 
 <ul .list-group>
   <div .panel .panel-default>
     <div .panel-heading>_{MsgFutureCompetitions}
     $forall Entity cid competition <- competitions
       $if competitionState competition == Init
-        <a href=@{CompetitionR cid} .list-group-item>#{displayCompetition competition}
+        <a href=@{CompetitionR cid} .list-group-item>
+          #{displayCompetition competition}
 
 <ul .list-group>
   <div .panel .panel-default>
     <div .panel-heading>_{MsgPastCompetitions}
     $forall Entity cid competition <- finished
-      <a href=@{CompetitionR cid} .list-group-item>#{competitionName competition}
+      <a href=@{CompetitionR cid} .list-group-item>
+        #{displayCompetition competition}
 
 <div .btn-group .btn-group-vertical .btn-block .btn-group-lg>
   $if superAdmin
