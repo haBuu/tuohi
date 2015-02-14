@@ -3,7 +3,7 @@ module Handler.Scores where
 
 import Import
 
-import Handler.TempAuth
+import Handler.CompetitionAuth
 import Handler.Forms
 import Handler.CompetitionState
 import Handler.RoundState(RoundState(DidNotFinish))
@@ -38,8 +38,8 @@ getCompetitionScoresR cid = do
 
 postScoreR :: CompetitionId -> RoundId -> HoleId -> Handler Html
 postScoreR cid rid hid = do
-  tempAuth <- isTempAuth cid
-  if tempAuth
+  competitionAuth <- isCompetitionAuth cid
+  if competitionAuth
     then do
       round_ <- runDB $ get404 rid
       user <- runDB $ get404 $ roundUserId round_
@@ -57,4 +57,4 @@ postScoreR cid rid hid = do
       redirect $ InputR (roundCompetitionId round_)
         (roundGroupnumber round_)
     else
-      redirect $ TempAuthR cid
+      notAuthenticated

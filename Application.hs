@@ -45,7 +45,7 @@ import Handler.Competition
 import Handler.Layout
 import Handler.SignUp
 import Handler.Series
-import Handler.TempAuth
+import Handler.CompetitionAuth
 import Handler.Scores
 import Handler.Groups
 import Handler.Input

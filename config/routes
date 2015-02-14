@@ -7,7 +7,7 @@
 / HomeR GET
 
 !/#CompetitionId/#Int InputR GET
-/temp/auth/#CompetitionId TempAuthR GET POST
+!/competition/auth/#CompetitionId CompetitionAuthR GET POST
 
 /score/#CompetitionId/#RoundId/#HoleId ScoreR POST
 

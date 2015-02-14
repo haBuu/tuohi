@@ -28,7 +28,7 @@ library
                      Handler.Layout
                      Handler.SignUp
                      Handler.Series
-                     Handler.TempAuth
+                     Handler.CompetitionAuth
                      Handler.Scores
                      Handler.Groups
                      Handler.Input

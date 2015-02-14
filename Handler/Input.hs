@@ -5,7 +5,7 @@ import Import
 import Control.Monad
 import Data.List(find)
 
-import Handler.TempAuth
+import Handler.CompetitionAuth
 import Handler.Forms
 import qualified Database.Esqueleto as E
 import Database
@@ -13,8 +13,8 @@ import Database
 getInputR :: CompetitionId -> Int -> Handler Html
 getInputR cid groupNumber = do
   -- render input site only if user has temp auth
-  tempAuth <- isTempAuth cid
-  if tempAuth
+  competitionAuth <- isCompetitionAuth cid
+  if competitionAuth
     then do
       competition <- runDB $ get404 cid
       let lid = competitionLayoutId competition
@@ -30,9 +30,8 @@ getInputR cid groupNumber = do
           -- try to find existing score for the form
           let mScore = flip find scores $ \(Entity _ score) ->
                 scoreRoundId score == rid && scoreHoleId score == hid
-          let value = case mScore of
-                Just (Entity _ score) -> Just $ scoreScore score
-                Nothing -> Nothing
+          -- get actual value of the score from Maybe (Entity Score)
+          let value = fmap (scoreScore . entityVal) mScore
           runFormPost $ scoreForm cid hid rid name value
         return (holeNumber hole, forms)
       muser <- maybeAuthUser
@@ -44,4 +43,4 @@ getInputR cid groupNumber = do
       -- so that the user is redirected back to this
       -- url after he has given the correct password
       setUltDestCurrent
-      redirect $ TempAuthR cid
+      redirect $ CompetitionAuthR cid

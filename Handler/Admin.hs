@@ -4,7 +4,6 @@ module Handler.Admin where
 import Import
 
 import Handler.CompetitionState
-import Handler.TempAuth
 import Database
 
 getAdminR :: Handler Html
