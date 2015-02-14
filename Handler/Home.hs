@@ -19,6 +19,7 @@ getHomeR = do
   tz <- liftIO getCurrentTimeZone
   competitions <- runDB $ selectList [] [Asc CompetitionDate]
   notifications <- getNotifications
+  series <- runDB $ selectList [] [Asc SerieName]
   defaultLayout $ do
     setTitle "WeeklyApp"
     let languageWidget = $(widgetFile "language")

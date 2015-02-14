@@ -32,4 +32,11 @@
         <a href=@{ResultsR cid} .list-group-item>
           #{competitionName competition}
 
+<ul .list-group>
+  <div .panel .panel-default>
+    <div .panel-heading>_{MsgSeries}
+    $forall Entity sid serie <- series
+      <a href=@{HandicapsR sid} .list-group-item>
+        #{serieName serie}
+
 ^{languageWidget}

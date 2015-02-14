@@ -277,13 +277,15 @@ handicapScores uid sid date = runDB $ do
     [ CompetitionSerieId ==. Just sid
     , CompetitionDate <=. date]
     []
-  forM competitions $ \(Entity cid competition) -> do
+  unfiltered <- forM competitions $ \(Entity cid competition) -> do
     -- layout id for this competion
     let lid = competitionLayoutId competition
     holes <- selectList [HoleLayoutId ==. lid] []
     let par = countPar holes
     rounds <- finishedRounds uid cid
     return (par, rounds)
+  -- filter out competitions which the player did not attented
+  filterM (return . not . null . snd) unfiltered
 
 finishedRounds uid cid = selectList
   [ RoundUserId ==. uid

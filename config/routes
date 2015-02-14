@@ -18,6 +18,8 @@
 /scores/#CompetitionId CompetitionScoresR GET
 /results/#CompetitionId ResultsR GET
 
+/serie/#SerieId/handicaps HandicapsR GET
+
 /profile ProfileR GET POST
 
 /language LanguageR POST

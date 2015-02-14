@@ -5,6 +5,7 @@ import Import
 import Data.List(nub, sortBy)
 import Data.Ord (comparing)
 import Control.Monad
+import Data.Maybe
 
 import Competition.Competition
 import Handler.Division
@@ -27,14 +28,17 @@ getResultsR cid = do
   -- not tested yet
   -- filter out dnfs
   let finished = filter (\(_, _, rounds) -> not $ dnf rounds) players
-  handicaps <- case competitionSerieId competition of
+  handicapsAll <- case competitionSerieId competition of
     Just sid ->
-      forM finished $ \u@(user, _, r) -> do
+      forM finished $ \u@(user, _, _) -> do
         entity <- runDB $ getBy404 $ UniqueUser $ userEmail user
         handicapScores <- handicapScores (entityKey entity) sid date
-        let hc = H.handicap handicapScores
-        return (u, H.countHandicapTotal (r, hc))
+        let mhc = H.handicap handicapScores
+        return (u, mhc)
     Nothing -> return []
+  -- filter out handicaps that are Nothing and count to
+  -- total to handicap results for rest
+  let handicaps = mapMaybe countOrFilter handicapsAll
   -- sort by handicap results
   let sortedHandicaps = sortBy (comparing snd) handicaps
   -- </handicap>
@@ -46,3 +50,8 @@ getResultsR cid = do
   defaultLayout $ do
     setTitleI MsgResults
     $(widgetFile "results")
+
+countOrFilter (u, mhc) =
+  case mhc of
+    Just hc -> Just (u, H.countHandicapTotal (thd u, hc))
+    Nothing -> Nothing

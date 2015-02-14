@@ -6,6 +6,7 @@ module Helpers
 , thd
 , language
 , showTime
+, today
 )
 where
 
@@ -15,6 +16,10 @@ import Data.Time.LocalTime
 import Data.List(find)
 import Data.Text(Text)
 import qualified Data.Text
+
+today :: IO Day
+today = getCurrentTime
+  >>= return . utctDay
 
 thd :: (t1,t2,t3) -> t3
 thd (_, _, x) = x
