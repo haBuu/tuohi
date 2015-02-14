@@ -23,6 +23,7 @@
 <div .btn-group .btn-group-vertical .btn-block .btn-group-lg>
   $if superAdmin
     <a href=@{UsersR} .btn .btn-default>_{MsgUsers}
+    <a href=@{PermissionsR} .btn .btn-default>_{MsgPermissions}
   <a href=@{NotificationsR} .btn .btn-default>_{MsgNotifications}
   <a href=@{CoursesR} .btn .btn-default>_{MsgCourses}
   <a href=@{SeriesR} .btn .btn-default>_{MsgSeries}

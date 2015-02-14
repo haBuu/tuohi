@@ -96,3 +96,6 @@ Cancel: Peruuta
 Remove: Poista
 HoleNumber hole@Int: Väylä #{show hole}
 RecaptchaError: reCAPTCHA virhe
+User: Käyttäjä
+Permissions: Oikeudet
+MissingPermission: Sinulla ei ole riittäviä oikeuksia

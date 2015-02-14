@@ -9,7 +9,7 @@ getUsersR = do
   users <- runDB $ selectList [] [Asc UserName]
   muser <- maybeAuthUser
   defaultLayout $ do
-    setTitle "WeeklyApp"
+    setTitleI MsgUsers
     $(widgetFile "users")
 
 -- helpers

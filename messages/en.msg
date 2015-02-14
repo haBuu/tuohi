@@ -96,3 +96,6 @@ Cancel: Cancel
 Remove: Delete
 HoleNumber hole@Int: Hole #{show hole}
 RecaptchaError: reCAPTCHA error
+User: User
+Permissions: Permissions
+MissingPermission: You do not have enough permissions

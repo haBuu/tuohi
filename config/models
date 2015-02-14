@@ -6,6 +6,7 @@ User
   verified Bool default=False
   admin Bool default=False
   superAdmin Bool default=False
+  permissions [Permission]
   UniqueUser email
   deriving Typeable
   deriving Show
@@ -23,6 +24,7 @@ Competition
 
 Serie
   name Text
+  UniqueSerie name
   deriving Show
 
 SignUp

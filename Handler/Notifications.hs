@@ -32,13 +32,12 @@ postNotificationsR = do
       formHandler result $ \notification -> do
         runDB $ insert_ notification
         setMessageI MsgNotificationAdded
-    Nothing -> return ()
-  redirect NotificationsR
+      redirect NotificationsR
+    Nothing -> notAuthenticated -- this can't be reached
 
 deleteNotificationR :: NotificationId -> Handler Html
-deleteNotificationR nid = do
-  runDB $ delete nid
-  redirect NotificationsR
+deleteNotificationR nid =
+  runDB $ delete nid >> redirect NotificationsR
 
 putNotificationR :: NotificationId -> Handler Html
 putNotificationR nid = do
@@ -52,5 +51,5 @@ putNotificationR nid = do
         , NotificationDate =. time
         , NotificationUser =. aid
         ]
+      redirect NotificationsR
     Nothing -> notAuthenticated -- this can't be reached
-  redirect NotificationsR

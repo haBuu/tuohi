@@ -51,3 +51,5 @@
 /admin/notification/#NotificationId NotificationR PUT DELETE
 
 /admin/addplayer/#CompetitionId AddPlayerR GET POST
+
+/admin/permissions PermissionsR GET POST

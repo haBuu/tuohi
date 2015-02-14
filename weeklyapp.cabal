@@ -45,6 +45,7 @@ library
                      Handler.Info
                      Handler.AddPlayer
                      Handler.ChangeGroup
+                     Handler.Permissions
                      Helpers
                      Database
                      Competition.Competition
@@ -52,6 +53,7 @@ library
                      Competition.Handicap
                      DivisionMessages
                      Yesod.Form.I18n.Finnish
+                     Permission
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

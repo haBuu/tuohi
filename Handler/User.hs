@@ -11,19 +11,19 @@ getUserR uid = do
   ((_, formWidget), formEnctype) <- runFormPost $ userForm user
   muser <- maybeAuthUser
   defaultLayout $ do
-    mmsg <- getMessage
-    setTitle "WeeklyApp"
+    setTitleI MsgUser
     $(widgetFile "user")
 
 postUserR :: UserId -> Handler Html
 postUserR uid = do
   user <- runDB $ get404 uid
   ((result, _), _) <- runFormPost $ userForm user
-  formHandler result $ \(name, email, admin) -> do
+  formHandler result $ \(name, email, admin, permissions) -> do
     runDB $ update uid
       [ UserName =. name
       , UserEmail =. email
       , UserAdmin =. admin
+      , UserPermissions =. permissions
       ]
     setMessageI MsgUserUpdatedSuccess
   redirect $ UserR uid

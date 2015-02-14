@@ -84,3 +84,9 @@ ol *.list-group-item
 
 textarea
   max-width: 100%
+
+.permission
+  color: green
+
+.no-permission
+  color: red

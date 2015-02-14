@@ -58,6 +58,7 @@ import Handler.Results
 import Handler.Info
 import Handler.AddPlayer
 import Handler.ChangeGroup
+import Handler.Permissions
 
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the
@@ -122,7 +123,7 @@ makeFoundation conf = do
   flip runSqlPool p $ do
     let pw = Just "sha256|14|vRb1oHsjxtKhQ/ftDnRc0w==|wJA1uiJK/o8q+zvcBeYlRoHP9iVSPcRfg4efqiuxrSs="
         verKey = Just "yAqw2iRbi7"
-    _ <- insertUnique $ User "super admin" "super@super" pw verKey True True True
+    _ <- insertUnique $ User "super admin" "super@super" pw verKey True True True []
     return ()
   return foundation
 

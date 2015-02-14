@@ -158,6 +158,7 @@ instance Yesod App where
   -- super admin
   isAuthorized UsersR _ = isSuperAdmin
   isAuthorized (UserR _) _ = isSuperAdmin
+  isAuthorized PermissionsR _ = isSuperAdmin
 
   -- Default to Authorized for now.
   -- TODO: REMOVE THIS
@@ -275,7 +276,7 @@ instance YesodAuthEmail App where
 
   addUnverified email verkey =
     runDB $ insert $
-      User "" email Nothing (Just verkey) False False False
+      User "" email Nothing (Just verkey) False False False []
 
   sendVerifyEmail email _ verurl = do
     liftIO $ print verurl

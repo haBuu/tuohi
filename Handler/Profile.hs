@@ -16,12 +16,11 @@ getProfileR = do
     Just user -> do
       ((_, formWidget), formEnctype) <- profileForm user
       defaultLayout $ do
-        mmsg <- getMessage
         setTitleI MsgProfile
         $(widgetFile "profile")
     -- this can't never happen because this handler
     -- is never reached if the user is not authenticated
-    Nothing -> redirect HomeR
+    Nothing -> notAuthenticated
 
 postProfileR :: Handler Html
 postProfileR = do

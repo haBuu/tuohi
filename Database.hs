@@ -16,6 +16,7 @@ import Competition.Groups
 import Competition.Competition
 import Data.List(nub, nubBy, find, sortBy)
 import Data.Time(Day)
+import Permission
 
 isAdmin :: Handler Bool
 isAdmin = do
@@ -38,9 +39,24 @@ maybeAuthUser = do
     Just aid -> runDB $ get aid
     Nothing -> return Nothing
 
+check :: Permission -> Handler ()
+check permission = do
+  maid <- maybeAuthId
+  case maid of
+    Just aid -> do
+      user <- runDB $ get404 aid
+      if elem permission $ userPermissions user
+        then return ()
+        else permissionDeniedI MsgMissingPermission
+    Nothing -> notAuthenticated
+
 updateUser :: UserId -> Text -> Text -> Handler ()
 updateUser uid name email = runDB $
   update uid [UserName =. name, UserEmail =. email]
+
+setPermissions :: UserId -> [Permission] -> Handler ()
+setPermissions uid permissions = runDB $
+  update uid [UserPermissions =. permissions]
 
 getNotifications :: Handler [Entity Notification]
 getNotifications = runDB $ selectList []
@@ -80,7 +96,7 @@ insertSignUp cid name email division = do
 insertUser :: Text -> Text -> Handler UserId
 insertUser name email = do
   eitherUser <- runDB $ insertBy $
-    User name email Nothing Nothing False False False
+    User name email Nothing Nothing False False False []
   return $ case eitherUser of
     Left (Entity uid _) -> uid
     Right uid -> uid

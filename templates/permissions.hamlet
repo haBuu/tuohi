@@ -1,0 +1,22 @@
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+<div .panel .panel-default>
+  <div .panel-heading>_{MsgPermissions}
+  <div .table-responsive>
+    <table .table>
+      <thead>
+        <tr>
+          <th>_{MsgName}
+          $forall permission <- permissions
+            <th>#{show permission}
+      <tbody>
+        $forall Entity _ user <- admins
+          <tr>
+            <td>#{userName user}
+            $forall permission <- permissions
+              $if elem permission $ userPermissions user
+                <td>
+                  <span .glyphicon .glyphicon-ok .permission>
+              $else
+                <td>
+                  <span .glyphicon .glyphicon-remove .no-permission>

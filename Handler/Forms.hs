@@ -14,6 +14,7 @@ import qualified Database.Esqueleto as E
 import Handler.CompetitionState
 import DivisionMessages
 import qualified Handler.Division as D
+import Permission
 
 -- form handler with default action for FormFailure and FormMissing
 formHandler :: FormResult a -> (a -> Handler ()) -> Handler ()
@@ -300,7 +301,8 @@ scoreForm cid hid rid name score extra = do
     scores :: [(Text, Int)]
     scores = ("#", 0) : [(pack (show i), i) | i <- [1..99]]
 
-profileForm :: User -> Handler ((FormResult (Text, Text), Widget), Enctype)
+profileForm :: User
+  -> Handler ((FormResult (Text, Text), Widget), Enctype)
 profileForm user = do
   mr <- getMessageRender
   let settings1 = withPlaceholder (mr MsgName) $ bfs MsgName
@@ -310,7 +312,8 @@ profileForm user = do
     <*> areq emailField settings2 (Just $ userEmail user)
     <*  bootstrapSubmit (submitButton MsgUpdate)
 
-userForm :: User -> Html -> MForm Handler (FormResult (Text, Text, Bool), Widget)
+userForm :: User -> Html
+  -> MForm Handler (FormResult (Text, Text, Bool, [Permission]), Widget)
 userForm user extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
@@ -319,7 +322,9 @@ userForm user extra = do
     (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) (Just $ userEmail user)
   (adminRes, adminView) <- mreq checkBoxField
     "" (Just $ userAdmin user)
-  let result = (,,) <$> nameRes <*> emailRes <*> adminRes
+  (perRes, perView) <- mreq (checkboxesField permissions)
+    "" (Just $ userPermissions user)
+  let result = (,,,) <$> nameRes <*> emailRes <*> adminRes <*> perRes
   let widget = [whamlet|
         #{extra}
         <div .form-group>
@@ -333,9 +338,16 @@ userForm user extra = do
             <label>
               ^{fvInput adminView}_{MsgAdmin}
         <div .form-group>
+          ^{fvInput perView}
+        <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdate}>
       |]
   return (result, widget)
+  where
+    permissions :: Handler (OptionList Permission)
+    permissions = do
+      optionsPairs $ for [minBound..] $
+        \permission -> (pack $ show permission, permission)
 
 tempAuthForm :: Handler ((FormResult Text, Widget), Enctype)
 tempAuthForm = do
