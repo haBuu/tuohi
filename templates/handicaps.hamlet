@@ -4,12 +4,10 @@
   <div .panel-heading>_{MsgHandicaps}
   <table .table>
     <tbody>
-      $forall (user, mhc) <- handicaps
-        $maybe hc <- mhc
-          <tr>
-            <td>
-              #{userName user}
-            <td>
-              <div .pull-right>
-                #{show hc}
-        $nothing
+      $forall (user, hc) <- handicaps
+        <tr>
+          <td>
+            #{userName user}
+          <td>
+            <div .pull-right>
+              #{show hc}

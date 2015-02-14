@@ -5,6 +5,7 @@ import Data.Time
 import Control.Monad(forM)
 import Data.Ord(comparing)
 import Data.List(sortBy)
+import Data.Maybe(mapMaybe)
 
 import Database
 import qualified Competition.Handicap as H
@@ -19,8 +20,16 @@ getHandicapsR sid = do
   handicapsAll <- forM users $ \user -> do
     handicapScores <- handicapScores (entityKey user) sid date
     return (entityVal user, H.handicap handicapScores)
-  let handicaps = sortBy (comparing snd) handicapsAll
+  -- filter out handicaps that are Nothing meaning players that
+  -- did not have any results in the serie
+  let filtered = mapMaybe justHc handicapsAll
+      handicaps = sortBy (comparing snd) filtered
   -- </handicap>
   defaultLayout $ do
     setTitleI MsgHandicaps
     $(widgetFile "handicaps")
+
+justHc (user, mhc) =
+  case mhc of
+    Just hc -> Just (user, hc)
+    Nothing -> Nothing
