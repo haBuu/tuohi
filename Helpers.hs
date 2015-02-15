@@ -13,9 +13,12 @@ where
 import Prelude
 import Data.Time
 import Data.Time.LocalTime
+-- import Data.Time.Format
 import Data.List(find)
 import Data.Text(Text)
 import qualified Data.Text
+
+import System.Locale
 
 today :: IO Day
 today = getCurrentTime
@@ -38,11 +41,8 @@ showTime tz time =
   let
     local = utcToLocalTime tz time
     day = showDay $ localDay local
-    localTime = localTimeOfDay local
-    hour = todHour localTime
-    minutes = todMin localTime
   in
-    day ++ " " ++ (show hour) ++ ":" ++ (show minutes)
+    day ++ " " ++ formatTime defaultTimeLocale "%H:%M" local
 
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
