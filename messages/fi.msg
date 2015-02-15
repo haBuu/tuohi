@@ -100,3 +100,5 @@ User: Käyttäjä
 Permissions: Oikeudet
 MissingPermission: Sinulla ei ole riittäviä oikeuksia
 AllCompetitions: Kaikki kilpailut
+Confirm: Vahvista
+ConfirmPlayerRemoveTitle: Vahvista pelaajan poistaminen

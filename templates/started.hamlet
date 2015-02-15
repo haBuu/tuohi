@@ -1,18 +1,16 @@
-<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
-
 <h3 .page-header>#{displayCompetition competition}
 
 <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
   ^{nextRoundFormWidget}
 
-<div .panel .panel-default>
+<div .panel .panel-info>
   <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
 
-<div .panel .panel-default>
+<div .panel .panel-info>
   <div .panel-heading>_{MsgRound}: #{currentRound}
 
 $forall group <- groups
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading #group data-group=#{show group}>
       _{MsgGroup} #{group}
     <table .table>
@@ -32,10 +30,21 @@ $forall group <- groups
                     <span class="glyphicon glyphicon-remove">
 
 <ul .list-group #dnf-list>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgDNF}
     $forall (E.Value rid, E.Value name) <- dnf
       <li .list-group-item>#{name}
 
 <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
   ^{finishFormWidget}
+
+<div #confirm .modal>
+  <div .modal-dialog>
+    <div .modal-content>
+      <div .modal-header>
+        <h4 .modal-title>_{MsgConfirmPlayerRemoveTitle}
+      <div .modal-body>
+        <p>
+      <div .modal-footer>
+        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
+        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}

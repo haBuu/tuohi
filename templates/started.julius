@@ -5,6 +5,8 @@
 
   var selectedPlayer = undefined;
 
+  var confirmModal = $('div#confirm');
+
   $('body').on("click", "table td#player-name", function() {
     var self = $(this);
     if (selectedPlayer) {
@@ -47,19 +49,24 @@
     var self = $(this);
     var item = self.parent().parent().parent();
     var url = self.data("url");
-    // remove from db
-    $.ajax({
-      type: 'POST',
-      url: url,
-      success: function() {
-        // move to dnf players
-        item.remove();
-        $('<li/>', {
-          class: "list-group-item",
-          text: item.text()
-        }).appendTo(dnfListPanel);
-      }
-    });
+    var name = item.find("td#player-name").text();
+    confirmModal.find("div.modal-body p").text(name);
+    confirmModal.modal({ backdrop: 'static', keyboard: false })
+      .one('click', '#confirm-button', function (e) {
+        // remove from db
+        $.ajax({
+          type: 'POST',
+          url: url,
+          success: function() {
+            // move to dnf players
+            item.remove();
+            $('<li/>', {
+              class: "list-group-item",
+              text: name
+            }).appendTo(dnfListPanel);
+          }
+        });
+      });
   });
 
 })();
