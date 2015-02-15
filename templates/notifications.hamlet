@@ -4,7 +4,7 @@
   ^{formWidget}
 
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgNotifications}
     $forall Entity nid notification <- notifications
       <li .list-group-item .clearfix>

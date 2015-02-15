@@ -1,11 +1,9 @@
-<a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<h3.page-header>#{displayCompetition competition}
 
 <a href=@{CompetitionScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgHoleScores}
 
-<h3.page-header>#{displayCompetition competition}
-
 $forall (d, msg) <- divisions
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{msg}
     <table .table>
       <tbody>
@@ -29,7 +27,7 @@ $forall (d, msg) <- divisions
                     )
 
 $if length sortedHandicaps > 0
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgHandicapResults}
     <table .table>
       <tbody>

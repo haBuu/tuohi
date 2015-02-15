@@ -1,6 +1,6 @@
 <a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
-<div .panel .panel-default>
+<div .panel .panel-primary>
   <div .panel-heading>_{MsgPermissions}
   <div .table-responsive>
     <table .table>

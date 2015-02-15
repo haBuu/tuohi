@@ -1,5 +1,5 @@
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgInformation}
     <li .list-group-item>_{MsgName}: #{competitionName competition}
     <li .list-group-item>_{MsgDate}: #{showDay $ competitionDate competition}

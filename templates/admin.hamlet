@@ -1,7 +1,7 @@
 <a href=@{NewCompetitionR} .btn .btn-default .btn-block .btn-lg>_{MsgNewCompetition}
 
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgActiveCompetitions}
     $forall Entity cid competition <- competitions
       $if competitionState competition == Started
@@ -9,7 +9,7 @@
           #{displayCompetition competition}
 
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgFutureCompetitions}
     $forall Entity cid competition <- competitions
       $if competitionState competition == Init
@@ -17,7 +17,7 @@
           #{displayCompetition competition}
 
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgPastCompetitions}
     $forall Entity cid competition <- finished
       <a href=@{CompetitionR cid} .list-group-item>

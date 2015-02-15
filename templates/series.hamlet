@@ -1,5 +1,5 @@
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgSeries}
     $forall Entity _ serie <- series
       <li .list-group-item>#{serieName serie}

@@ -1,6 +1,6 @@
 <h3 .page-header>#{serieName serie}
 
-<div .panel .panel-default>
+<div .panel .panel-primary>
   <div .panel-heading>_{MsgHandicaps}
   <table .table>
     <tbody>

@@ -1,5 +1,5 @@
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgLayouts}
     $forall Entity lid layout <- layouts
       <a .list-group-item href=@{LayoutR cid lid}>#{layoutName layout}

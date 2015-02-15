@@ -1,5 +1,5 @@
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgCourses}
     $forall Entity cid course <- courses
       <a .list-group-item href=@{CourseR cid}>#{courseName course}

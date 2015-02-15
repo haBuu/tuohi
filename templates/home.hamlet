@@ -1,5 +1,5 @@
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgNotifications}
     $forall Entity _ notification <- notifications
       <li .list-group-item .clearfix>
@@ -9,7 +9,7 @@
           #{showTime tz $ notificationDate notification}
 
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgActiveCompetitions}
     $forall Entity cid competition <- competitions
       $if competitionState competition == Started
@@ -17,7 +17,7 @@
           #{displayCompetition competition}
 
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgOpenSignUps}
     $forall Entity cid competition <- competitions
       $if competitionState competition == Init
@@ -25,7 +25,7 @@
           #{displayCompetition competition}
 
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgPastCompetitions}
     $forall Entity cid competition <- take finishedLimit finished
       <a href=@{ResultsR cid} .list-group-item>
@@ -35,7 +35,7 @@
         _{MsgAllCompetitions}
 
 <ul .list-group>
-  <div .panel .panel-default>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgHandicaps}
     $forall Entity sid serie <- series
       <a href=@{HandicapsR sid} .list-group-item>

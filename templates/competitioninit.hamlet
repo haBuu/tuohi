@@ -1,5 +1,3 @@
-<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
-
 <h3 .page-header>#{displayCompetition competition}
 
 <form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
@@ -7,7 +5,7 @@
 
 <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
 
-<div .panel .panel-default>
+<div .panel .panel-primary>
   <div .panel-heading>_{MsgNotPresent}
   <table .table #not-confirmed>
     <tbody>
@@ -23,7 +21,7 @@
                 <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
                   <span class="glyphicon glyphicon-remove">
 
-<div .panel .panel-default>
+<div .panel .panel-primary>
   <div .panel-heading>_{MsgPresent}
   <table .table #confirmed>
     <tbody>
