@@ -9,15 +9,13 @@
 !/#CompetitionId/#Int InputR GET
 !/competition/auth/#CompetitionId CompetitionAuthR GET POST
 
-/score/#CompetitionId/#RoundId/#HoleId ScoreR POST
-
 /competition/#CompetitionId/signup SignUpR GET POST
 /competition/#CompetitionId/groups GroupsR GET
 
 /competitions/finished FinishedCompetitionsR GET
 
-/scores ScoresR GET
-/scores/#CompetitionId CompetitionScoresR GET
+/score/#CompetitionId/#RoundId/#HoleId ScoreR POST
+/scores/#CompetitionId ScoresR GET
 /results/#CompetitionId ResultsR GET
 
 /serie/#SerieId/handicaps HandicapsR GET

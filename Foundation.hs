@@ -131,8 +131,7 @@ instance Yesod App where
   isAuthorized HomeR _ = return Authorized
   isAuthorized (GroupsR _) _ = return Authorized
   isAuthorized (SignUpR _) _ = return Authorized
-  isAuthorized ScoresR _ = return Authorized
-  isAuthorized (CompetitionScoresR _) _ = return Authorized
+  isAuthorized (ScoresR _) _ = return Authorized
   isAuthorized (CompetitionAuthR _) _ = return Authorized
 
   -- user

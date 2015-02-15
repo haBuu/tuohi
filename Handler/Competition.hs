@@ -18,7 +18,7 @@ getCompetitionR cid = do
   case competitionState competition of
     Init -> initPage cid
     Started -> startedPage cid
-    Finished -> finishedPage cid
+    Finished -> notFound
 
 initPage :: CompetitionId -> Handler Html
 initPage cid = do
@@ -53,14 +53,6 @@ startedPage cid = do
   defaultLayout $ do
     setTitleI MsgAdminPanel
     $(widgetFile "started")
-
-finishedPage :: CompetitionId -> Handler Html
-finishedPage cid = do
-  competition <- runDB $ get404 cid
-  layout <- runDB $ get404 $ competitionLayoutId competition
-  defaultLayout $ do
-    setTitleI MsgAdminPanel
-    $(widgetFile "finished")
 
 postCompetitionNextRoundR :: CompetitionId -> Handler Html
 postCompetitionNextRoundR cid = do

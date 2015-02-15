@@ -8,37 +8,42 @@
         <p .list-group-item-text .timestamp .pull-right>
           #{showTime tz $ notificationDate notification}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgActiveCompetitions}
-    $forall Entity cid competition <- competitions
-      $if competitionState competition == Started
-        <a href=@{GroupsR cid} .list-group-item>
-          #{displayCompetition competition}
+<div .row>
+  <div .col-sm-3>
+    <ul .list-group>
+      <div .panel .panel-primary>
+        <div .panel-heading>_{MsgActiveCompetitions}
+        $forall Entity cid competition <- competitions
+          $if competitionState competition == Started
+            <a href=@{GroupsR cid} .list-group-item>
+              #{displayCompetition competition}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgOpenSignUps}
-    $forall Entity cid competition <- competitions
-      $if competitionState competition == Init
-        <a href=@{SignUpR cid} .list-group-item>
-          #{displayCompetition competition}
+  <div .col-sm-3>
+    <ul .list-group>
+      <div .panel .panel-primary>
+        <div .panel-heading>_{MsgOpenSignUps}
+        $forall Entity cid competition <- competitions
+          $if competitionState competition == Init
+            <a href=@{SignUpR cid} .list-group-item>
+              #{displayCompetition competition}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgPastCompetitions}
-    $forall Entity cid competition <- take finishedLimit finished
-      <a href=@{ResultsR cid} .list-group-item>
-        #{displayCompetition competition}
-    $if length finished > finishedLimit
-      <a href=@{FinishedCompetitionsR} .list-group-item .list-group-item-info>
-        _{MsgAllCompetitions}
+  <div .col-sm-3>
+    <ul .list-group>
+      <div .panel .panel-primary>
+        <div .panel-heading>_{MsgPastCompetitions}
+        $forall Entity cid competition <- take finishedLimit finished
+          <a href=@{ResultsR cid} .list-group-item>
+            #{displayCompetition competition}
+        $if length finished > finishedLimit
+          <a href=@{FinishedCompetitionsR} .list-group-item .list-group-item-info>
+            _{MsgAllCompetitions}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgHandicaps}
-    $forall Entity sid serie <- series
-      <a href=@{HandicapsR sid} .list-group-item>
-        #{serieName serie}
+  <div .col-sm-3>
+    <ul .list-group>
+      <div .panel .panel-primary>
+        <div .panel-heading>_{MsgHandicaps}
+        $forall Entity sid serie <- series
+          <a href=@{HandicapsR sid} .list-group-item>
+            #{serieName serie}
 
 ^{languageWidget}

@@ -1,6 +1,6 @@
 <h3.page-header>#{displayCompetition competition}
 
-<a href=@{CompetitionScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgHoleScores}
+<a href=@{ScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgHoleScores}
 
 $forall (d, msg) <- divisions
   <div .panel .panel-primary>

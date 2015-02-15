@@ -1,6 +1,6 @@
 <h3 .page-header>#{displayCompetition competition}
 
-<a href=@{CompetitionScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgHoleScores}
+<a href=@{ScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgHoleScores}
 <a href=@{ResultsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgResults}
 
 <ul .list-group>

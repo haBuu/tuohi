@@ -11,17 +11,8 @@ import Handler.RoundState(RoundState(DidNotFinish))
 import Competition.Competition
 import Database
 
--- just for convenience for the users
-getScoresR :: Handler Html
-getScoresR = do
-  mcompetition <- runDB $ selectFirst
-    [CompetitionState ==. Started] [Asc CompetitionDate]
-  case mcompetition of
-    Nothing -> notFound
-    Just (Entity cid competition) -> redirect $ CompetitionScoresR cid
-
-getCompetitionScoresR :: CompetitionId -> Handler TypedContent
-getCompetitionScoresR cid = do
+getScoresR :: CompetitionId -> Handler TypedContent
+getScoresR cid = do
   competition <- runDB $ get404 cid
   let lid = competitionLayoutId competition
   holes <- runDB $ selectList

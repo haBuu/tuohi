@@ -1,29 +1,24 @@
-<a href=@{NewCompetitionR} .btn .btn-default .btn-block .btn-lg>_{MsgNewCompetition}
+<div .row>
+  <div .col-sm-6>
+    <ul .list-group>
+      <div .panel .panel-primary>
+        <div .panel-heading>_{MsgActiveCompetitions}
+        $forall Entity cid competition <- competitions
+          $if competitionState competition == Started
+            <a href=@{CompetitionR cid} .list-group-item>
+              #{displayCompetition competition}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgActiveCompetitions}
-    $forall Entity cid competition <- competitions
-      $if competitionState competition == Started
-        <a href=@{CompetitionR cid} .list-group-item>
-          #{displayCompetition competition}
-
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgFutureCompetitions}
-    $forall Entity cid competition <- competitions
-      $if competitionState competition == Init
-        <a href=@{CompetitionR cid} .list-group-item>
-          #{displayCompetition competition}
-
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgPastCompetitions}
-    $forall Entity cid competition <- finished
-      <a href=@{CompetitionR cid} .list-group-item>
-        #{displayCompetition competition}
+  <div .col-sm-6>
+    <ul .list-group>
+      <div .panel .panel-primary>
+        <div .panel-heading>_{MsgFutureCompetitions}
+        $forall Entity cid competition <- competitions
+          $if competitionState competition == Init
+            <a href=@{CompetitionR cid} .list-group-item>
+              #{displayCompetition competition}
 
 <div .btn-group .btn-group-vertical .btn-block .btn-group-lg>
+  <a href=@{NewCompetitionR} .btn .btn-default>_{MsgNewCompetition}
   $if superAdmin
     <a href=@{UsersR} .btn .btn-default>_{MsgUsers}
     <a href=@{PermissionsR} .btn .btn-default>_{MsgPermissions}

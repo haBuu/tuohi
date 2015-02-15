@@ -15,7 +15,7 @@
 
   // get rid of this
   function fetch() {
-    $.getJSON('@{CompetitionScoresR cid}' , function(data) {
+    $.getJSON('@{ScoresR cid}' , function(data) {
       var players = data;
       for (var i = 0; i < players.length; ++i) {
         var rounds = players[i][1][2];
