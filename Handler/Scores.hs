@@ -2,6 +2,7 @@
 module Handler.Scores where
 
 import Import
+import Control.Monad(void)
 
 import Handler.CompetitionAuth
 import Handler.Forms
@@ -33,7 +34,7 @@ getCompetitionScoresR cid = do
   -- Accept: application/json will return JSON
   -- Accept: text/html will return HTML
   defaultLayoutJson
-    (setTitleI MsgHoleScores >> $(widgetFile "scores"))
+    (setTitleI MsgHoleScores >> $(widgetFile "scores")) -- html
     (returnJson sortedPlayers) -- json
 
 postScoreR :: CompetitionId -> RoundId -> HoleId -> Handler Html
@@ -46,14 +47,7 @@ postScoreR cid rid hid = do
       ((result, _), _) <- runFormPost $ scoreForm cid hid rid
         (userName user) Nothing
       formHandler result $ \res -> do
-        -- check if the score already exists
-        mScore <- runDB $ getBy $
-          UniqueScore (scoreRoundId res) (scoreHoleId res)
-        case mScore of
-          -- replace previous score
-          Just (Entity sid _) -> runDB $ replace sid res
-          -- insert new score
-          Nothing -> runDB $ insert_ res
+        void $ runDB $ upsert res [ScoreScore =. scoreScore res]
       redirect $ InputR (roundCompetitionId round_)
         (roundGroupnumber round_)
     else
