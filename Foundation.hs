@@ -377,14 +377,13 @@ myRegisterHandler = do
   lift $ authLayout $ do
     setTitleI Msg.RegisterLong
     [whamlet|
-      <div .container>
-        <h3>_{Msg.EnterEmail}
-        <form method="post" action="@{tp registerR}">
-          <div .form-group>
-            <label .control-label>_{Msg.Email}:
-            <input .form-control type="email" name="email" autofocus>
-          <div .form-group>
-            <input type=submit .btn .btn-default .btn-block value=_{Msg.Register}>
+      <h3>_{Msg.EnterEmail}
+      <form method="post" action="@{tp registerR}">
+        <div .form-group>
+          <label .control-label>_{Msg.Email}:
+          <input .form-control type="email" name="email" autofocus>
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{Msg.Register}>
     |]
 
 myConfirmationEmailSentResponse :: Text -> HandlerT App IO TypedContent
@@ -395,8 +394,7 @@ myConfirmationEmailSentResponse identifier = do
     provideRep $ authLayout $ do
       setTitleI Msg.ConfirmationEmailSentTitle
       [whamlet|
-        <div .container>
-          <h3>_{msg}
+        <h3>_{msg}
       |]
   where
     msg = Msg.ConfirmationEmailSent identifier
@@ -411,21 +409,20 @@ mySetPasswordHandler needOld = do
     provideRep $ lift $ authLayout $ do
       setTitleI Msg.SetPassTitle
       [whamlet|
-        <div .container>
-          <h3>_{Msg.SetPass}
-          <form method="post" action="@{tp setpassR}">
-            $if needOld
-              <div .form-group>
-                <label .control-label>_{MsgCurrentPassword}
-                <input .form-control type="password" name="current" autofocus>
+        <h3>_{Msg.SetPass}
+        <form method="post" action="@{tp setpassR}">
+          $if needOld
             <div .form-group>
-              <label .control-label>_{Msg.NewPass}
-              <input .form-control type="password" name="new" :not needOld:autofocus>
-            <div .form-group>
-              <label .control-label>_{Msg.ConfirmPass}
-              <input .form-control type="password" name="confirm">
-            <div .form-group>
-              <input type="submit" .btn .btn-default .btn-block value=_{Msg.SetPassTitle}>
+              <label .control-label>_{MsgCurrentPassword}
+              <input .form-control type="password" name="current" autofocus>
+          <div .form-group>
+            <label .control-label>_{Msg.NewPass}
+            <input .form-control type="password" name="new" :not needOld:autofocus>
+          <div .form-group>
+            <label .control-label>_{Msg.ConfirmPass}
+            <input .form-control type="password" name="confirm">
+          <div .form-group>
+            <input type="submit" .btn .btn-default .btn-block value=_{Msg.SetPassTitle}>
       |]
 
 myForgotPasswordHandler :: YesodAuthEmail master => AuthHandler master Html
@@ -434,27 +431,25 @@ myForgotPasswordHandler = do
   lift $ authLayout $ do
     setTitleI Msg.PasswordResetTitle
     [whamlet|
-      <div .container>
-        <h3>_{Msg.PasswordResetPrompt}
-        <form method="post" action="@{tp forgotPasswordR}">
-          <div .form-group>
-            <label .control-label>_{Msg.ProvideIdentifier}
-            <input .form-control type="text" name="email" autofocus>
-          <div .form-group>
-            <input type=submit .btn .btn-default .btn-block value=_{Msg.SendPasswordResetEmail}>
+      <h3>_{Msg.PasswordResetPrompt}
+      <form method="post" action="@{tp forgotPasswordR}">
+        <div .form-group>
+          <label .control-label>_{Msg.ProvideIdentifier}
+          <input .form-control type="text" name="email" autofocus>
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block value=_{Msg.SendPasswordResetEmail}>
     |]
 
 myLoginHandler tm =
   [whamlet|
-    <div .container>
-      <form method="post" action="@{tm loginR}">
-        <div .form-group>
-          <label .control-label>_{Msg.Email}
-          <input .form-control type="email" name="email" required>
-        <div .form-group>
-          <label .control-label>_{Msg.Password}
-          <input .form-control type="password" name="password" required>
-        <div .form-group>
-          <input type=submit .btn .btn-success .btn-block value=_{Msg.LoginViaEmail}>
-      <a href="@{tm registerR}" .btn .btn-default .btn-block>_{Msg.RegisterLong}
+    <form method="post" action="@{tm loginR}">
+      <div .form-group>
+        <label .control-label>_{Msg.Email}
+        <input .form-control type="email" name="email" required>
+      <div .form-group>
+        <label .control-label>_{Msg.Password}
+        <input .form-control type="password" name="password" required>
+      <div .form-group>
+        <input type=submit .btn .btn-success .btn-block value=_{Msg.LoginViaEmail}>
+    <a href="@{tm registerR}" .btn .btn-default .btn-block>_{Msg.RegisterLong}
   |]
