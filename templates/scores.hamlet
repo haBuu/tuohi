@@ -2,7 +2,8 @@
 
 <div .checkbox>
   <label>
-    <input name="live-update" type="checkbox" checked="checked">_{MsgReloadPage}
+    <input name="live-update" type="checkbox" checked="checked">
+      _{MsgReloadPage}
 
 <div .table-responsive>
   <table #score-table>
@@ -26,7 +27,7 @@
         <th>
         <th>#{show $ layoutPar * roundCount}
     <tbody>
-      $forall (place, (user, division, rounds)) <- sortedPlayers
+      $forall (place, (user, _, rounds)) <- sortedPlayers
         $forall (round_, scores) <- rounds
           <tr>
             $if roundRoundnumber round_ == 1
@@ -36,7 +37,8 @@
               <td>
                 $forall score <- scores
                   $if scoreHoleId score == hid
-                    <div data-hid=#{toPathPiece $ scoreHoleId score} data-rid=#{toPathPiece $ scoreRoundId score} class=#{textualScore (holePar hole) (scoreScore score)}>#{scoreScore score}
+                    <div data-hid=#{toPathPiece $ scoreHoleId score} data-rid=#{toPathPiece $ scoreRoundId score} class=#{textualScore (holePar hole) (scoreScore score)}>
+                      #{scoreScore score}
             <td>
               $if countRoundToPar holes scores == 0
                 E

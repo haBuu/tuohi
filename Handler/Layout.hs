@@ -4,7 +4,6 @@ module Handler.Layout where
 import Import
 
 import Handler.Forms
-import Database
 
 getLayoutR :: CourseId -> LayoutId -> Handler Html
 getLayoutR cid lid = do

@@ -2,9 +2,6 @@
 module Handler.Notifications where
 
 import Import
-import Data.Time
-
-import Yesod.Auth
 
 import Handler.Forms
 import Database

@@ -2,14 +2,9 @@
 module Handler.Forms where
 
 import Import hiding(for)
-import qualified Import
 
-import Data.Time(Day, UTCTime, getCurrentTime)
 import Yesod.Form.Bootstrap3
 import qualified Data.Text as T
-import qualified Data.Text.Read
-import Data.Traversable(sequenceA)
-import qualified Database.Esqueleto as E
 
 import Handler.CompetitionState
 import DivisionMessages
@@ -147,7 +142,7 @@ holesForm :: [Entity Hole] -> Html
   -> MForm Handler (FormResult [(HoleId, Int)], Widget)
 holesForm holes extra = do
   -- select field for every hole
-  holeFields <- forM holes $ \(Entity hid hole) ->
+  holeFields <- forM holes $ \(Entity _ hole) ->
     mreq (selectFieldList pars) (set (holeNumber hole)) $ Just $ holePar hole
   let (holeResults, holeViews) = unzip holeFields
   -- add holeids
@@ -189,9 +184,9 @@ finishCompetitionForm cid = do
     renderBootstrap3 BootstrapBasicForm $ (pure cid)
       <* bootstrapSubmit (submitButton MsgFinishCompetition)
 
-addPlayerForm :: CompetitionId -> Html
+addPlayerForm :: Html
   -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
-addPlayerForm cid extra = do
+addPlayerForm extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (withPlaceholder (mr MsgName) $ bfs MsgName) Nothing
@@ -220,9 +215,9 @@ addPlayerForm cid extra = do
       |]
   return (result, widget)
 
-signUpForm :: CompetitionId -> Html
+signUpForm :: Html
   -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
-signUpForm cid extra = do
+signUpForm extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (withPlaceholder (mr MsgName) $ bfs MsgName) Nothing
@@ -253,9 +248,9 @@ signUpForm cid extra = do
       |]
   return (result, widget)
 
-signUpFormLoggedIn :: CompetitionId -> User -> Html
+signUpFormLoggedIn :: User -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
-signUpFormLoggedIn cid user extra = do
+signUpFormLoggedIn user extra = do
   mr <- getMessageRender
   (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
@@ -277,7 +272,7 @@ signUpFormLoggedIn cid user extra = do
 
 -- helper
 -- adds message renderer to divisions so that forms can display them
-divisionsRender mr = Import.map (\(d, msg) -> (mr msg, d)) divisions
+divisionsRender mr = map (\(d, msg) -> (mr msg, d)) divisions
 
 scoreForm :: CompetitionId -> HoleId -> RoundId -> Text -> Maybe Int
   -> Html -> MForm Handler (FormResult Score, Widget)

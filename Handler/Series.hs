@@ -17,7 +17,6 @@ getSeriesR = do
 
 postSeriesR :: Handler Html
 postSeriesR = do
-  series <- runDB $ selectList [] [Asc SerieName]
   ((result, _), _) <- newSerieForm
   formHandler result $ \res -> do
     runDB $ insert_ res

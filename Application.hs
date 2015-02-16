@@ -19,8 +19,8 @@ import Import
 import Language.Haskell.TH.Syntax           (qLocation)
 import Network.Wai.Handler.Warp             (Settings, defaultSettings,
                                              defaultShouldDisplayException,
-                                             runSettings, setHost,
-                                             setOnException, setPort, getPort)
+                                             setHost, setPort,
+                                             setOnException, getPort)
 import Network.Wai.Handler.WarpTLS
 import Network.Wai.Middleware.RequestLogger (Destination (Logger),
                                              IPAddrSource (..),

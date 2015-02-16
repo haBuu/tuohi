@@ -3,11 +3,7 @@ module Competition.Groups
 )
 where
 
-import Prelude
-import Data.Time
-import Data.List hiding(group)
-import Helpers
-import Control.Monad
+import Import hiding(group)
 
 type GroupNumber = Int
 type GroupNumbers = [GroupNumber]

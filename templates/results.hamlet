@@ -31,7 +31,7 @@ $if length sortedHandicaps > 0
     <div .panel-heading>_{MsgHandicapResults}
     <table .table>
       <tbody>
-        $forall ((user, _, rounds), hc) <- sortedHandicaps
+        $forall ((user, _, _), hc) <- sortedHandicaps
           <tr>
             <td .middle>
               #{userName user}

@@ -7,6 +7,6 @@
   $forall group <- groups
     <div .panel .panel-primary>
       <div .panel-heading>_{MsgGroup} #{group}
-      $forall (E.Value rid, E.Value _, E.Value groupNumber, E.Value name) <- rounds
+      $forall (E.Value _, E.Value _, E.Value groupNumber, E.Value name) <- rounds
         $if group == groupNumber
           <a href=@{InputR cid groupNumber} .list-group-item>#{name}

@@ -2,9 +2,6 @@
 module Database where
 
 import Import
-import Yesod.Auth
-
--- import Control.Monad
 
 import qualified Database.Esqueleto as E
 import Database.Esqueleto((^.))
@@ -14,8 +11,6 @@ import qualified Handler.RoundState as R
 import Handler.Division
 import Competition.Groups
 import Competition.Competition
-import Data.List(nub, nubBy, find, sortBy)
-import Data.Time(Day)
 import Permission
 
 isAdmin :: Handler Bool
@@ -212,8 +207,9 @@ nextRound cid = do
       let groups_ = groups (length holes) (length rounds)
       -- get players and scores so we can put them in order
       players <- forM rounds $ \(Entity _ r) -> do
-        rounds <- runDB $ playerRoundsAndScores (roundUserId r) cid
-        return (roundUserId r, True, rounds)
+        scores <- runDB $ playerRoundsAndScores (roundUserId r) cid
+        -- MPO is dummy
+        return (roundUserId r, MPO, scores)
       let sortedPlayers = playerSort holes players
       -- insert round for each player
       forM_ (zip sortedPlayers groups_) $ \((pid, _, _), groupNumber) -> do
@@ -292,9 +288,11 @@ finishedRounds uid cid = selectList
   , RoundCompetitionId ==. cid
   , RoundState ==. R.Finished]
   [Asc RoundRoundnumber]
-  >>= mapM (\entity@(Entity rid round_) -> do
+  >>= mapM (\(Entity rid round_) -> do
     scores <- selectList [ScoreRoundId ==. rid] []
     return (round_, map entityVal scores))
 
+holeCount :: LayoutId -> Handler Int
 holeCount lid = runDB $ count [HoleLayoutId ==. lid]
+scoreCount :: RoundId -> Handler Int
 scoreCount rid = runDB $ count [ScoreRoundId ==. rid]

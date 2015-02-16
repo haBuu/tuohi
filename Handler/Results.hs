@@ -3,11 +3,8 @@ module Handler.Results where
 import Import hiding(for)
 
 import Data.List(nub)
-import Data.Ord (comparing)
-import Data.Maybe
 
 import Competition.Competition
-import Handler.Division
 import Database
 import qualified DivisionMessages as D
 import qualified Competition.Handicap as H
@@ -32,8 +29,8 @@ getResultsR cid = do
     Just sid ->
       forM finished $ \u@(user, _, _) -> do
         entity <- runDB $ getBy404 $ UniqueUser $ userEmail user
-        handicapScores <- handicapScores (entityKey entity) sid date
-        let mhc = H.handicap handicapScores
+        handicapScores_ <- handicapScores (entityKey entity) sid date
+        let mhc = H.handicap handicapScores_
         return (u, mhc)
     Nothing -> return []
   -- filter out handicaps that are Nothing and count to

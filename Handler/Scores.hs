@@ -5,7 +5,6 @@ import Import
 
 import Handler.CompetitionAuth
 import Handler.Forms
-import Handler.CompetitionState
 import Handler.RoundState(RoundState(DidNotFinish))
 import Competition.Competition
 import Database
@@ -30,8 +29,8 @@ getScoresR cid = do
 
 postScoreR :: CompetitionId -> RoundId -> HoleId -> Handler Html
 postScoreR cid rid hid = do
-  competitionAuth <- isCompetitionAuth cid
-  if competitionAuth
+  auth <- isCompetitionAuth cid
+  if auth
     then do
       round_ <- runDB $ get404 rid
       user <- runDB $ get404 $ roundUserId round_

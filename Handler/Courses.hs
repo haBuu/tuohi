@@ -4,7 +4,6 @@ module Handler.Courses where
 import Import
 
 import Handler.Forms
-import Database
 
 getCoursesR :: Handler Html
 getCoursesR = do

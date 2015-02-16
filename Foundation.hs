@@ -4,7 +4,6 @@ import Import.NoFoundation
 import Database.Persist.Sql (ConnectionPool, runSqlPool)
 import Text.Hamlet          (hamletFile)
 import Text.Jasmine         (minifym)
-import Yesod.Auth.BrowserId (authBrowserId)
 import Yesod.Auth.Email
 import Yesod.Auth.Message
 import Yesod.Default.Util   (addStaticContentExternal)
@@ -16,10 +15,7 @@ import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import Network.Mail.Mime
 import Text.Shakespeare.Text (stext)
 import qualified Data.Text.Lazy.Encoding
-import Data.Maybe (isJust)
-import Data.List(find)
-import Data.Text(Text, isInfixOf)
-import Control.Monad (join)
+import Data.Text(isInfixOf)
 import Helpers
 
 import qualified Yesod.Auth.Message as Msg
@@ -59,129 +55,129 @@ type Form x = Html -> MForm (HandlerT App IO) (FormResult x, Widget)
 development :: Bool
 development =
 #if DEVELOPMENT
- True
+  True
 #else
- False
+  False
 #endif
 
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
 instance Yesod App where
-    -- Controls the base of generated URLs. For more information on modifying,
-    -- see: https://github.com/yesodweb/yesod/wiki/Overriding-approot
-    approot = ApprootMaster $ appRoot . appSettings
+  -- Controls the base of generated URLs. For more information on modifying,
+  -- see: https://github.com/yesodweb/yesod/wiki/Overriding-approot
+  approot = ApprootMaster $ appRoot . appSettings
 
-    -- Store session data on the client in encrypted cookies,
-    -- default session idle timeout is 120 minutes
-    makeSessionBackend _
-      | development = session
-      | otherwise = sslOnlySessions session
-      where
-        session = fmap Just $ defaultClientSessionBackend
-          120 -- timeout in minutes
-          "config/client_session_key.aes"
+  -- Store session data on the client in encrypted cookies,
+  -- default session idle timeout is 120 minutes
+  makeSessionBackend _
+    | development = session
+    | otherwise = sslOnlySessions session
+    where
+      session = fmap Just $ defaultClientSessionBackend
+        120 -- timeout in minutes
+        "config/client_session_key.aes"
 
-    yesodMiddleware
-      | development = defaultYesodMiddleware
-      | otherwise = (sslOnlyMiddleware 120) . defaultYesodMiddleware
+  yesodMiddleware
+    | development = defaultYesodMiddleware
+    | otherwise = (sslOnlyMiddleware 120) . defaultYesodMiddleware
 
-    defaultLayout widget = do
-      master <- getYesod
-      mmsg <- getMessage
+  defaultLayout widget = do
+    master <- getYesod
+    mmsg <- getMessage
 
-      -- We break up the default layout into two components:
-      -- default-layout is the contents of the body tag, and
-      -- default-layout-wrapper is the entire page. Since the final
-      -- value passed to hamletToRepHtml cannot be a widget, this allows
-      -- you to use normal widget features in default-layout.
+    -- We break up the default layout into two components:
+    -- default-layout is the contents of the body tag, and
+    -- default-layout-wrapper is the entire page. Since the final
+    -- value passed to hamletToRepHtml cannot be a widget, this allows
+    -- you to use normal widget features in default-layout.
 
-      maid <- maybeAuthId
-      muser <- case maid of
-        Just aid -> runDB $ get aid
-        Nothing -> return Nothing
+    maid <- maybeAuthId
+    muser <- case maid of
+      Just aid -> runDB $ get aid
+      Nothing -> return Nothing
 
-      pc <- widgetToPageContent $ do
-        addStylesheet $ StaticR css_bootstrap_css
-        $(widgetFile "style")
-        -- jquery
-        addScriptRemote "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-        addScript $ StaticR js_bootstrap_js
-        $(widgetFile "header")
-        $(widgetFile "message")
-        $(widgetFile "default-layout")
-      withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
+    pc <- widgetToPageContent $ do
+      addStylesheet $ StaticR css_bootstrap_css
+      $(widgetFile "style")
+      -- jquery
+      addScriptRemote "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+      addScript $ StaticR js_bootstrap_js
+      $(widgetFile "header")
+      $(widgetFile "message")
+      $(widgetFile "default-layout")
+    withUrlRenderer $(hamletFile "templates/default-layout-wrapper.hamlet")
 
-    -- The page to be redirected to when authentication is required.
-    authRoute _ = Just $ HomeR
+  -- The page to be redirected to when authentication is required.
+  authRoute _ = Just $ HomeR
 
-    -- Routes not requiring authentication.
-    isAuthorized (AuthR _) _ = return Authorized
-    isAuthorized FaviconR _ = return Authorized
-    isAuthorized RobotsR _ = return Authorized
+  -- Routes not requiring authentication.
+  isAuthorized (AuthR _) _ = return Authorized
+  isAuthorized FaviconR _ = return Authorized
+  isAuthorized RobotsR _ = return Authorized
 
-    -- public
-    isAuthorized HomeR _ = return Authorized
-    isAuthorized (GroupsR _) _ = return Authorized
-    isAuthorized (SignUpR _) _ = return Authorized
-    isAuthorized (ScoresR _) _ = return Authorized
-    isAuthorized (CompetitionAuthR _) _ = return Authorized
+  -- public
+  isAuthorized HomeR _ = return Authorized
+  isAuthorized (GroupsR _) _ = return Authorized
+  isAuthorized (SignUpR _) _ = return Authorized
+  isAuthorized (ScoresR _) _ = return Authorized
+  isAuthorized (CompetitionAuthR _) _ = return Authorized
 
-    -- user
-    isAuthorized ProfileR _ = isUser
+  -- user
+  isAuthorized ProfileR _ = isUser
 
-    -- admin
-    isAuthorized AdminR _ = isAdmin
-    isAuthorized NewCompetitionR _ = isAdmin
-    isAuthorized CoursesR _ = isAdmin
-    isAuthorized SeriesR _ = isAdmin
-    isAuthorized (CourseR _) _ = isAdmin
-    isAuthorized (LayoutR _ _) _ = isAdmin
-    isAuthorized (CompetitionR _) _ = isAdmin
-    isAuthorized (ConfirmSignUpR _) _ = isAdmin
-    isAuthorized (RemoveSignUpR _) _ = isAdmin
-    isAuthorized (DnfRoundR _) _ = isAdmin
-    isAuthorized (CompetitionNextRoundR _) _ = isAdmin
-    isAuthorized (CompetitionFinishR _) _ = isAdmin
-    isAuthorized NotificationsR _ = isAdmin
-    isAuthorized (NotificationR _) _ = isAdmin
-    isAuthorized (AddPlayerR _) _ = isAdmin
+  -- admin
+  isAuthorized AdminR _ = isAdmin
+  isAuthorized NewCompetitionR _ = isAdmin
+  isAuthorized CoursesR _ = isAdmin
+  isAuthorized SeriesR _ = isAdmin
+  isAuthorized (CourseR _) _ = isAdmin
+  isAuthorized (LayoutR _ _) _ = isAdmin
+  isAuthorized (CompetitionR _) _ = isAdmin
+  isAuthorized (ConfirmSignUpR _) _ = isAdmin
+  isAuthorized (RemoveSignUpR _) _ = isAdmin
+  isAuthorized (DnfRoundR _) _ = isAdmin
+  isAuthorized (CompetitionNextRoundR _) _ = isAdmin
+  isAuthorized (CompetitionFinishR _) _ = isAdmin
+  isAuthorized NotificationsR _ = isAdmin
+  isAuthorized (NotificationR _) _ = isAdmin
+  isAuthorized (AddPlayerR _) _ = isAdmin
 
-    -- super admin
-    isAuthorized UsersR _ = isSuperAdmin
-    isAuthorized (UserR _) _ = isSuperAdmin
-    isAuthorized PermissionsR _ = isSuperAdmin
+  -- super admin
+  isAuthorized UsersR _ = isSuperAdmin
+  isAuthorized (UserR _) _ = isSuperAdmin
+  isAuthorized PermissionsR _ = isSuperAdmin
 
-    -- Default to Authorized for now.
-    -- TODO: REMOVE THIS
-    isAuthorized _ _ = return Authorized
+  -- Default to Authorized for now.
+  -- TODO: REMOVE THIS
+  isAuthorized _ _ = return Authorized
 
-    -- This function creates static content files in the static folder
-    -- and names them based on a hash of their content. This allows
-    -- expiration dates to be set far in the future without worry of
-    -- users receiving stale content.
-    addStaticContent ext mime content = do
-        master <- getYesod
-        let staticDir = appStaticDir $ appSettings master
-        addStaticContentExternal
-            minifym
-            genFileName
-            staticDir
-            (StaticR . flip StaticRoute [])
-            ext
-            mime
-            content
-      where
-        -- Generate a unique filename based on the content itself
-        genFileName lbs = "autogen-" ++ base64md5 lbs
+  -- This function creates static content files in the static folder
+  -- and names them based on a hash of their content. This allows
+  -- expiration dates to be set far in the future without worry of
+  -- users receiving stale content.
+  addStaticContent ext mime content = do
+    master <- getYesod
+    let staticDir = appStaticDir $ appSettings master
+    addStaticContentExternal
+      minifym
+      genFileName
+      staticDir
+      (StaticR . flip StaticRoute [])
+      ext
+      mime
+      content
+    where
+      -- Generate a unique filename based on the content itself
+      genFileName lbs = "autogen-" ++ base64md5 lbs
 
-    -- What messages should be logged. The following includes all messages when
-    -- in development, and warnings and errors in production.
-    shouldLog app _source level =
-        appShouldLogAll (appSettings app)
-            || level == LevelWarn
-            || level == LevelError
+  -- What messages should be logged. The following includes all messages when
+  -- in development, and warnings and errors in production.
+  shouldLog app _source level =
+    appShouldLogAll (appSettings app)
+      || level == LevelWarn
+      || level == LevelError
 
-    makeLogger = return . appLogger
+  makeLogger = return . appLogger
 
 isUser = do
   maid <- maybeAuthId
@@ -229,12 +225,12 @@ isSuperAdmin = do
 
 -- How to run database actions.
 instance YesodPersist App where
-    type YesodPersistBackend App = SqlBackend
-    runDB action = do
-        master <- getYesod
-        runSqlPool action $ appConnPool master
+  type YesodPersistBackend App = SqlBackend
+  runDB action = do
+    master <- getYesod
+    runSqlPool action $ appConnPool master
 instance YesodPersistRunner App where
-    getDBRunner = defaultGetDBRunner appConnPool
+  getDBRunner = defaultGetDBRunner appConnPool
 
 instance YesodAuth App where
   type AuthId App = UserId
@@ -322,7 +318,7 @@ instance YesodAuthEmail App where
     muser <- get uid
     case muser of
       Nothing -> return Nothing
-      Just u -> do
+      Just _ -> do
         update uid [UserVerified =. True]
         return $ Just uid
 
@@ -334,12 +330,12 @@ instance YesodAuthEmail App where
     case muser of
       Nothing -> return Nothing
       Just (Entity uid user) -> return $ Just EmailCreds
-          { emailCredsId = uid
-          , emailCredsAuthId = Just uid
-          , emailCredsStatus = isJust $ userPassword user
-          , emailCredsVerkey = userVerkey user
-          , emailCredsEmail = email
-          }
+        { emailCredsId = uid
+        , emailCredsAuthId = Just uid
+        , emailCredsStatus = isJust $ userPassword user
+        , emailCredsVerkey = userVerkey user
+        , emailCredsEmail = email
+        }
 
   getEmail = runDB . fmap (fmap userEmail) . get
 

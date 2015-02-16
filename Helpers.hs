@@ -12,8 +12,6 @@ where
 
 import Prelude
 import Data.Time
-import Data.Time.LocalTime
--- import Data.Time.Format
 import Data.List(find)
 import Data.Text(Text)
 import qualified Data.Text

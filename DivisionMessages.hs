@@ -1,12 +1,14 @@
 {-# LANGUAGE TemplateHaskell #-}
 module DivisionMessages where
 
-import Foundation
+import Import
 
 import Handler.Division
 
-divisions = [(MPO, MsgMPO), (FPO, MsgFPO)]
+divisions :: [(Division, AppMessage)]
+divisions = map (\d -> (d, divisionMsg d)) [minBound..]
 
+divisionMsg :: Division -> AppMessage
 divisionMsg division =
   case division of
     MPO -> MsgMPO

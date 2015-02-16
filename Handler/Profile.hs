@@ -3,9 +3,6 @@ module Handler.Profile where
 
 import Import
 
-import Yesod.Auth
-import Yesod.Auth.Email
-
 import Handler.Forms
 import Database
 

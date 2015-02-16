@@ -1,9 +1,7 @@
 module Handler.ChangeGroup where
 
-import Import
-import Data.Text
+import Import hiding(group)
 import Data.Text.Read
-import Data.Either
 
 postChangeGroupR :: CompetitionId -> RoundId -> Handler Html
 postChangeGroupR cid rid = do

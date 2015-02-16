@@ -3,12 +3,7 @@ module Handler.NewCompetition where
 
 import Import
 
-import Data.List(find)
-import qualified Data.Text
-import Control.Monad(liftM)
-
 import Handler.Forms
-import Database
 import Helpers
 
 getNewCompetitionR :: Handler Html

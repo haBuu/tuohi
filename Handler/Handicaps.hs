@@ -1,9 +1,6 @@
 module Handler.Handicaps where
 
 import Import
-import Data.Time
-import Data.Ord(comparing)
-import Data.Maybe(mapMaybe)
 
 import Database
 import qualified Competition.Handicap as H
@@ -17,8 +14,8 @@ getHandicapsR sid = do
   date <- liftIO today
   users <- runDB $ selectList [] []
   handicapsAll <- forM users $ \user -> do
-    handicapScores <- handicapScores (entityKey user) sid date
-    return (entityVal user, H.handicap handicapScores)
+    handicapScores_ <- handicapScores (entityKey user) sid date
+    return (entityVal user, H.handicap handicapScores_)
   -- filter out handicaps that are Nothing meaning players that
   -- did not have any results in the serie
   let filtered = mapMaybe justHc handicapsAll
@@ -28,6 +25,7 @@ getHandicapsR sid = do
     setTitleI MsgHandicaps
     $(widgetFile "handicaps")
 
+justHc :: (User, Maybe Double) -> Maybe (User, Double)
 justHc (user, mhc) =
   case mhc of
     Just hc -> Just (user, hc)

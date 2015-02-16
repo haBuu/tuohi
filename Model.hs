@@ -7,8 +7,6 @@ import Handler.RoundState
 import Handler.CompetitionState
 import qualified Handler.CompetitionState as C
 import Handler.Division
-import Data.Time(Day, UTCTime)
-import Yesod.Form.Fields(Textarea)
 
 import Helpers
 import Permission
@@ -43,12 +41,12 @@ instance ToJSON User where
     ]
 
 instance ToJSON Round where
-  toJSON round = object
-    [ "uid"      .= (String $ toPathPiece $ roundUserId round)
-    , "cid"   .= (String $ toPathPiece $ roundCompetitionId round)
-    , "state" .= (show $ roundState round)
-    , "number" .= (show $ roundRoundnumber round)
-    , "group" .= (show $ roundGroupnumber round)
+  toJSON round_ = object
+    [ "uid"      .= (String $ toPathPiece $ roundUserId round_)
+    , "cid"   .= (String $ toPathPiece $ roundCompetitionId round_)
+    , "state" .= (show $ roundState round_)
+    , "number" .= (show $ roundRoundnumber round_)
+    , "group" .= (show $ roundGroupnumber round_)
     ]
 
 instance ToJSON Division where

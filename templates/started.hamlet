@@ -7,7 +7,7 @@
   <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
 
 <div .panel .panel-info>
-  <div .panel-heading>_{MsgRound}: #{currentRound}
+  <div .panel-heading>_{MsgRound}: #{currentRound_}
 
 $forall group <- groups
   <div .panel .panel-primary>
@@ -22,7 +22,7 @@ $forall group <- groups
                 #{name}
               <td>
                 <div .pull-right>
-                  $if scoreCount == count
+                  $if scoreCount == count_
                     <span .label .label-success .label-lg>#{scoreCount}
                   $else
                     <span .label .label-warning .label-lg>#{scoreCount}
@@ -32,7 +32,7 @@ $forall group <- groups
 <ul .list-group #dnf-list>
   <div .panel .panel-primary>
     <div .panel-heading>_{MsgDNF}
-    $forall (E.Value rid, E.Value name) <- dnf
+    $forall (E.Value _, E.Value name) <- dnf
       <li .list-group-item>#{name}
 
 <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>

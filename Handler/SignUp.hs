@@ -2,20 +2,15 @@
 module Handler.SignUp where
 
 import Import
-import Yesod.Default.Config(appExtra)
 
--- import Data.List(isInfixOf)
 import qualified Data.ByteString.Lazy as L
 import qualified Data.ByteString.Lazy.Char8 as C
-import Control.Monad(unless)
 import qualified Network.HTTP.Conduit as HTTP
 
 import Handler.Forms
-import Handler.Division
 import qualified Database.Esqueleto as E
 import Database
 import DivisionMessages
--- import Data.Text(unpack)
 
 getSignUpR :: CompetitionId -> Handler Html
 getSignUpR cid = do
@@ -25,9 +20,9 @@ getSignUpR cid = do
   muser <- maybeAuthUser
   ((_, formWidget), formEnctype) <- case muser of
     -- user is logged in
-    Just user -> runFormPost $ signUpFormLoggedIn cid user
+    Just user -> runFormPost $ signUpFormLoggedIn user
     -- user is not logged in
-    Nothing -> runFormPost $ signUpForm cid
+    Nothing -> runFormPost signUpForm
   signups <- signUpsWithName cid
   defaultLayout $ do
     addScriptRemote "https://www.google.com/recaptcha/api.js"
@@ -38,13 +33,13 @@ postSignUpR cid = do
   muser <- maybeAuthUser
   ((result, _), _) <- case muser of
     -- user is logged in
-    Just user -> runFormPost $ signUpFormLoggedIn cid user
+    Just user -> runFormPost $ signUpFormLoggedIn user
     -- user is not logged in
     Nothing -> do
       -- short-circuit recaptcha
       checkRecaptcha >>= flip unless (recaptchaError cid)
       -- if recaptcha fails we won't reach here
-      runFormPost $ signUpForm cid
+      runFormPost signUpForm
   formHandler result $ \(name, email, division) -> do
     let checkFull = True
     msid <- maybeInsertSignUp checkFull cid name email division

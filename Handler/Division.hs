@@ -4,9 +4,8 @@ module Handler.Division where
 import Prelude
 
 import Database.Persist.TH
-import Data.Text
 
 data Division = MPO | FPO
-  deriving (Show, Read, Eq)
+  deriving (Show, Read, Eq, Enum, Bounded)
 
 derivePersistField "Division"

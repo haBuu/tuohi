@@ -15,7 +15,6 @@ import Import
 import Data.List(foldl)
 
 import Handler.RoundState
-import Handler.Division
 import Helpers
 
 countPar :: [Entity Hole] -> Int
@@ -61,17 +60,17 @@ playerSort holes players = flip sortBy players $
 
 addPlacements :: [Entity Hole] -> [(a, b, [(Round, [Score])])]
   -> [(Int, (a, b, [(Round, [Score])]))]
-addPlacements holes [] = []
+addPlacements _ [] = []
 addPlacements holes (x:xs) = loop 2 (1, x) xs
   where
-    loop index previous [] = [previous]
-    loop index previous (x:xs) =
+    loop _ previous [] = [previous]
+    loop idx previous (x:xs) =
       if countToPar holes (thd x) == countToPar holes (thd $ snd previous)
         && not (dnf $ thd x)
         -- placement remains the same
-        then [previous] ++ loop (index + 1) (fst previous, x) xs
+        then [previous] ++ loop (idx + 1) (fst previous, x) xs
         -- next placement from index
-        else [previous] ++ loop (index + 1) (index, x) xs
+        else [previous] ++ loop (idx + 1) (idx, x) xs
 
 dnf :: [(Round, [Score])] -> Bool
 dnf rounds = flip any rounds $

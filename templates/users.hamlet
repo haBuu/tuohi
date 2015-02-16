@@ -2,21 +2,21 @@
 
 <ul .list-group>
   <div .panel .panel-primary>
-    <div .panel-heading>_{MsgHeadAdmins} (#{length $ filter superAdmin users})
+    <div .panel-heading>_{MsgHeadAdmins} (#{length $ filter isSuperAdmin users})
     $forall Entity uid user <- users
       $if userSuperAdmin user
         <a href=@{UserR uid} .list-group-item>#{userName user}
 
 <ul .list-group>
   <div .panel .panel-primary>
-    <div .panel-heading>_{MsgAdmins} (#{length $ filter admin users})
+    <div .panel-heading>_{MsgAdmins} (#{length $ filter isAdmin users})
     $forall Entity uid user <- users
       $if userAdmin user && not (userSuperAdmin user)
         <a href=@{UserR uid} .list-group-item>#{userName user}
 
 <ul .list-group>
   <div .panel .panel-primary>
-    <div .panel-heading>_{MsgUsers} (#{length $ filter user users})
+    <div .panel-heading>_{MsgUsers} (#{length $ filter isUser users})
     $forall Entity uid user <- users
       $if not (userSuperAdmin user) && not (userAdmin user)
         <a href=@{UserR uid} .list-group-item>#{userName user}

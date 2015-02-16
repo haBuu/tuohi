@@ -2,25 +2,23 @@
 module Handler.Users where
 
 import Import
-import Database
 
 getUsersR :: Handler Html
 getUsersR = do
   users <- runDB $ selectList [] [Asc UserName]
-  muser <- maybeAuthUser
   defaultLayout $ do
     setTitleI MsgUsers
     $(widgetFile "users")
 
 -- helpers
-superAdmin :: Entity User -> Bool
-superAdmin (Entity _ user) =
+isSuperAdmin :: Entity User -> Bool
+isSuperAdmin (Entity _ user) =
   userSuperAdmin user
 
-admin :: Entity User -> Bool
-admin (Entity _ user) =
+isAdmin :: Entity User -> Bool
+isAdmin (Entity _ user) =
   userAdmin user && not (userSuperAdmin user)
 
-user :: Entity User -> Bool
-user (Entity _ user) =
+isUser :: Entity User -> Bool
+isUser (Entity _ user) =
   not (userAdmin user) && not (userSuperAdmin user)

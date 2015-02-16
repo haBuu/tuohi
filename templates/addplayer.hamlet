@@ -1,7 +1,7 @@
 <label .control-label>_{MsgChoosePlayer}
 <select .form-control .margin-bottom>
   <option>
-  $forall Entity uid user <- users
+  $forall Entity _ user <- users
     <option data-email=#{userEmail user}>#{userName user}
 
 <form method=post action=@{AddPlayerR cid}#form enctype=#{formEnctype}>

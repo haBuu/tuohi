@@ -1,7 +1,7 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Input where
 
-import Import
+import Import hiding(group)
 
 import Handler.CompetitionAuth
 import Handler.Forms
@@ -11,8 +11,8 @@ import Database
 getInputR :: CompetitionId -> Int -> Handler Html
 getInputR cid groupNumber = do
   -- render input site only if user has temp auth
-  competitionAuth <- isCompetitionAuth cid
-  if competitionAuth
+  auth <- isCompetitionAuth cid
+  if auth
     then do
       competition <- runDB $ get404 cid
       let lid = competitionLayoutId competition

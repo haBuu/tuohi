@@ -4,7 +4,6 @@ module Handler.Course where
 import Import hiding(for)
 
 import Handler.Forms
-import Database
 import Helpers
 
 getCourseR :: CourseId -> Handler Html

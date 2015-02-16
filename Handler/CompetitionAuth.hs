@@ -3,12 +3,7 @@ module Handler.CompetitionAuth where
 
 import Import
 
-import Data.Time
-import Data.Text
-import Control.Monad
-
 import Handler.Forms
-import Database
 
 -- name of the temp session
 -- this can be anything
@@ -30,7 +25,6 @@ postCompetitionAuthR cid = do
   -- the input page where the user wanted to go
   -- default to HomeR if destination is not set
   redirectUltDest HomeR
-
 
 competitionAuth :: CompetitionId -> Text -> Handler ()
 competitionAuth cid pw = do
