@@ -1,11 +1,12 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Groups where
 
-import Import
+import Import hiding(for)
 import Data.List(nub)
 
 import qualified Database.Esqueleto as E
 import Database
+import Helpers
 
 getGroupsR :: CompetitionId -> Handler Html
 getGroupsR cid = do

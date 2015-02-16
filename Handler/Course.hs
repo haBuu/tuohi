@@ -1,10 +1,11 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Course where
 
-import Import
+import Import hiding(for)
 
 import Handler.Forms
 import Database
+import Helpers
 
 getCourseR :: CourseId -> Handler Html
 getCourseR cid = do
@@ -21,6 +22,6 @@ postCourseR cid = do
     lid <- runDB $ insert layout
     -- insert given number of holes with par set to 3
     let holes = for [1..holeCount] $ \n -> Hole lid n 3
-    _ <- runDB $ insertMany holes
+    void $ runDB $ insertMany holes
     setMessageI MsgLayoutAdded
   redirect $ CourseR cid

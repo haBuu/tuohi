@@ -9,6 +9,7 @@ import Control.Monad(liftM)
 
 import Handler.Forms
 import Database
+import Helpers
 
 getNewCompetitionR :: Handler Html
 getNewCompetitionR = do

@@ -4,7 +4,7 @@ module Database where
 import Import
 import Yesod.Auth
 
-import Control.Monad
+-- import Control.Monad
 
 import qualified Database.Esqueleto as E
 import Database.Esqueleto((^.))
@@ -128,7 +128,7 @@ startCompetition cid = do
   let groups_ = groups holes $ length confirmed
   -- make a round for each confirmed sign up
   forM_ (zip confirmed groups_) $ \((Entity _ signup), groupNumber) ->
-    runDB $ insertBy $
+    void $ runDB $ insertBy $
       Round (signUpUserId signup) cid R.Started 1 groupNumber
 
 insertLayout :: Layout -> Int -> Handler ()
@@ -137,7 +137,7 @@ insertLayout layout holes = do
   mlid <- runDB $ insertUnique layout
   -- insert holes
   case mlid of
-    Just lid -> forM_ [1..holes] $ \n -> runDB $ insertUnique $ Hole lid n 3
+    Just lid -> forM_ [1..holes] $ \n -> void $ runDB $ insertUnique $ Hole lid n 3
     Nothing -> return ()
 
 -- select started rounds for given competition with user names
@@ -217,7 +217,7 @@ nextRound cid = do
       let sortedPlayers = playerSort holes players
       -- insert round for each player
       forM_ (zip sortedPlayers groups_) $ \((pid, _, _), groupNumber) -> do
-        runDB $ insertBy $ Round pid cid R.Started
+        void $ runDB $ insertBy $ Round pid cid R.Started
           (roundNumber + 1) groupNumber
 
 finishCompetition :: CompetitionId -> Handler ()

@@ -10,14 +10,13 @@ module Competition.Competition
 )
 where
 
-import Prelude
-import Data.List(nub, nubBy, find, sortBy)
 import Import
 
-import Data.List
+import Data.List(foldl)
 
 import Handler.RoundState
 import Handler.Division
+import Helpers
 
 countPar :: [Entity Hole] -> Int
 countPar = foldl (\n (Entity _ hole) -> n + holePar hole) 0

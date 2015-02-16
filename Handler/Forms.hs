@@ -1,13 +1,13 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Forms where
 
-import Import
+import Import hiding(for)
+import qualified Import
 
 import Data.Time(Day, UTCTime, getCurrentTime)
 import Yesod.Form.Bootstrap3
-import Data.Text hiding(count, head)
+import qualified Data.Text as T
 import qualified Data.Text.Read
-import Control.Monad(forM, liftM)
 import Data.Traversable(sequenceA)
 import qualified Database.Esqueleto as E
 
@@ -15,14 +15,14 @@ import Handler.CompetitionState
 import DivisionMessages
 import qualified Handler.Division as D
 import Permission
+import Helpers
 
 -- form handler with default action for FormFailure and FormMissing
 formHandler :: FormResult a -> (a -> Handler ()) -> Handler ()
 formHandler result f =
   case result of
     FormSuccess res -> f res
-    FormFailure err -> setMessageI $ MsgFormFailure $
-      Data.Text.concat err
+    FormFailure err -> setMessageI $ MsgFormFailure $ T.concat err
     FormMissing -> setMessageI MsgFormMissing
 
 -- default submit button
@@ -151,7 +151,7 @@ holesForm holes extra = do
     mreq (selectFieldList pars) (set (holeNumber hole)) $ Just $ holePar hole
   let (holeResults, holeViews) = unzip holeFields
   -- add holeids
-  let result = sequenceA $ Import.for (Import.zip holes holeResults) $
+  let result = sequenceA $ for (Import.zip holes holeResults) $
         \((Entity hid _), res) -> (,) <$> (pure hid) <*> res
   let widget = [whamlet|
         #{extra}
@@ -347,7 +347,7 @@ userForm user extra = do
     permissions :: Handler (OptionList Permission)
     permissions = do
       optionsPairs $ for [minBound..] $
-        \permission -> (pack $ show permission, permission)
+        \permission -> (T.pack $ show permission, permission)
 
 tempAuthForm :: Handler ((FormResult Text, Widget), Enctype)
 tempAuthForm = do

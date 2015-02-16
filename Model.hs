@@ -1,10 +1,7 @@
 module Model where
 
-import Yesod
-import Data.Text(Text, unpack)
+import ClassyPrelude.Yesod
 import Database.Persist.Quasi
-import Data.Typeable(Typeable)
-import Prelude
 
 import Handler.RoundState
 import Handler.CompetitionState
@@ -21,23 +18,10 @@ import Permission
 -- at:
 -- http://www.yesodweb.com/book/persistent/
 share [mkPersist sqlSettings, mkMigrate "migrateAll"]
-  $(persistFileWith lowerCaseSettings "config/models")
+    $(persistFileWith lowerCaseSettings "config/models")
 
 isFinished :: Entity Competition -> Bool
 isFinished = (== C.Finished) . competitionState . entityVal
-
-data CompetitionPlayer = CompetitionPlayer
-  { name :: Text
-  , division :: Division
-  , rounds :: [CompetitionRound]
-  }
-  deriving (Show)
-
-data CompetitionRound = CompetitionRound
-  { info :: Round
-  , scores :: [Score]
-  }
-  deriving (Show)
 
 displayCompetition :: Competition -> String
 displayCompetition competition = name ++ ", " ++ date

@@ -2,13 +2,12 @@ module Handler.Handicaps where
 
 import Import
 import Data.Time
-import Control.Monad(forM)
 import Data.Ord(comparing)
-import Data.List(sortBy)
 import Data.Maybe(mapMaybe)
 
 import Database
 import qualified Competition.Handicap as H
+import Helpers
 
 getHandicapsR :: SerieId -> Handler Html
 getHandicapsR sid = do

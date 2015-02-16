@@ -2,7 +2,6 @@
 module Handler.Scores where
 
 import Import
-import Control.Monad(void)
 
 import Handler.CompetitionAuth
 import Handler.Forms
@@ -10,6 +9,7 @@ import Handler.CompetitionState
 import Handler.RoundState(RoundState(DidNotFinish))
 import Competition.Competition
 import Database
+import Helpers
 
 getScoresR :: CompetitionId -> Handler TypedContent
 getScoresR cid = do

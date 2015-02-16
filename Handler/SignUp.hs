@@ -4,7 +4,7 @@ module Handler.SignUp where
 import Import
 import Yesod.Default.Config(appExtra)
 
-import Data.List(isInfixOf)
+-- import Data.List(isInfixOf)
 import qualified Data.ByteString.Lazy as L
 import qualified Data.ByteString.Lazy.Char8 as C
 import Control.Monad(unless)
@@ -15,7 +15,7 @@ import Handler.Division
 import qualified Database.Esqueleto as E
 import Database
 import DivisionMessages
-import Data.Text(unpack)
+-- import Data.Text(unpack)
 
 getSignUpR :: CompetitionId -> Handler Html
 getSignUpR cid = do
@@ -59,7 +59,7 @@ checkRecaptcha = do
   mrecaptcha <- lookupPostParam "g-recaptcha-response"
   -- get recaptcha secret key
   master <- getYesod
-  let mkey = extraRecaptchakey $ appExtra $ settings master
+  let mkey = appRecaptcha $ appSettings master
   case (mrecaptcha, mkey) of
     (Just response, Just key) -> do
       req <- HTTP.parseUrl $ verifyUrl key $ unpack response

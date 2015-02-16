@@ -1,9 +1,9 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Competition where
 
-import Import
+import Import hiding(for)
+
 import Data.List(nub)
-import Control.Monad(forM)
 
 import qualified Database.Esqueleto as E
 
@@ -11,6 +11,7 @@ import Handler.Forms
 import Handler.CompetitionState
 import Handler.RoundState(RoundState(DidNotFinish))
 import Database
+import Helpers
 
 getCompetitionR :: CompetitionId -> Handler Html
 getCompetitionR cid = do

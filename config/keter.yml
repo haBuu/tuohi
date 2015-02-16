@@ -1,5 +1,6 @@
 # After you've edited this file, remove the following line to allow
 # `yesod keter` to build your bundle.
+user-edited: false
 
 # A Keter app is composed of 1 or more stanzas. The main stanza will define our
 # web application. See the Keter documentation for more information on
@@ -11,17 +12,16 @@ stanzas:
 
     # Name of your executable. You are unlikely to need to change this.
     # Note that all file paths are relative to the keter.yml file.
-    exec: ../dist/build/weeklyapp/weeklyapp
+    exec: ../dist/build/weeklyapp2/weeklyapp2
 
     # Command line options passed to your application.
-    args:
-      - production
+    args: []
 
     hosts:
       # You can specify one or more hostnames for your application to respond
       # to. The primary hostname will be used for generating your application
       # root.
-      - dev.habuu.me
+      - www.weeklyapp2.com
 
     # Enable to force Keter to redirect to https
     # Can be added to any stanza
@@ -30,7 +30,7 @@ stanzas:
   # Static files.
   - type: static-files
     hosts:
-      - dev.habuu.me
+      - static.weeklyapp2.com
     root: ../static
 
     # Uncomment to turn on directory listings.
@@ -40,18 +40,18 @@ stanzas:
   - type: redirect
 
     hosts:
-      - dev.habuu.me
+      - weeklyapp2.com
     actions:
-      - host: www.dev.habuu.me
-        secure: false
-        port: 80
+      - host: www.weeklyapp2.com
+        # secure: false
+        # port: 80
 
     # Uncomment to switch to a non-permanent redirect.
     # status: 303
 
 # Use the following to automatically copy your bundle upon creation via `yesod
 # keter`. Uses `scp` internally, so you can set it to a remote destination
-copy-to: /opt/keter/incoming
+# copy-to: user@host:/opt/keter/incoming
 
 # If you would like to have Keter automatically create a PostgreSQL database
 # and set appropriate environment variables for it to be discovered, uncomment

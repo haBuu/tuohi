@@ -1,10 +1,9 @@
 module Handler.Results where
 
-import Import
+import Import hiding(for)
 
-import Data.List(nub, sortBy)
+import Data.List(nub)
 import Data.Ord (comparing)
-import Control.Monad
 import Data.Maybe
 
 import Competition.Competition
@@ -12,6 +11,7 @@ import Handler.Division
 import Database
 import qualified DivisionMessages as D
 import qualified Competition.Handicap as H
+import Helpers
 
 getResultsR :: CompetitionId -> Handler Html
 getResultsR cid = do

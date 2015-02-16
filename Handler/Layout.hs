@@ -2,7 +2,6 @@
 module Handler.Layout where
 
 import Import
-import Control.Monad
 
 import Handler.Forms
 import Database

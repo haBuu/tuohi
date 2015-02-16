@@ -1,4 +1,5 @@
-import Application (startProductionApp)
+import Prelude     (IO)
+import Application (appMain)
 
 main :: IO ()
-main = startProductionApp
+main = appMain

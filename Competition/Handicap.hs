@@ -4,8 +4,10 @@ module Competition.Handicap
 )
 where
 
-import Import
-import Data.List(sort)
+import Import hiding(for)
+
+import Data.List(foldl)
+
 import Competition.Competition
 import Helpers
 

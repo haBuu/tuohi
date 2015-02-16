@@ -2,8 +2,6 @@
 module Handler.Input where
 
 import Import
-import Control.Monad
-import Data.List(find)
 
 import Handler.CompetitionAuth
 import Handler.Forms
