@@ -56,7 +56,13 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 -- | A convenient synonym for creating forms.
 type Form x = Html -> MForm (HandlerT App IO) (FormResult x, Widget)
 
-development = True
+development :: Bool
+development =
+#if DEVELOPMENT
+ True
+#else
+ False
+#endif
 
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
@@ -99,7 +105,6 @@ instance Yesod App where
         $(widgetFile "style")
         -- jquery
         addScriptRemote "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-        -- addScriptRemote "//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"
         addScript $ StaticR js_bootstrap_js
         $(widgetFile "header")
         $(widgetFile "message")
