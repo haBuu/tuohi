@@ -4,13 +4,11 @@ module Handler.Series where
 import Import
 
 import Handler.Forms
-import Database
 
 getSeriesR :: Handler Html
 getSeriesR = do
   series <- runDB $ selectList [] [Asc SerieName]
   ((_, formWidget), formEnctype) <- newSerieForm
-  muser <- maybeAuthUser
   defaultLayout $ do
     setTitleI MsgSeries
     $(widgetFile "series")

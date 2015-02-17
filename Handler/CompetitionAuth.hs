@@ -28,7 +28,6 @@ postCompetitionAuthR cid = do
 
 competitionAuth :: CompetitionId -> Text -> Handler ()
 competitionAuth cid pw = do
-  -- session can be created only with the current password
   competition <- runDB $ get404 cid
   let password = competitionPassword competition
   when (pw == password) $ do
@@ -36,9 +35,9 @@ competitionAuth cid pw = do
 
 isCompetitionAuth :: CompetitionId -> Handler Bool
 isCompetitionAuth cid = do
+  mSession <- lookupSession sessionName
   competition <- runDB $ get404 cid
   let password = competitionPassword competition
-  mSession <- lookupSession sessionName
   return $ case mSession of
     Just pw -> if pw == password then True else False
     _ -> False

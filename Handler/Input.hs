@@ -32,7 +32,6 @@ getInputR cid groupNumber = do
           let value = fmap (scoreScore . entityVal) mScore
           runFormPost $ scoreForm cid hid rid name value
         return (holeNumber hole, forms)
-      muser <- maybeAuthUser
       defaultLayout $ do
         setTitleI $ MsgGroupNumber groupNumber
         $(widgetFile "input")

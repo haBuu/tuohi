@@ -28,18 +28,13 @@ isSuperAdmin = do
     Nothing -> False
 
 maybeAuthUser :: Handler (Maybe User)
-maybeAuthUser = do
-  maid <- maybeAuthId
-  case maid of
-    Just aid -> runDB $ get aid
-    Nothing -> return Nothing
+maybeAuthUser = liftM (fmap entityVal) maybeAuth
 
 check :: Permission -> Handler ()
 check permission = do
-  maid <- maybeAuthId
-  case maid of
-    Just aid -> do
-      user <- runDB $ get404 aid
+  muser <- maybeAuthUser
+  case muser of
+    Just user -> do
       if elem permission $ userPermissions user
         then return ()
         else permissionDeniedI MsgMissingPermission

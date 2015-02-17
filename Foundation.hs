@@ -84,17 +84,13 @@ instance Yesod App where
   defaultLayout widget = do
     master <- getYesod
     mmsg <- getMessage
+    muser <- maybeAuth
 
     -- We break up the default layout into two components:
     -- default-layout is the contents of the body tag, and
     -- default-layout-wrapper is the entire page. Since the final
     -- value passed to hamletToRepHtml cannot be a widget, this allows
     -- you to use normal widget features in default-layout.
-
-    maid <- maybeAuthId
-    muser <- case maid of
-      Just aid -> runDB $ get aid
-      Nothing -> return Nothing
 
     pc <- widgetToPageContent $ do
       addStylesheet $ StaticR css_bootstrap_css
@@ -187,41 +183,29 @@ isUser = do
 
 isAdmin = do
   mr <- getMessageRender
-  maid <- maybeAuthId
-  case maid of
-    Just aid -> do
-      muser <- runDB $ get aid
-      return $ case muser of
-        Just user ->
-          if userAdmin user
-            -- user is admin,
-            then Authorized
-            -- user is not admin
-            else Unauthorized $ mr MsgNotAdmin
-        -- logged in user was not found in db
-        -- this should and can't never happen
-        Nothing -> Unauthorized $ mr MsgNotAdmin
+  muser <- maybeAuth
+  return $ case muser of
+    Just (Entity _ user) ->
+      if userAdmin user
+        -- user is admin,
+        then Authorized
+        -- user is not admin
+        else Unauthorized $ mr MsgNotAdmin
     -- not logged in
-    Nothing -> return AuthenticationRequired
+    Nothing -> AuthenticationRequired
 
 isSuperAdmin = do
   mr <- getMessageRender
-  maid <- maybeAuthId
-  case maid of
-    Just aid -> do
-      muser <- runDB $ get aid
-      return $ case muser of
-        Just user ->
-          if userSuperAdmin user
-            -- user is super admin,
-            then Authorized
-            -- user is not super admin
-            else Unauthorized $ mr MsgNotSuperAdmin
-        -- logged in user was not found in db
-        -- this should and can't never happen
-        Nothing -> Unauthorized $ mr MsgNotSuperAdmin
+  muser <- maybeAuth
+  return $ case muser of
+    Just (Entity _ user) ->
+      if userSuperAdmin user
+        -- user is super admin,
+        then Authorized
+        -- user is not super admin
+        else Unauthorized $ mr MsgNotSuperAdmin
     -- not logged in
-    Nothing -> return AuthenticationRequired
+    Nothing -> AuthenticationRequired
 
 -- How to run database actions.
 instance YesodPersist App where

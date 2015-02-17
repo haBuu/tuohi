@@ -3,13 +3,11 @@ module Handler.User where
 
 import Import
 import Handler.Forms
-import Database
 
 getUserR :: UserId -> Handler Html
 getUserR uid = do
   user <- runDB $ get404 uid
   ((_, formWidget), formEnctype) <- runFormPost $ userForm user
-  muser <- maybeAuthUser
   defaultLayout $ do
     setTitleI MsgUser
     $(widgetFile "user")

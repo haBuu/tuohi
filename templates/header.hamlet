@@ -9,7 +9,7 @@
       <a .navbar-brand href=@{HomeR}>WeeklyApp
 
     <div #navbar .navbar-collapse .collapse .navbar-right>
-      $maybe user <- muser
+      $maybe (Entity _ user) <- muser
         <a .btn .btn-default .navbar-btn href=@{ProfileR}>_{MsgProfile}
         $if userAdmin user || userSuperAdmin user
           <a .btn .btn-default .navbar-btn href=@{AdminR}>_{MsgAdminPanel}
