@@ -39,7 +39,6 @@ import Handler.Notifications
 import Handler.NewCompetition
 import Handler.Competition
 import Handler.Layout
-import Handler.SignUp
 import Handler.Series
 import Handler.CompetitionAuth
 import Handler.Scores
@@ -57,6 +56,7 @@ import Handler.ChangeGroup
 import Handler.Permissions
 import Handler.Handicaps
 import Handler.FinishedCompetitions
+import Handler.SignUp
 
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the

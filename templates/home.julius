@@ -1,0 +1,29 @@
+(function() {
+
+  var signUpButtons = $("button#sign-up");
+  var confirmModal = $('div#confirm');
+
+  signUpButtons.on("click", function() {
+    var self = $(this);
+    var item = self.parent().parent().parent();
+    var url = self.data("url");
+    var name = item.find("#competition-info").text();
+    confirmModal.find("div.modal-body p").text(name);
+    confirmModal.modal({ backdrop: 'static', keyboard: false })
+      .one('click', '#confirm-button', function (e) {
+        // remove from db
+        $.ajax({
+          type: 'DELETE',
+          url: url,
+          success: function() {
+            item.remove();
+            // if this was last signup remove table
+            if ($("div#sign-ups tr").length == 0) {
+              $("div#sign-ups").remove();
+            }
+          }
+        });
+      });
+  });
+
+})();

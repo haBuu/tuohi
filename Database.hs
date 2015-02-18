@@ -12,6 +12,7 @@ import Handler.Division
 import Competition.Groups
 import Competition.Competition
 import Permission
+import Helpers(today)
 
 isAdmin :: Handler Bool
 isAdmin = do
@@ -51,6 +52,24 @@ setPermissions uid permissions = runDB $
 getNotifications :: Handler [Entity Notification]
 getNotifications = runDB $ selectList []
   [Desc NotificationDate, LimitTo 5]
+
+getActiveSignUps :: UserId
+  -> Handler [(E.Value SignUpId, E.Value CompetitionId, E.Value Text, E.Value Day)]
+getActiveSignUps uid = do
+  today_ <- liftIO today
+  runDB $ E.select $
+    E.from $ \(competition `E.InnerJoin` signUp) -> do
+      E.on $ competition ^. CompetitionId E.==. signUp ^. SignUpCompetitionId
+      E.where_ $ signUp ^. SignUpUserId E.==. E.val uid
+      E.where_ $ competition ^. CompetitionState E.==. E.val Init
+      E.where_ $ competition ^. CompetitionDate E.>=. E.val today_
+      E.orderBy [E.asc (competition ^. CompetitionDate)]
+      return
+        ( signUp ^. SignUpId
+        , competition ^. CompetitionId
+        , competition ^. CompetitionName
+        , competition ^. CompetitionDate
+        )
 
 -- select sign ups for given competition with user name
 signUpsWithName :: CompetitionId

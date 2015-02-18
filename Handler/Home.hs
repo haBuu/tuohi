@@ -6,6 +6,7 @@ import Import
 import Handler.CompetitionState
 import Database
 import Data.Time.LocalTime
+import qualified Database.Esqueleto as E
 import Helpers
 
 -- This is a handler function for the GET request method on the HomeR
@@ -17,6 +18,10 @@ import Helpers
 -- inclined, or create a single monolithic file.
 getHomeR :: Handler Html
 getHomeR = do
+  maid <- maybeAuthId
+  activeSignUps <- case maid of
+    Just aid -> getActiveSignUps aid
+    Nothing -> return []
   tz <- liftIO getCurrentTimeZone
   competitions <- runDB $ selectList [] [Desc CompetitionDate]
   let finished = filter isFinished competitions
@@ -31,3 +36,11 @@ getHomeR = do
 -- in the home page
 finishedLimit :: Int
 finishedLimit = 5
+
+-- helper for hamlet
+-- returns true if competition is found in signups
+findMatch :: CompetitionId
+  -> [(E.Value SignUpId, E.Value CompetitionId, E.Value Text, E.Value Day)]
+  -> Bool
+findMatch cid signups = flip any signups $
+  \(_, E.Value signUpCid, _, _) -> cid == signUpCid

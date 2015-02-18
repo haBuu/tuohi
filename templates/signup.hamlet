@@ -2,10 +2,10 @@
 
 $if full
   <fieldset disabled>
-    <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
+    <form method=post action=@{SignUpsR cid}#form enctype=#{formEnctype}>
       ^{formWidget}
 $else
-  <form method=post action=@{SignUpR cid}#form enctype=#{formEnctype}>
+  <form method=post action=@{SignUpsR cid}#form enctype=#{formEnctype}>
     ^{formWidget}
 
 <ul .list-group>

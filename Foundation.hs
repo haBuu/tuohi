@@ -114,7 +114,7 @@ instance Yesod App where
   -- public
   isAuthorized HomeR _ = return Authorized
   isAuthorized (GroupsR _) _ = return Authorized
-  isAuthorized (SignUpR _) _ = return Authorized
+  isAuthorized (SignUpsR _) _ = return Authorized
   isAuthorized (ScoresR _) _ = return Authorized
   isAuthorized (CompetitionAuthR _) _ = return Authorized
 

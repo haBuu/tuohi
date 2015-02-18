@@ -27,8 +27,9 @@ postNotificationsR = do
   redirect NotificationsR
 
 deleteNotificationR :: NotificationId -> Handler Html
-deleteNotificationR nid =
-  runDB $ delete nid >> redirect NotificationsR
+deleteNotificationR nid = do
+  runDB $ delete nid
+  redirect NotificationsR
 
 putNotificationR :: NotificationId -> Handler Html
 putNotificationR nid = do

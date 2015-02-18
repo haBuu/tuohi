@@ -1,4 +1,3 @@
-{-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.SignUp where
 
 import Import
@@ -11,9 +10,19 @@ import Handler.Forms
 import qualified Database.Esqueleto as E
 import Database
 import DivisionMessages
+import Handler.CompetitionState
 
-getSignUpR :: CompetitionId -> Handler Html
-getSignUpR cid = do
+deleteSignUpR :: SignUpId -> Handler Html
+deleteSignUpR sid = do
+  signup <- runDB $ get404 sid
+  competition <- runDB $ get404 $ signUpCompetitionId signup
+  -- allow deleting of signup only from competitions
+  -- that are in state Init
+  when (competitionState competition == Init) $ runDB $ delete sid
+  redirect HomeR
+
+getSignUpsR :: CompetitionId -> Handler Html
+getSignUpsR cid = do
   -- if the competition does not exist return 404
   competition <- runDB $ get404 cid
   full <- competitionFull cid
@@ -28,8 +37,8 @@ getSignUpR cid = do
     addScriptRemote "https://www.google.com/recaptcha/api.js"
     $(widgetFile "signup")
 
-postSignUpR :: CompetitionId -> Handler Html
-postSignUpR cid = do
+postSignUpsR :: CompetitionId -> Handler Html
+postSignUpsR cid = do
   muser <- maybeAuthUser
   ((result, _), _) <- case muser of
     -- user is logged in
@@ -46,7 +55,7 @@ postSignUpR cid = do
     case msid of
       Just _ -> setMessageI MsgSignUpSuccess
       Nothing -> setMessageI MsgSignUpFail
-  redirect $ SignUpR cid
+  redirect $ SignUpsR cid
 
 -- recaptcha
 checkRecaptcha :: Handler Bool
@@ -65,7 +74,7 @@ checkRecaptcha = do
 recaptchaError :: CompetitionId -> Handler ()
 recaptchaError cid = do
   setMessageI MsgRecaptchaError
-  redirect $ SignUpR cid
+  redirect $ SignUpsR cid
 
 verifyResponse :: L.ByteString -> Bool
 verifyResponse = isInfixOf "\"success\": true" . C.unpack

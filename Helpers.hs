@@ -3,7 +3,7 @@ module Helpers
 , showDay
 , textualScore
 , safeHead
-, thd
+, thd, snd3
 , language
 , showTime
 , today
@@ -24,6 +24,9 @@ today = getCurrentTime
 
 thd :: (t1,t2,t3) -> t3
 thd (_, _, x) = x
+
+snd3 :: (t1,t2,t3) -> t2
+snd3 (_, x, _) = x
 
 for :: [a] -> (a -> b) -> [b]
 for = flip map

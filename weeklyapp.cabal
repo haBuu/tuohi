@@ -28,7 +28,6 @@ library
                      Handler.NewCompetition
                      Handler.Competition
                      Handler.Layout
-                     Handler.SignUp
                      Handler.Series
                      Handler.CompetitionAuth
                      Handler.Scores
@@ -50,6 +49,7 @@ library
                      Handler.Permissions
                      Handler.Handicaps
                      Handler.FinishedCompetitions
+                     Handler.SignUp
                      Helpers
                      Database
                      Competition.Competition

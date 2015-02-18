@@ -102,3 +102,5 @@ MissingPermission: You do not have enough permissions
 AllCompetitions: All competitions
 Confirm: Confirm
 ConfirmPlayerRemoveTitle: Confirm the player's removal
+ConfirmSignUpRemoveTitle: Confirm the cancellation of sign-up
+SignUps: Sign-ups

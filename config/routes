@@ -9,7 +9,9 @@
 !/#CompetitionId/#Int InputR GET
 !/competition/auth/#CompetitionId CompetitionAuthR GET POST
 
-/competition/#CompetitionId/signup SignUpR GET POST
+/signup/#SignUpId SignUpR DELETE
+
+/competition/#CompetitionId/signups SignUpsR GET POST
 /competition/#CompetitionId/groups GroupsR GET
 
 /competitions/finished FinishedCompetitionsR GET

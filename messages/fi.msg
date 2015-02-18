@@ -102,3 +102,5 @@ MissingPermission: Sinulla ei ole riittäviä oikeuksia
 AllCompetitions: Kaikki kilpailut
 Confirm: Vahvista
 ConfirmPlayerRemoveTitle: Vahvista pelaajan poistaminen
+ConfirmSignUpRemoveTitle: Vahvista ilmoittautumisen peruutus
+SignUps: Ilmoittautumiset
