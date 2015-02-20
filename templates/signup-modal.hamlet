@@ -1,0 +1,10 @@
+<div #confirm .modal>
+  <div .modal-dialog>
+    <div .modal-content>
+      <div .modal-header>
+        <h4 .modal-title>_{MsgConfirmSignUpRemoveTitle}
+      <div .modal-body>
+        <p>
+      <div .modal-footer>
+        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
+        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}

@@ -30,6 +30,7 @@ getHomeR = do
   defaultLayout $ do
     setTitle "WeeklyApp"
     let languageWidget = $(widgetFile "language")
+    let signUpWidget = $(widgetFile "signup-modal")
     $(widgetFile "home")
 
 -- how many finished competitions gets displayed

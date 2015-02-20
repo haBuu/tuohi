@@ -56,7 +56,8 @@ getNotifications = runDB $ selectList []
 getActiveSignUps :: UserId
   -> Handler [(E.Value SignUpId, E.Value CompetitionId, E.Value Text, E.Value Day)]
 getActiveSignUps uid = do
-  today_ <- liftIO today
+  -- today_ <- liftIO today
+  let today_ = fromGregorian 2014 1 1
   runDB $ E.select $
     E.from $ \(competition `E.InnerJoin` signUp) -> do
       E.on $ competition ^. CompetitionId E.==. signUp ^. SignUpCompetitionId

@@ -1,4 +1,17 @@
+$if not $ null activeSignUps
+  <div .panel .panel-primary #sign-ups>
+    <div .panel-heading>_{MsgSignUps}
+    <table .table>
+      <tbody>
+        $forall (E.Value sid, _, E.Value name, E.Value date) <- activeSignUps
+          <tr>
+            <td .middle #competition-info>
+              #{name}, #{showDay date}
+            <td>
+              <div .pull-right>
+                <button data-url=@{SignUpR sid} #sign-up .pull-right .btn .btn-default .btn-sm>_{MsgRemove}
+
 <form method=post action=@{ProfileR}#form enctype=#{formEnctype}>
   ^{formWidget}
 
-<a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+^{signUpWidget}

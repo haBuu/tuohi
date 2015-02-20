@@ -32,7 +32,7 @@ $if not $ null activeSignUps
               #{displayCompetition competition}
 
   <div .col-sm-3>
-    <ul .list-group>
+    <ul .list-group #open-signups>
       <div .panel .panel-primary>
         <div .panel-heading>_{MsgOpenSignUps}
         $forall Entity cid competition <- competitions
@@ -61,13 +61,4 @@ $if not $ null activeSignUps
 
 ^{languageWidget}
 
-<div #confirm .modal>
-  <div .modal-dialog>
-    <div .modal-content>
-      <div .modal-header>
-        <h4 .modal-title>_{MsgConfirmSignUpRemoveTitle}
-      <div .modal-body>
-        <p>
-      <div .modal-footer>
-        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
-        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
+^{signUpWidget}

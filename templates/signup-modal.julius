@@ -21,6 +21,11 @@
             if ($("div#sign-ups tr").length == 0) {
               $("div#sign-ups").remove();
             }
+            // if there is openSignUpsList remove success class from it
+            if ($('ul#open-signups').length > 0) {
+              // ugly matching by name
+              $("ul#open-signups a:contains(" + name + ")").removeClass("list-group-item-success");
+            }
           }
         });
       });

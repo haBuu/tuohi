@@ -9,8 +9,13 @@
     $forall Entity nid notification <- notifications
       <li .list-group-item .clearfix>
         <p>#{notificationContent notification}
-        <textarea .margin-bottom .hidden .form-control>#{notificationContent notification}
-        <button #remove data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default>_{MsgRemove}
-        <button #edit .pull-right .margin-left .btn .btn-default>_{MsgEdit}
-        <button #cancel .pull-right .margin-left .btn .btn-default .hidden>_{MsgCancel}
-        <button #save data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default .hidden>_{MsgSave}
+        <textarea .margin-bottom .hidden .form-control>
+          #{notificationContent notification}
+        <button #remove data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default>
+          _{MsgRemove}
+        <button #edit .pull-right .margin-left .btn .btn-default>
+          _{MsgEdit}
+        <button #cancel .pull-right .margin-left .btn .btn-default .hidden>
+          _{MsgCancel}
+        <button #save data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default .hidden>
+          _{MsgSave}
