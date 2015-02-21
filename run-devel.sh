@@ -50,6 +50,7 @@ function reloadTemplates() {
   tmux select-window -t ghci_server:ghci
   tmux select-pane -t 0
 
+  tmux send-keys -t ghci_server:0 "DevelMain.shutdown" C-m
   tmux send-keys -t ghci_server:ghci ":l DevelMain" C-m
   tmux send-keys -t ghci_server:0 "DevelMain.update" C-m
 }
