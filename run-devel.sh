@@ -31,6 +31,7 @@ function startReplYesodDev() {
   # start yesod with repl
   tmux select-pane -t 0
   tmux send-keys -t ghci_server:ghci "cabal repl --ghc-options=\"-O0 -fobject-code\"" C-m
+  tmux send-keys -t ghci_server:ghci ":set -DDEVELOPMENT" C-m
   tmux send-keys -t ghci_server:ghci ":l DevelMain" C-m
   tmux send-keys -t ghci_server:0 "DevelMain.update" C-m
 
