@@ -7,6 +7,7 @@ import Handler.Forms
 
 getLayoutR :: CourseId -> LayoutId -> Handler Html
 getLayoutR cid lid = do
+  layout <- runDB $ get404 lid
   holes <- runDB $ selectList [HoleLayoutId ==. lid] [Asc HoleNumber]
   ((_, formWidget), formEnctype) <- runFormPost $ holesForm holes
   defaultLayout $ do
