@@ -17,6 +17,7 @@ postCoursesR :: Handler Html
 postCoursesR = do
   ((result, _), _) <- newCourseForm
   formHandler result $ \course -> do
-    runDB $ insert_ course
+    cid <- runDB $ insert course
     setMessageI MsgCourseAdded
+    redirect $ CourseR cid
   redirect CoursesR
