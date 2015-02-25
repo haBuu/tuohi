@@ -4,6 +4,7 @@ module Handler.CompetitionAuth where
 import Import
 
 import Handler.Forms
+import Handler.CompetitionState
 
 -- name of the temp session
 -- this can be anything
@@ -30,7 +31,9 @@ competitionAuth :: CompetitionId -> Text -> Handler ()
 competitionAuth cid pw = do
   competition <- runDB $ get404 cid
   let password = competitionPassword competition
-  when (pw == password) $ do
+      state = competitionState competition
+  -- allow auth only for competitions that are in state started
+  when (pw == password && state == Started) $ do
     setSession sessionName pw
 
 isCompetitionAuth :: CompetitionId -> Handler Bool
@@ -38,6 +41,9 @@ isCompetitionAuth cid = do
   mSession <- lookupSession sessionName
   competition <- runDB $ get404 cid
   let password = competitionPassword competition
+      state = competitionState competition
   return $ case mSession of
-    Just pw -> if pw == password then True else False
+    Just pw -> if pw == password && state == Started
+      then True
+      else False
     _ -> False
