@@ -12,6 +12,7 @@ User
   deriving Show
 
 Competition
+  userId UserId
   layoutId LayoutId
   date Day
   name Text

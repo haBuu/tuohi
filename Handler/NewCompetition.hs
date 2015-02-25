@@ -10,7 +10,8 @@ getNewCompetitionR :: Handler Html
 getNewCompetitionR = do
   -- language for datepicker
   lang <- liftM language languages
-  ((_, formWidget), formEnctype) <- runFormPost newCompetitionForm
+  uid <- requireAuthId
+  ((_, formWidget), formEnctype) <- runFormPost $ newCompetitionForm uid
   defaultLayout $ do
     addScript $ StaticR js_bootstrap_datepicker_js
     -- add more languages here (currently finnish and english)
@@ -23,7 +24,8 @@ getNewCompetitionR = do
 
 postNewCompetitionR :: Handler Html
 postNewCompetitionR = do
-  ((result, _), _) <- runFormPost newCompetitionForm
+  uid <- requireAuthId
+  ((result, _), _) <- runFormPost $ newCompetitionForm uid
   formHandler result $ \res -> do
     runDB $ insert_ res
     setMessageI MsgCompetitionAdded

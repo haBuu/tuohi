@@ -24,9 +24,9 @@ formHandler result f =
 submitButton :: a -> BootstrapSubmit a
 submitButton msg = BootstrapSubmit msg "btn btn-default btn-block btn-lg" []
 
-newCompetitionForm :: Html
+newCompetitionForm :: UserId -> Html
   -> MForm Handler (FormResult Competition, Widget)
-newCompetitionForm extra = do
+newCompetitionForm uid extra = do
   mr <- getMessageRender
   (layoutRes, layoutView) <- mreq (selectField layouts)
     (bfs MsgLayout) Nothing
@@ -42,7 +42,8 @@ newCompetitionForm extra = do
   (serieRes, serieView) <- mopt (selectField series)
     (bfs MsgSerie) Nothing
   let competitionRes = Competition
-                        <$> layoutRes
+                        <$> (pure uid)
+                        <*> layoutRes
                         <*> dayRes
                         <*> nameRes
                         <*> playersRes
