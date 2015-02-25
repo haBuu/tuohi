@@ -21,6 +21,7 @@ postCourseR cid = do
     lid <- runDB $ insert layout
     -- insert given number of holes with par set to 3
     let holes = for [1..holeCount] $ \n -> Hole lid n 3
-    void $ runDB $ insertMany holes
+    runDB $ insertMany_ holes
     setMessageI MsgLayoutAdded
+    redirect $ LayoutR cid lid
   redirect $ CourseR cid
