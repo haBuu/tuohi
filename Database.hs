@@ -41,10 +41,6 @@ check permission = do
         else permissionDeniedI MsgMissingPermission
     Nothing -> notAuthenticated
 
-updateUser :: UserId -> Text -> Text -> Handler ()
-updateUser uid name email = runDB $
-  update uid [UserName =. name, UserEmail =. email]
-
 setPermissions :: UserId -> [Permission] -> Handler ()
 setPermissions uid permissions = runDB $
   update uid [UserPermissions =. permissions]

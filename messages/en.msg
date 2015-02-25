@@ -104,3 +104,5 @@ Confirm: Confirm
 ConfirmPlayerRemoveTitle: Confirm the player's removal
 ConfirmSignUpRemoveTitle: Confirm the cancellation of sign-up
 SignUps: Sign-ups
+Competitions: Competitions
+EmailExists: Another user with the same email exists

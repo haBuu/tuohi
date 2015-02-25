@@ -7,6 +7,7 @@ import Handler.Forms
 import qualified Database.Esqueleto as E
 import Database
 import Helpers
+import qualified Error as E
 
 getProfileR :: Handler Html
 getProfileR = do
@@ -23,6 +24,11 @@ postProfileR = do
   (Entity uid user) <- requireAuth
   ((result, _), _) <- profileForm user
   formHandler result $ \(name, email) -> do
-    updateUser uid name email
-    setMessageI MsgProfileUpdated
+    -- check that the email does not exist
+    handle E.emailExists $ do
+      runDB $ update uid
+        [ UserName =. name
+        , UserEmail =. email
+        ]
+      setMessageI MsgProfileUpdated
   redirect ProfileR

@@ -10,5 +10,5 @@ getFinishedCompetitionsR = do
     [CompetitionState ==. Finished]
     [Asc CompetitionDate]
   defaultLayout $ do
-    setTitleI MsgPastCompetitions
+    setTitleI MsgCompetitions
     $(widgetFile "finished-competitions")

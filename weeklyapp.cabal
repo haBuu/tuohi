@@ -58,6 +58,7 @@ library
                      DivisionMessages
                      Yesod.Form.I18n.Finnish
                      Permission
+                     Error
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

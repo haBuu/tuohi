@@ -1,4 +1,2 @@
-<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
-
 <form method=post action=@{NewCompetitionR}#form enctype=#{formEnctype}>
   ^{formWidget}
