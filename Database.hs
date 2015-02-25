@@ -52,8 +52,8 @@ getNotifications = runDB $ selectList []
 getActiveSignUps :: UserId
   -> Handler [(E.Value SignUpId, E.Value CompetitionId, E.Value Text, E.Value Day)]
 getActiveSignUps uid = do
-  -- today_ <- liftIO today
-  let today_ = fromGregorian 2014 1 1
+  today_ <- liftIO today
+  -- let today_ = fromGregorian 2014 1 1
   runDB $ E.select $
     E.from $ \(competition `E.InnerJoin` signUp) -> do
       E.on $ competition ^. CompetitionId E.==. signUp ^. SignUpCompetitionId
@@ -111,40 +111,29 @@ insertUser name email = do
 competitionFull :: CompetitionId -> Handler Bool
 competitionFull cid = runDB $ do
   competition <- get404 cid
-  -- how many players is allowed in the competition
+  -- how many players are allowed in the competition
   let playerLimit = competitionPlayerLimit competition
   -- how many players have signed up for the competition
   signups <- count [SignUpCompetitionId ==. cid]
   return $ signups >= playerLimit
 
 startCompetition :: CompetitionId -> Handler ()
-startCompetition cid = do
+startCompetition cid = runDB $ do
+  competition <- get404 cid
   -- set state to started
-  runDB $ update cid [CompetitionState =. Started]
+  update cid [CompetitionState =. Started]
   -- get sign ups for the competition that are confirmed
-  confirmed <- runDB $ selectList
+  confirmed <- selectList
     [SignUpConfirmed ==. True, SignUpCompetitionId ==. cid] []
-  -- get competition
-  competition <- runDB $ get404 cid
-  -- competiton layout id
-  let lid = competitionLayoutId competition
   -- count holes in the layout
-  holes <- holeCount lid
+  let lid = competitionLayoutId competition
+  holes <- count [HoleLayoutId ==. lid]
   -- make groups
   let groups_ = groups holes $ length confirmed
   -- make a round for each confirmed sign up
   forM_ (zip confirmed groups_) $ \((Entity _ signup), groupNumber) ->
-    void $ runDB $ insertBy $
+    void $ insertBy $
       Round (signUpUserId signup) cid R.Started 1 groupNumber
-
-insertLayout :: Layout -> Int -> Handler ()
-insertLayout layout holes = do
-  -- insert layout
-  mlid <- runDB $ insertUnique layout
-  -- insert holes
-  case mlid of
-    Just lid -> forM_ [1..holes] $ \n -> void $ runDB $ insertUnique $ Hole lid n 3
-    Nothing -> return ()
 
 -- select started rounds for given competition with user names
 roundsWithNames :: CompetitionId
@@ -197,50 +186,49 @@ nextRound cid = do
   mroundNumber <- currentRound cid
   case mroundNumber of
     Nothing -> return ()
-    Just roundNumber -> do
-      runDB $ updateWhere
+    Just roundNumber -> runDB $ do
+      updateWhere
         [ RoundCompetitionId ==. cid
         , RoundRoundnumber ==. roundNumber
         , RoundState ==. R.Started]
         [RoundState =. R.Finished]
-      rounds <- runDB $ selectList
+      rounds <- selectList
         [ RoundCompetitionId ==. cid
         , RoundRoundnumber ==. roundNumber
         , RoundState ==. R.Finished]
         []
-      -- get competition
-      competition <- runDB $ get404 cid
+      competition <- get404 cid
       -- competiton layout id
       let lid = competitionLayoutId competition
-      holes <- runDB $ selectList
-        [HoleLayoutId ==. lid] [Asc HoleNumber]
+      holes <- selectList [HoleLayoutId ==. lid] [Asc HoleNumber]
       -- make groups
       let groups_ = groups (length holes) (length rounds)
       -- get players and scores so we can put them in order
       players <- forM rounds $ \(Entity _ r) -> do
-        scores <- runDB $ playerRoundsAndScores (roundUserId r) cid
+        scores <- playerRoundsAndScores (roundUserId r) cid
         -- MPO is dummy
         return (roundUserId r, MPO, scores)
       let sortedPlayers = playerSort holes players
       -- insert round for each player
-      forM_ (zip sortedPlayers groups_) $ \((pid, _, _), groupNumber) -> do
-        void $ runDB $ insertBy $ Round pid cid R.Started
+      forM_ (zip sortedPlayers groups_) $ \((pid, _, _), groupNumber) ->
+        void $ insertBy $ Round pid cid R.Started
           (roundNumber + 1) groupNumber
 
 finishCompetition :: CompetitionId -> Handler ()
 finishCompetition cid = do
   mroundNumber <- currentRound cid
   -- finish competition
-  runDB $ update cid [CompetitionState =. Finished]
-  case mroundNumber of
-    Just roundNumber -> do
-      -- finish rounds
-      runDB $ updateWhere
-        [ RoundCompetitionId ==. cid
-        , RoundRoundnumber ==. roundNumber
-        , RoundState ==. R.Started]
-        [RoundState =. R.Finished]
-    Nothing -> return ()
+  runDB $ do
+    update cid [CompetitionState =. Finished]
+    case mroundNumber of
+      Just roundNumber -> do
+        -- finish rounds
+        updateWhere
+          [ RoundCompetitionId ==. cid
+          , RoundRoundnumber ==. roundNumber
+          , RoundState ==. R.Started]
+          [RoundState =. R.Finished]
+      Nothing -> return ()
 
 -- returns highest round that has state started from
 -- given competition i.e. currently active round

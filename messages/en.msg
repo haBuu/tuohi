@@ -106,3 +106,4 @@ ConfirmSignUpRemoveTitle: Confirm the cancellation of sign-up
 SignUps: Sign-ups
 Competitions: Competitions
 EmailExists: Another user with the same email exists
+LayoutExists: Layout already exists

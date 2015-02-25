@@ -10,7 +10,7 @@ import Database
 
 getInputR :: CompetitionId -> Int -> Handler Html
 getInputR cid groupNumber = do
-  -- render input site only if user has temp auth
+  -- render input site only if user has competition auth
   auth <- isCompetitionAuth cid
   if auth
     then do
