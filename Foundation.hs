@@ -219,10 +219,10 @@ instance YesodPersistRunner App where
 instance YesodAuth App where
   type AuthId App = UserId
 
-  renderAuthMessage _ langs =
-    case fmap (Data.Text.isInfixOf "fi") (safeHead langs) of
-      Just True -> finnishMessage
-      _ -> defaultMessage
+  renderAuthMessage _ [] = defaultMessage
+  renderAuthMessage _ ("en":_) = defaultMessage
+  renderAuthMessage _ ("fi":_) = finnishMessage
+  renderAuthMessage m (_:ls) = renderAuthMessage m ls
 
   -- Where to send a user after successful login
   loginDest _ = HomeR
@@ -255,7 +255,7 @@ instance YesodAuthEmail App where
 
   addUnverified email verkey =
     runDB $ insert $
-      User "" email Nothing (Just verkey) False False False []
+      User "N/A" email Nothing (Just verkey) False False False []
 
   sendVerifyEmail email _ verurl = do
     liftIO $ print verurl
@@ -331,10 +331,10 @@ instance YesodAuthEmail App where
 -- This instance is required to use forms. You can modify renderMessage to
 -- achieve customized and internationalized form validation messages.
 instance RenderMessage App FormMessage where
-  renderMessage _ langs =
-    case fmap (Data.Text.isInfixOf "fi") (safeHead langs) of
-      Just True -> FF.finnishMessage
-      _ -> defaultFormMessage
+  renderMessage _ [] = defaultFormMessage
+  renderMessage _ ("en":_) = defaultFormMessage
+  renderMessage _ ("fi":_) = FF.finnishMessage
+  renderMessage m (_:ls) = renderMessage m ls
 
 unsafeHandler :: App -> Handler a -> IO a
 unsafeHandler = Unsafe.fakeHandlerGetLogger appLogger
