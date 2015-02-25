@@ -18,10 +18,7 @@ import Helpers
 -- inclined, or create a single monolithic file.
 getHomeR :: Handler Html
 getHomeR = do
-  maid <- maybeAuthId
-  activeSignUps <- case maid of
-    Just aid -> getActiveSignUps aid
-    Nothing -> return []
+  activeSignUps <- maybeAuthId >>= maybe (return []) getActiveSignUps
   tz <- liftIO getCurrentTimeZone
   competitions <- runDB $ selectList [] [Desc CompetitionDate]
   let finished = filter isFinished competitions
@@ -36,7 +33,7 @@ getHomeR = do
 -- how many finished competitions gets displayed
 -- in the home page
 finishedLimit :: Int
-finishedLimit = 5
+finishedLimit = 2
 
 -- helper for hamlet
 -- returns true if competition is found in signups
