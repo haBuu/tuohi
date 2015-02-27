@@ -38,8 +38,7 @@
 /admin/newcompetition NewCompetitionR GET POST
 
 /admin/competition/#CompetitionId CompetitionR GET POST
-
-/admin/addplayer/#CompetitionId AddPlayerR GET POST
+/admin/competition/#CompetitionId/edit EditCompetitionR GET POST
 
 /admin/competition/signup/#SignUpId/confirm ConfirmSignUpR POST
 /admin/competition/signup/#SignUpId/remove RemoveSignUpR POST
@@ -47,6 +46,8 @@
 /admin/competition/#CompetitionId/round/#RoundId/group/change ChangeGroupR POST
 /admin/competition/#CompetitionId/nextround CompetitionNextRoundR POST
 /admin/competition/#CompetitionId/finish CompetitionFinishR POST
+
+/admin/addplayer/#CompetitionId AddPlayerR GET POST
 
 /admin/users UsersR GET
 /admin/user/#UserId UserR GET POST

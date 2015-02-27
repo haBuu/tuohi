@@ -6,12 +6,19 @@ import Import
 import Handler.Forms
 import Database
 
+-- how many notifications gets displayed
+-- this will also limit the ability to edit old notifications
+-- but since they can't be seen anywhere it does not matter
+notificationLimit :: Int
+notificationLimit = 5
+
 getNotificationsR :: Handler Html
 getNotificationsR = do
   aid <- requireAuthId
   time <- liftIO getCurrentTime
   ((_, formWidget), formEnctype) <- notificationForm aid time
-  notifications <- getNotifications
+  notifications <- runDB $ selectList []
+    [Desc NotificationDate, LimitTo notificationLimit]
   defaultLayout $ do
     setTitleI MsgNotifications
     $(widgetFile "notifications")

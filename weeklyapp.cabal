@@ -50,6 +50,7 @@ library
                      Handler.Handicaps
                      Handler.FinishedCompetitions
                      Handler.SignUp
+                     Handler.EditCompetition
                      Helpers
                      Database
                      Competition.Competition
@@ -59,6 +60,7 @@ library
                      Yesod.Form.I18n.Finnish
                      Permission
                      Error
+                     Datepicker
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

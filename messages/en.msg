@@ -107,3 +107,6 @@ SignUps: Sign-ups
 Competitions: Competitions
 EmailExists: Another user with the same email exists
 LayoutExists: Layout already exists
+EditCompetition: Edit competition
+CompetitionUpdated: Competition updated
+CompetitionStartedError: You are not allowed to modify competition once it is started

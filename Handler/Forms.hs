@@ -91,6 +91,79 @@ newCompetitionForm uid extra = do
       optionsPairs $ for entities $
         \(Entity sid serie) -> (serieName serie, sid)
 
+editCompetitionForm :: Competition -> Html
+  -> MForm Handler (FormResult Competition, Widget)
+editCompetitionForm competition extra = do
+  mr <- getMessageRender
+  (layoutRes, layoutView) <- mreq (selectField layouts)
+    (bfs MsgLayout)
+    (Just $ competitionLayoutId competition)
+  (dayRes, dayView) <- mreq dayField
+    (withPlaceholder (mr MsgDate) $ bfs MsgDate)
+    (Just $ competitionDate competition)
+  (nameRes, nameView) <- mreq textField
+    (withPlaceholder (mr MsgCompetitionName) $ bfs MsgCompetitionName)
+    (Just $ competitionName competition)
+  (playersRes, playersView) <- mreq intField
+    (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
+      [("min","1"),("max", "200"), ("class", "form-control")])
+    (Just $ competitionPlayerLimit competition)
+  (pwRes, pwView) <- mreq textField
+    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword)
+    (Just $ competitionPassword competition)
+  (serieRes, serieView) <- mopt (selectField series)
+    (bfs MsgSerie)
+    (Just $ competitionSerieId competition)
+  let competitionRes = Competition
+                        <$> (pure $ competitionUserId competition)
+                        <*> layoutRes
+                        <*> dayRes
+                        <*> nameRes
+                        <*> playersRes
+                        <*> (pure $ competitionState competition)
+                        <*> pwRes
+                        <*> serieRes
+  let widget = [whamlet|
+        #{extra}
+        <div .form-group>
+          <label .control-label>^{fvLabel layoutView}
+          ^{fvInput layoutView}
+        <div .form-group>
+          <label .control-label>^{fvLabel dayView}
+          <div .input-group .date>
+            ^{fvInput dayView}
+            <span .input-group-addon>
+              <i .glyphicon .glyphicon-calendar>
+        <div .form-group>
+          <label .control-label>^{fvLabel serieView}
+          ^{fvInput serieView}
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <label .control-label>^{fvLabel playersView}
+          ^{fvInput playersView}
+        <div .form-group>
+          <label .control-label>^{fvLabel pwView}
+          ^{fvInput pwView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgEditCompetition}>
+      |]
+  return (competitionRes, widget)
+  where
+    -- get layouts from db
+    layouts :: Handler (OptionList LayoutId)
+    layouts = do
+      entities <- runDB $ selectList [] [Asc LayoutName]
+      optionsPairs $ for entities $
+        \(Entity lid layout) -> (layoutName layout, lid)
+    -- get series from db
+    series :: Handler (OptionList SerieId)
+    series = do
+      entities <- runDB $ selectList [] [Asc SerieName]
+      optionsPairs $ for entities $
+        \(Entity sid serie) -> (serieName serie, sid)
+
 newCourseForm :: Handler ((FormResult Course, Widget), Enctype)
 newCourseForm = do
   mr <- getMessageRender

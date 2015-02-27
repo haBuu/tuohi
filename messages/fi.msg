@@ -107,3 +107,6 @@ SignUps: Ilmoittautumiset
 Competitions: Kilpailut
 EmailExists: Toinen käyttäjä samalla sähköpostiosoitteella on jo olemassa
 LayoutExists: Layout on jo olemassa
+EditCompetition: Muokkaa kilpailua
+CompetitionUpdated: Kilpailu päivitetty
+CompetitionStartedError: Et voi muokata aloitettua kilpailua

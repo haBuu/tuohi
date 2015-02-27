@@ -1,7 +1,7 @@
-<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
-
 <form method=post action=@{NotificationsR}#form enctype=#{formEnctype}>
   ^{formWidget}
+
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
 <ul .list-group>
   <div .panel .panel-primary>

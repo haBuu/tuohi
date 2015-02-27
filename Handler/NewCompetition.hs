@@ -5,6 +5,7 @@ import Import
 
 import Handler.Forms
 import Helpers
+import qualified Datepicker
 
 getNewCompetitionR :: Handler Html
 getNewCompetitionR = do
@@ -13,10 +14,7 @@ getNewCompetitionR = do
   uid <- requireAuthId
   ((_, formWidget), formEnctype) <- runFormPost $ newCompetitionForm uid
   defaultLayout $ do
-    addScript $ StaticR js_bootstrap_datepicker_js
-    -- add more languages here (currently finnish and english)
-    addScript $ StaticR js_locales_bootstrap_datepicker_fi_js
-    addStylesheet $ StaticR css_datepicker3_css
+    Datepicker.addDatepicker
     setTitleI MsgAddCompetition
     -- datepicker widget enables datepicker for all inputs of type date
     $(widgetFile "datepicker")

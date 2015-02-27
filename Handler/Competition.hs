@@ -45,8 +45,8 @@ startedPage cid = do
   -- get score count for each player so we can display
   -- labels for how many holes they have played
   -- this could be done with the same query where we get the rounds
-  scoreCounts <- forM rounds $ \(E.Value rid, _, _, _) -> do
-    scoreCount rid
+  scoreCounts <- forM rounds $
+    \(E.Value rid, _, _, _) -> scoreCount rid
   -- how many holes does the layout have
   count_ <- holeCount $ competitionLayoutId competition
   -- compine rounds and score counts

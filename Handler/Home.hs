@@ -20,9 +20,13 @@ getHomeR :: Handler Html
 getHomeR = do
   activeSignUps <- maybeAuthId >>= maybe (return []) getActiveSignUps
   tz <- liftIO getCurrentTimeZone
-  competitions <- runDB $ selectList [] [Desc CompetitionDate]
-  let finished = filter isFinished competitions
-  notifications <- getNotifications
+  activeCompetitions <- runDB $ selectList
+    [CompetitionState !=. Finished] [Desc CompetitionDate]
+  finished <- runDB $ selectList
+    [CompetitionState ==. Finished]
+    [Desc CompetitionDate, LimitTo (finishedLimit + 1)]
+  notifications <- runDB $ selectList []
+    [Desc NotificationDate, LimitTo notificationLimit]
   series <- runDB $ selectList [] [Asc SerieName]
   defaultLayout $ do
     setTitle "WeeklyApp"
@@ -31,9 +35,12 @@ getHomeR = do
     $(widgetFile "home")
 
 -- how many finished competitions gets displayed
--- in the home page
 finishedLimit :: Int
 finishedLimit = 2
+
+-- how many notifications gets displayed
+notificationLimit :: Int
+notificationLimit = 3
 
 -- helper for hamlet
 -- returns true if competition is found in signups

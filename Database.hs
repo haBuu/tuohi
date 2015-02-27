@@ -45,10 +45,6 @@ setPermissions :: UserId -> [Permission] -> Handler ()
 setPermissions uid permissions = runDB $
   update uid [UserPermissions =. permissions]
 
-getNotifications :: Handler [Entity Notification]
-getNotifications = runDB $ selectList []
-  [Desc NotificationDate, LimitTo 5]
-
 getActiveSignUps :: UserId
   -> Handler [(E.Value SignUpId, E.Value CompetitionId, E.Value Text, E.Value Day)]
 getActiveSignUps uid = do

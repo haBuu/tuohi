@@ -4,6 +4,7 @@
   ^{formWidget}
 
 <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+<a href=@{EditCompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgEditCompetition}
 
 <div .panel .panel-primary>
   <div .panel-heading>_{MsgNotPresent}
