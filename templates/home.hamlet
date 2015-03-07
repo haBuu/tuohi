@@ -1,3 +1,7 @@
+$maybe activeRound <- mactiveRound
+  <a href=@{InputR (roundCompetitionId activeRound) (roundGroupnumber activeRound)} .btn .btn-default .btn-block>
+    _{MsgInputScores}
+
 $if not $ null activeSignUps
   <div .panel .panel-primary #sign-ups>
     <div .panel-heading>_{MsgSignUps}

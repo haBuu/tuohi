@@ -14,6 +14,11 @@ import Competition.Competition
 import Permission
 import Helpers(today)
 
+requireAdmin :: Handler ()
+requireAdmin = do
+  Entity _ user <- requireAuth
+  unless (userAdmin user) $ permissionDeniedI MsgNotAdmin
+
 isAdmin :: Handler Bool
 isAdmin = do
   muser <- maybeAuthUser
@@ -31,8 +36,8 @@ isSuperAdmin = do
 maybeAuthUser :: Handler (Maybe User)
 maybeAuthUser = liftM (fmap entityVal) maybeAuth
 
-check :: Permission -> Handler ()
-check permission = do
+requirePermission :: Permission -> Handler ()
+requirePermission permission = do
   muser <- maybeAuthUser
   case muser of
     Just user -> do
@@ -49,7 +54,6 @@ getActiveSignUps :: UserId
   -> Handler [(E.Value SignUpId, E.Value CompetitionId, E.Value Text, E.Value Day)]
 getActiveSignUps uid = do
   today_ <- liftIO today
-  -- let today_ = fromGregorian 2014 1 1
   runDB $ E.select $
     E.from $ \(competition `E.InnerJoin` signUp) -> do
       E.on $ competition ^. CompetitionId E.==. signUp ^. SignUpCompetitionId
@@ -63,6 +67,10 @@ getActiveSignUps uid = do
         , competition ^. CompetitionName
         , competition ^. CompetitionDate
         )
+
+getActiveRound :: UserId -> Handler (Maybe Round)
+getActiveRound uid = liftM (fmap entityVal) . runDB $
+  selectFirst [RoundUserId ==. uid, RoundState ==. R.Started] []
 
 -- select sign ups for given competition with user name
 signUpsWithName :: CompetitionId
@@ -251,10 +259,12 @@ playersAndScores cid = runDB $ selectList
     rounds <- playerRoundsAndScores uid cid
     return (user, signUpDivision signUp, rounds))
 
+playerRoundsAndScores :: UserId -> CompetitionId
+  -> ReaderT SqlBackend Handler [(Round, [Score])]
 playerRoundsAndScores uid cid = selectList
   [RoundUserId ==. uid, RoundCompetitionId ==. cid]
   [Asc RoundRoundnumber]
-  >>= mapM (\entity@(Entity rid round_) -> do
+  >>= mapM (\(Entity rid round_) -> do
     scores <- selectList [ScoreRoundId ==. rid] []
     return (round_, map entityVal scores))
 
@@ -278,6 +288,8 @@ handicapScores uid sid date = runDB $ do
   -- filter out competitions which the player did not attented
   filterM (return . not . null . snd) unfiltered
 
+finishedRounds :: UserId -> CompetitionId
+  -> ReaderT SqlBackend Handler [(Round, [Score])]
 finishedRounds uid cid = selectList
   [ RoundUserId ==. uid
   , RoundCompetitionId ==. cid

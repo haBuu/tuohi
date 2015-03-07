@@ -18,7 +18,9 @@ import Helpers
 -- inclined, or create a single monolithic file.
 getHomeR :: Handler Html
 getHomeR = do
-  activeSignUps <- maybeAuthId >>= maybe (return []) getActiveSignUps
+  maid <- maybeAuthId
+  activeSignUps <- maybe (return []) getActiveSignUps maid
+  mactiveRound <- maybe (return Nothing) getActiveRound maid
   tz <- liftIO getCurrentTimeZone
   activeCompetitions <- runDB $ selectList
     [CompetitionState !=. Finished] [Desc CompetitionDate]

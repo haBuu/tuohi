@@ -110,3 +110,4 @@ LayoutExists: Layout on jo olemassa
 EditCompetition: Muokkaa kilpailua
 CompetitionUpdated: Kilpailu päivitetty
 CompetitionStartedError: Et voi muokata aloitettua kilpailua
+InputScores: Syötä tuloksia

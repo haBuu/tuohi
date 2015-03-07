@@ -110,3 +110,4 @@ LayoutExists: Layout already exists
 EditCompetition: Edit competition
 CompetitionUpdated: Competition updated
 CompetitionStartedError: You are not allowed to modify competition once it is started
+InputScores: Input scores
