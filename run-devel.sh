@@ -10,6 +10,11 @@
 # original version: https://gist.github.com/maerten/2c9152f68e2bbefa93ac
 #
 
+# name of the yesod app
+app="weeklyapp"
+# files to ignore
+ignore="\.git/*|dist/*|yesod-devel/*|static/tmp/*|$app.sqlite3|$app.cabal|run-devel.sh"
+
 function showHelp() {
   echo "Usage: $0 -w"
   echo ""
@@ -18,48 +23,73 @@ function showHelp() {
 
 function startReplYesodDev() {
 
-  # start tmux with two windows:
+  # start tmux with three windows:
   # - repl
   # - iwatch (to trigger recompile on file change)
+  # - iwatch (to trigger cabal clean and recompile on cabal file change)
   tmux start-server
-  tmux new-session -d -s ghci_server -n ghci
-  tmux split-window -t ghci
-
-  # make the repl window bigger
-  tmux resize-pane -t 0 -D 30
+  tmux new-session -d -s yesod -n repl
 
   # start yesod with repl
-  tmux select-pane -t 0
-  tmux send-keys -t ghci_server:ghci "cabal repl --ghc-options=\"-O0 -fobject-code\"" C-m
-  tmux send-keys -t ghci_server:ghci ":set -DDEVELOPMENT" C-m
-  tmux send-keys -t ghci_server:ghci ":l DevelMain" C-m
-  tmux send-keys -t ghci_server:0 "DevelMain.update" C-m
+  tmux send-keys -t yesod:repl "cabal repl --ghc-options=\"-O0 -fobject-code\"" C-m
+  tmux send-keys -t yesod:repl ":set -DDEVELOPMENT" C-m
+  tmux send-keys -t yesod:repl ":l DevelMain" C-m
+  tmux send-keys -t yesod:repl "DevelMain.update" C-m
 
-  # watch files with iwatch
+  # main watcher
+  tmux split-window
   tmux select-pane -t 1
-  # watch every file for modify event recursively exluding folders dist/, yesod-devel/ and static/tmp/
-  tmux send-keys -t ghci:0 "iwatch -X '\.git/*|dist/*|yesod-devel/*|static/tmp/*|weeklyapp.sqlite3' -r -e close_write -c \"$0 %e\" ." C-m
+  tmux send-keys "iwatch -X '$ignore' -r -e close_write -c \"$0 -r\" ." C-m
 
-  # make the repl windows active
-  tmux select-window -t ghci_server:ghci
-  tmux attach-session -t ghci_server
+  # cabal watcher
+  tmux split-window
+  tmux select-pane -t 2
+  tmux send-keys "iwatch -t '$app.cabal' -e close_write -c \"$0 -c\" ." C-m
+
+  # hide watchers
+  tmux select-pane -t 1
+  tmux break-pane -d
+  tmux select-pane -t 2
+  tmux break-pane -d
+  # rename watcher windows
+  tmux select-window -t yesod:1
+  tmux rename-window iwatch
+  tmux select-window -t yesod:2
+  tmux rename-window iwatch_cabal
+
+  # make the repl window active and attach to session
+  tmux select-window -t yesod:repl
+  tmux attach-session -t yesod
 }
 
 function reloadTemplates() {
   # send reload and update commands to repl
   echo "reloading..."
-  tmux select-window -t ghci_server:ghci
-  tmux select-pane -t 0
-
-  tmux send-keys -t ghci_server:0 "DevelMain.shutdown" C-m
-  tmux send-keys -t ghci_server:ghci ":l DevelMain" C-m
-  tmux send-keys -t ghci_server:0 "DevelMain.update" C-m
+  tmux select-window -t yesod:repl
+  tmux send-keys -t yesod:repl "DevelMain.shutdown" C-m
+  tmux send-keys -t yesod:repl ":l DevelMain" C-m
+  tmux send-keys -t yesod:repl "DevelMain.update" C-m
 }
 
-if [ "$1" == "" ]; then
-  showHelp
-elif [ "$1" = "-w" ]; then
-  startReplYesodDev
+function cleanReload() {
+  # send cabal clean, reload and update commands to repl
+  echo "reloading..."
+  tmux select-window -t yesod:repl
+  tmux send-keys -t yesod:repl "DevelMain.shutdown" C-m
+  tmux send-keys -t yesod:repl C-d
+  tmux send-keys -t yesod:repl "cabal clean" C-m
+  tmux send-keys -t yesod:repl "cabal repl --ghc-options=\"-O0 -fobject-code\"" C-m
+  tmux send-keys -t yesod:repl ":set -DDEVELOPMENT" C-m
+  tmux send-keys -t yesod:repl ":l DevelMain" C-m
+  tmux send-keys -t yesod:repl "DevelMain.update" C-m
+}
+
+if [ "$1" = "-w" ]; then
+  startReplYesodDev # startup
+elif [ "$1" = "-c" ]; then
+  cleanReload # reload with cabal clean
+elif [ "$1" = "-r" ]; then
+  reloadTemplates # normal reload
 else
-  reloadTemplates
+  showHelp
 fi
