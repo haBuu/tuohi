@@ -13,6 +13,7 @@ module Application
     ) where
 
 import Control.Monad.Logger                 (liftLoc, runLoggingT)
+import Database.Persist.Sql                 (runMigrationUnsafe)
 import Database.Persist.Sqlite              (createSqlitePool, runSqlPool,
                                              sqlDatabase, sqlPoolSize)
 import Import
@@ -94,6 +95,8 @@ makeFoundation appSettings = do
 
   -- Perform database migration using our application's logging settings.
   runLoggingT (runSqlPool (runMigration migrateAll) pool) logFunc
+  -- runLoggingT (runSqlPool (runMigrationUnsafe migrateAll) pool) logFunc
+
 
   -- Return the foundation
   return $ mkFoundation pool
