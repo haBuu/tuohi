@@ -5,7 +5,7 @@ import Import
 
 import Handler.CompetitionAuth
 import Handler.Forms
-import Handler.RoundState(RoundState(DidNotFinish))
+import Model.RoundState(RoundState(DidNotFinish))
 import Competition.Competition
 import Database
 import Helpers

@@ -4,7 +4,7 @@ module Handler.CompetitionAuth where
 import Import
 
 import Handler.Forms
-import Handler.CompetitionState
+import Model.CompetitionState
 
 -- name of the temp session
 -- this can be anything

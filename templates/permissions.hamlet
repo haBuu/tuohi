@@ -6,17 +6,10 @@
     <table .table>
       <thead>
         <tr>
-          <th>_{MsgName}
-          $forall permission <- permissions
-            <th>#{show permission}
-      <tbody>
-        $forall Entity _ user <- admins
-          <tr>
-            <td>#{userName user}
-            $forall permission <- permissions
-              $if elem permission $ userPermissions user
-                <td>
-                  <span .glyphicon .glyphicon-ok .permission>
-              $else
-                <td>
-                  <span .glyphicon .glyphicon-remove .no-permission>
+          <th>UID
+          <th>Permission
+        <tbody>
+          $forall Entity uid permission <- permissions
+            <tr>
+              <td>#{show uid}
+              <td>#{show permission}

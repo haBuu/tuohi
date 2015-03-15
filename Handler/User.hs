@@ -18,14 +18,13 @@ postUserR :: UserId -> Handler Html
 postUserR uid = do
   user <- runDB $ get404 uid
   ((result, _), _) <- runFormPost $ userForm user
-  formHandler result $ \(name, email, admin, permissions) -> do
+  formHandler result $ \(name, email, admin) -> do
     -- check that the email does not exist
     handle E.emailExists $ do
       runDB $ update uid
         [ UserName =. name
         , UserEmail =. email
         , UserAdmin =. admin
-        , UserPermissions =. permissions
         ]
       setMessageI MsgUserUpdatedSuccess
   redirect $ UserR uid

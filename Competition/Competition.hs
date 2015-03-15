@@ -14,7 +14,7 @@ import Import
 
 import Data.List(foldl)
 
-import Handler.RoundState
+import Model.RoundState
 import Helpers
 
 countPar :: [Entity Hole] -> Int

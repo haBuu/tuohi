@@ -38,8 +38,6 @@ library
                      Handler.User
                      Handler.Users
                      Handler.Forms
-                     Handler.CompetitionState
-                     Handler.RoundState
                      Handler.Division
                      Handler.Language
                      Handler.Results
@@ -58,7 +56,10 @@ library
                      Competition.Handicap
                      DivisionMessages
                      Yesod.Form.I18n.Finnish
-                     Permission
+                     Model.Permission
+                     Model.User
+                     Model.CompetitionState
+                     Model.RoundState
                      Error
                      Datepicker
 

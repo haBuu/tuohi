@@ -1,11 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Permission where
+module Model.Permission where
 
 import Prelude
-
 import Database.Persist.TH
 
-data Permission =
+data PermissionType =
     AddCompetition
   | EditCompetition
   | AddCourse
@@ -16,4 +15,4 @@ data Permission =
   | BypassFullCompetitionCheck
   deriving (Show, Read, Eq, Enum, Bounded)
 
-derivePersistField "Permission"
+derivePersistField "PermissionType"

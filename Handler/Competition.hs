@@ -8,8 +8,8 @@ import Data.List(nub)
 import qualified Database.Esqueleto as E
 
 import Handler.Forms
-import Handler.CompetitionState
-import Handler.RoundState(RoundState(DidNotFinish))
+import Model.CompetitionState
+import Model.RoundState(RoundState(DidNotFinish))
 import Database
 import Helpers
 

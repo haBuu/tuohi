@@ -2,7 +2,7 @@ module Handler.FinishedCompetitions where
 
 import Import
 
-import Handler.CompetitionState
+import Model.CompetitionState
 
 getFinishedCompetitionsR :: Handler Html
 getFinishedCompetitionsR = do

@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Handler.CompetitionState where
+module Model.CompetitionState where
 
 import Database.Persist.TH
 import Prelude

@@ -6,7 +6,6 @@ User
   verified Bool default=False
   admin Bool default=False
   superAdmin Bool default=False
-  permissions [Permission]
   UniqueUser email
   deriving Typeable
   deriving Show
@@ -75,4 +74,13 @@ Notification
   content Textarea
   user UserId
   date UTCTime
+  deriving Show
+
+--SignUpEmailReminder
+--  userId UserId
+--  deriving Show
+
+Permission
+  userId UserId
+  type PermissionType
   deriving Show

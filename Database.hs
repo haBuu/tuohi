@@ -1,4 +1,4 @@
-{-# LANGUAGE TupleSections, OverloadedStrings #-}
+{-# LANGUAGE TupleSections, OverloadedStrings, RankNTypes #-}
 module Database where
 
 import Import
@@ -6,13 +6,17 @@ import Import
 import qualified Database.Esqueleto as E
 import Database.Esqueleto((^.))
 
-import Handler.CompetitionState
-import qualified Handler.RoundState as R
+import Model.CompetitionState
+import qualified Model.RoundState as R
 import Handler.Division
 import Competition.Groups
 import Competition.Competition
-import Permission
+import Model.Permission
+import Model.User
 import Helpers(today)
+
+type DB a = forall (m :: * -> *).
+  (MonadIO m, Functor m) => ReaderT SqlBackend m a
 
 requireAdmin :: Handler ()
 requireAdmin = do
@@ -35,20 +39,6 @@ isSuperAdmin = do
 
 maybeAuthUser :: Handler (Maybe User)
 maybeAuthUser = liftM (fmap entityVal) maybeAuth
-
-requirePermission :: Permission -> Handler ()
-requirePermission permission = do
-  muser <- maybeAuthUser
-  case muser of
-    Just user -> do
-      if elem permission $ userPermissions user
-        then return ()
-        else permissionDeniedI MsgMissingPermission
-    Nothing -> notAuthenticated
-
-setPermissions :: UserId -> [Permission] -> Handler ()
-setPermissions uid permissions = runDB $
-  update uid [UserPermissions =. permissions]
 
 getActiveSignUps :: UserId
   -> Handler [(E.Value SignUpId, E.Value CompetitionId, E.Value Text, E.Value Day)]
@@ -101,15 +91,6 @@ insertSignUp :: CompetitionId -> Text -> Text -> Division
 insertSignUp cid name email division = do
   pid <- insertUser name email
   runDB $ insertUnique $ SignUp pid cid False division
-
--- either insert new user or get id from existing user
-insertUser :: Text -> Text -> Handler UserId
-insertUser name email = do
-  eitherUser <- runDB $ insertBy $
-    User name email Nothing Nothing False False False []
-  return $ case eitherUser of
-    Left (Entity uid _) -> uid
-    Right uid -> uid
 
 -- returns true if the competition is full
 competitionFull :: CompetitionId -> Handler Bool
@@ -259,8 +240,7 @@ playersAndScores cid = runDB $ selectList
     rounds <- playerRoundsAndScores uid cid
     return (user, signUpDivision signUp, rounds))
 
-playerRoundsAndScores :: UserId -> CompetitionId
-  -> ReaderT SqlBackend Handler [(Round, [Score])]
+playerRoundsAndScores :: UserId -> CompetitionId -> DB [(Round, [Score])]
 playerRoundsAndScores uid cid = selectList
   [RoundUserId ==. uid, RoundCompetitionId ==. cid]
   [Asc RoundRoundnumber]
@@ -271,7 +251,8 @@ playerRoundsAndScores uid cid = selectList
 -- returns list where each item is one competition for the player
 -- and that competition consist of par of the layout that was played
 -- rounds and corresponding scores
-handicapScores :: UserId -> SerieId -> Day -> Handler [(Int, [(Round, [Score])])]
+handicapScores :: UserId -> SerieId -> Day
+  -> Handler [(Int, [(Round, [Score])])]
 handicapScores uid sid date = runDB $ do
   -- competitions with given serie and before date
   competitions <- selectList
@@ -288,8 +269,7 @@ handicapScores uid sid date = runDB $ do
   -- filter out competitions which the player did not attented
   filterM (return . not . null . snd) unfiltered
 
-finishedRounds :: UserId -> CompetitionId
-  -> ReaderT SqlBackend Handler [(Round, [Score])]
+finishedRounds :: UserId -> CompetitionId -> DB [(Round, [Score])]
 finishedRounds uid cid = selectList
   [ RoundUserId ==. uid
   , RoundCompetitionId ==. cid

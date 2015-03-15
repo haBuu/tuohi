@@ -13,7 +13,8 @@ $if not $ null activeSignUps
               #{name}, #{showDay date}
             <td>
               <div .pull-right>
-                <button data-url=@{SignUpR sid} #sign-up .pull-right .btn .btn-default .btn-sm>_{MsgRemove}
+                <button data-url=@{SignUpR sid} #sign-up .pull-right .btn .btn-default .btn-sm>
+                  _{MsgRemove}
 
 <ul .list-group>
   <div .panel .panel-primary>

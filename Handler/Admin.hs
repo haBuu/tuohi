@@ -3,7 +3,7 @@ module Handler.Admin where
 
 import Import
 
-import Handler.CompetitionState
+import Model.CompetitionState
 import Database
 
 getAdminR :: Handler Html

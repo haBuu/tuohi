@@ -1,25 +1,25 @@
+{-# LANGUAGE FlexibleInstances #-}
 module Model where
 
 import ClassyPrelude.Yesod
 import Database.Persist.Quasi
 
-import Handler.RoundState
-import Handler.CompetitionState
-import qualified Handler.CompetitionState as C
 import Handler.Division
 
 import Helpers
-import Permission
+import Model.Permission
+import Model.CompetitionState
+import Model.RoundState hiding(Finished)
 
 -- You can define all of your database entities in the entities file.
 -- You can find more information on persistent and how to declare entities
 -- at:
 -- http://www.yesodweb.com/book/persistent/
 share [mkPersist sqlSettings, mkMigrate "migrateAll"]
-    $(persistFileWith lowerCaseSettings "config/models")
+  $(persistFileWith lowerCaseSettings "config/models")
 
 isFinished :: Entity Competition -> Bool
-isFinished = (== C.Finished) . competitionState . entityVal
+isFinished = (== Finished) . competitionState . entityVal
 
 displayCompetition :: Competition -> String
 displayCompetition competition = name ++ ", " ++ date
@@ -29,21 +29,15 @@ displayCompetition competition = name ++ ", " ++ date
 
 instance ToJSON Score where
   toJSON score = object
-    [ "rid"      .= (String $ toPathPiece $ scoreRoundId score)
-    , "hid"   .= (String $ toPathPiece $ scoreHoleId score)
+    [ "rid" .= (String $ toPathPiece $ scoreRoundId score)
+    , "hid" .= (String $ toPathPiece $ scoreHoleId score)
     , "score" .= (show $ scoreScore score)
-    ]
-
-instance ToJSON User where
-  toJSON user = object
-    [ "name"      .= (show $ userName user)
-    , "email"   .= (show $ userEmail user)
     ]
 
 instance ToJSON Round where
   toJSON round_ = object
-    [ "uid"      .= (String $ toPathPiece $ roundUserId round_)
-    , "cid"   .= (String $ toPathPiece $ roundCompetitionId round_)
+    [ "uid" .= (String $ toPathPiece $ roundUserId round_)
+    , "cid" .= (String $ toPathPiece $ roundCompetitionId round_)
     , "state" .= (show $ roundState round_)
     , "number" .= (show $ roundRoundnumber round_)
     , "group" .= (show $ roundGroupnumber round_)

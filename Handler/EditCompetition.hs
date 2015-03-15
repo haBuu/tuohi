@@ -4,7 +4,7 @@ import Import
 import qualified Datepicker
 import Helpers
 import Handler.Forms
-import Handler.CompetitionState
+import Model.CompetitionState
 
 getEditCompetitionR :: CompetitionId -> Handler Html
 getEditCompetitionR cid = do

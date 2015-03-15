@@ -2,12 +2,9 @@ module Handler.Permissions where
 
 import Import
 
-import Permission
-
 getPermissionsR :: Handler Html
 getPermissionsR = do
-  admins <- runDB $ selectList [UserAdmin ==. True] [Asc UserName]
-  let permissions = [minBound..] :: [Permission]
+  permissions <- runDB $ selectList [] [Asc PermissionUserId]
   defaultLayout $ do
     setTitleI MsgPermissions
     $(widgetFile "permissions")

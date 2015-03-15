@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Handler.RoundState where
+module Model.RoundState where
 
 import Database.Persist.TH
 import Prelude

@@ -3,7 +3,7 @@ module Handler.Home where
 
 import Import
 
-import Handler.CompetitionState
+import Model.CompetitionState
 import Database
 import Data.Time.LocalTime
 import qualified Database.Esqueleto as E

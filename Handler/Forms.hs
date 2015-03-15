@@ -6,10 +6,10 @@ import Import hiding(for)
 import Yesod.Form.Bootstrap3
 import qualified Data.Text as T
 
-import Handler.CompetitionState
+import Model.CompetitionState
 import DivisionMessages
 import qualified Handler.Division as D
-import Permission
+import Model.Permission
 import Helpers
 
 -- form handler with default action for FormFailure and FormMissing
@@ -382,7 +382,7 @@ profileForm user = do
     <*  bootstrapSubmit (submitButton MsgUpdate)
 
 userForm :: User -> Html
-  -> MForm Handler (FormResult (Text, Text, Bool, [Permission]), Widget)
+  -> MForm Handler (FormResult (Text, Text, Bool), Widget)
 userForm user extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
@@ -391,9 +391,7 @@ userForm user extra = do
     (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) (Just $ userEmail user)
   (adminRes, adminView) <- mreq checkBoxField
     "" (Just $ userAdmin user)
-  (perRes, perView) <- mreq (checkboxesField permissions)
-    "" (Just $ userPermissions user)
-  let result = (,,,) <$> nameRes <*> emailRes <*> adminRes <*> perRes
+  let result = (,,) <$> nameRes <*> emailRes <*> adminRes
   let widget = [whamlet|
         #{extra}
         <div .form-group>
@@ -407,16 +405,9 @@ userForm user extra = do
             <label>
               ^{fvInput adminView}_{MsgAdmin}
         <div .form-group>
-          ^{fvInput perView}
-        <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdate}>
       |]
   return (result, widget)
-  where
-    permissions :: Handler (OptionList Permission)
-    permissions = do
-      optionsPairs $ for [minBound..] $
-        \permission -> (T.pack $ show permission, permission)
 
 tempAuthForm :: Handler ((FormResult Text, Widget), Enctype)
 tempAuthForm = do

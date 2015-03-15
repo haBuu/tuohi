@@ -10,7 +10,7 @@ import Handler.Forms
 import qualified Database.Esqueleto as E
 import Database
 import DivisionMessages
-import Handler.CompetitionState
+import Model.CompetitionState
 
 deleteSignUpR :: SignUpId -> Handler Html
 deleteSignUpR sid = do

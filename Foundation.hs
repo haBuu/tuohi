@@ -26,15 +26,15 @@ import qualified Yesod.Form.I18n.Finnish as FF
 -- starts running, such as database connections. Every handler will have
 -- access to the data present here.
 data App = App
-    { appSettings    :: AppSettings
-    , appStatic      :: Static -- ^ Settings for static file serving.
-    , appConnPool    :: ConnectionPool -- ^ Database connection pool.
-    , appHttpManager :: Manager
-    , appLogger      :: Logger
-    }
+  { appSettings    :: AppSettings
+  , appStatic      :: Static -- ^ Settings for static file serving.
+  , appConnPool    :: ConnectionPool -- ^ Database connection pool.
+  , appHttpManager :: Manager
+  , appLogger      :: Logger
+  }
 
 instance HasHttpManager App where
-    getHttpManager = appHttpManager
+  getHttpManager = appHttpManager
 
 -- Set up i18n messages. See the message folder.
 -- yesod will overwrite this if it detects finnish
@@ -253,9 +253,8 @@ instance YesodAuthEmail App where
 
   afterPasswordRoute _ = HomeR
 
-  addUnverified email verkey =
-    runDB $ insert $
-      User "N/A" email Nothing (Just verkey) False False False []
+  addUnverified email verkey = runDB $ insert $
+    User "N/A" email Nothing (Just verkey) False False False
 
   sendVerifyEmail email _ verurl = do
     liftIO $ print verurl
