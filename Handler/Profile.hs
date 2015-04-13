@@ -8,6 +8,7 @@ import qualified Database.Esqueleto as E
 import Database
 import Helpers
 import qualified Error as E
+import Model.User
 
 getProfileR :: Handler Html
 getProfileR = do
@@ -26,9 +27,6 @@ postProfileR = do
   formHandler result $ \(name, email) -> do
     -- check that the email does not exist
     handle E.emailExists $ do
-      runDB $ update uid
-        [ UserName =. name
-        , UserEmail =. email
-        ]
+      updateProfile uid name email
       setMessageI MsgProfileUpdated
   redirect ProfileR

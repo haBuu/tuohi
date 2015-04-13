@@ -2,3 +2,14 @@
   ^{formWidget}
 
 <a href=@{UsersR} .btn .btn-default .btn-block .btn-lg>_{MsgCancel}
+
+<ul .list-group>
+  <div .panel .panel-primary>
+    <div .panel-heading>_{MsgPermissions}
+    $forall t <- types
+      <li .list-group-item>
+        <div class="checkbox">
+          $if elem t $ map (permissionType . entityVal) permissions
+            <label><input type="checkbox" checked>#{show t}
+          $else
+            <label><input type="checkbox">#{show t}

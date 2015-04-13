@@ -5,10 +5,15 @@ import Import
 import Handler.Forms
 import Database
 import qualified Error as E
+import Model.Permission
+import Model.User
 
 getUserR :: UserId -> Handler Html
 getUserR uid = do
   user <- runDB $ get404 uid
+  let types = [minBound..]
+  permissions <- runDB $ selectList
+    [PermissionUserId ==. uid] [Asc PermissionType]
   ((_, formWidget), formEnctype) <- runFormPost $ userForm user
   defaultLayout $ do
     setTitleI MsgUser
@@ -21,10 +26,6 @@ postUserR uid = do
   formHandler result $ \(name, email, admin) -> do
     -- check that the email does not exist
     handle E.emailExists $ do
-      runDB $ update uid
-        [ UserName =. name
-        , UserEmail =. email
-        , UserAdmin =. admin
-        ]
+      updateUser uid name email admin
       setMessageI MsgUserUpdatedSuccess
   redirect $ UserR uid
