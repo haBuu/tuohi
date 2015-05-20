@@ -122,10 +122,11 @@ startCompetition cid = runDB $ do
 
 -- select started rounds for given competition with user names
 roundsWithNames :: CompetitionId
-  -> Handler [(E.Value (Key Round), E.Value Int, E.Value Int, E.Value Text)]
+  -> Handler [(E.Value (Key Round), E.Value Int, E.Value Int, E.Value Text, E.Value Division)]
 roundsWithNames cid = runDB $ E.select $
-  E.from $ \(round_ `E.InnerJoin` user) -> do
-    E.on $ round_ ^. RoundUserId E.==. user ^. UserId
+  E.from $ \(round_, user, signUp) -> do
+    E.where_ $ round_ ^. RoundUserId E.==. user ^. UserId
+    E.where_ $ signUp ^. SignUpUserId E.==. user ^. UserId
     E.where_ $ round_ ^. RoundCompetitionId E.==. E.val cid
     E.where_ $ round_ ^. RoundState E.==. E.val R.Started
     E.orderBy [E.asc (round_ ^. RoundGroupnumber)]
@@ -134,6 +135,7 @@ roundsWithNames cid = runDB $ E.select $
       , round_ ^. RoundRoundnumber
       , round_ ^. RoundGroupnumber
       , user ^. UserName
+      , signUp ^. SignUpDivision
       )
 
 -- select dnf rounds with user names
@@ -257,7 +259,9 @@ handicapScores uid sid date = runDB $ do
   -- competitions with given serie and before date
   competitions <- selectList
     [ CompetitionSerieId ==. Just sid
-    , CompetitionDate <=. date]
+    , CompetitionDate <=. date
+    , CompetitionState ==. Finished
+    ]
     []
   unfiltered <- forM competitions $ \(Entity cid competition) -> do
     -- layout id for this competion

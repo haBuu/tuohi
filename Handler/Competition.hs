@@ -8,6 +8,7 @@ import Data.List(nub)
 import qualified Database.Esqueleto as E
 
 import Handler.Forms
+import Handler.Division
 import Model.CompetitionState
 import Model.RoundState(RoundState(DidNotFinish))
 import Database
@@ -39,14 +40,14 @@ startedPage cid = do
   rounds <- roundsWithNames cid
   dnf <- dnfRoundsWithNames cid
   -- for hamlet so it can put dividers between groups
-  let groups = nub $ for rounds $ \(_,_,E.Value g,_) -> g
+  let groups = nub $ for rounds $ \(_, _, E.Value g, _, _) -> g
       mround = safeHead rounds
-      currentRound_ = maybe 1 (\(_, E.Value r, _, _) -> r) mround
+      currentRound_ = maybe 1 (\(_, E.Value r, _, _, _) -> r) mround
   -- get score count for each player so we can display
   -- labels for how many holes they have played
   -- this could be done with the same query where we get the rounds
   scoreCounts <- forM rounds $
-    \(E.Value rid, _, _, _) -> scoreCount rid
+    \(E.Value rid, _, _, _, _) -> scoreCount rid
   -- how many holes does the layout have
   count_ <- holeCount $ competitionLayoutId competition
   -- compine rounds and score counts
@@ -69,7 +70,7 @@ postCompetitionFinishR cid = do
   formHandler result $ \res -> do
     finishCompetition res
     setMessageI MsgCompetitionFinished
-  redirect $ CompetitionR cid
+  redirect AdminR
 
 postCompetitionR :: CompetitionId -> Handler Html
 postCompetitionR cid = do

@@ -15,13 +15,14 @@ $forall group <- groups
       _{MsgGroup} #{group}
     <table .table>
       <tbody>
-        $forall ((E.Value rid, E.Value _, E.Value groupNumber, E.Value name), scoreCount) <- roundsAndScores
+        $forall ((E.Value rid, E.Value _, E.Value groupNumber, E.Value name, E.Value division), scoreCount) <- roundsAndScores
           $if group == groupNumber
             <tr data-rid=#{show rid} data-url=@{ChangeGroupR cid rid}>
               <td .middle #player-name>
                 #{name}
               <td>
                 <div .pull-right>
+                  <span .label .label-info .label-lg>#{show division}
                   $if scoreCount == count_
                     <span .label .label-success .label-lg>#{scoreCount}
                   $else
