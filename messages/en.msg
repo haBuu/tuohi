@@ -13,6 +13,8 @@ Round: Round
 Total: Total
 MPO: Open
 FPO: Women
+MJ2: Junior-16
+MPM: Master
 Password: Password
 Courses: Courses
 Series: Series

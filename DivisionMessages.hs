@@ -13,3 +13,5 @@ divisionMsg division =
   case division of
     MPO -> MsgMPO
     FPO -> MsgFPO
+    MJ2 -> MsgMJ2
+    MPM -> MsgMPM

@@ -13,6 +13,8 @@ Round: Kierros
 Total: Yhteensä
 MPO: Avoin
 FPO: Naiset
+MJ2: Juniorit-16
+MPM: Seniorit-40
 Password: Salasana
 Courses: Radat
 Series: Sarjat
