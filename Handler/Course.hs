@@ -21,12 +21,10 @@ postCourseR cid = do
     runDB $ do
       mlid <- insertUnique layout
       case mlid of
+        Nothing -> setMessageI MsgLayoutExists
         Just lid -> do
           -- insert given number of holes with par set to 3
           let holes = for [1..holeCount] $ \n -> Hole lid n 3
           insertMany_ holes
           setMessageI MsgLayoutAdded
-          redirect $ LayoutR cid lid
-        Nothing ->
-          setMessageI MsgLayoutExists
   redirect $ CourseR cid
