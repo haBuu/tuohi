@@ -3,6 +3,10 @@ module Handler.AddPlayer where
 import Import
 import Database
 import Handler.Forms
+import Handler.Division
+import qualified Model.RoundState as R
+import qualified Model.CompetitionState as C
+import Model.User
 
 getAddPlayerR :: CompetitionId -> Handler Html
 getAddPlayerR cid = do
@@ -18,9 +22,47 @@ postAddPlayerR :: CompetitionId -> Handler Html
 postAddPlayerR cid = do
   ((result, _), _) <- runFormPost addPlayerForm
   formHandler result $ \(name, email, division) -> do
-    let checkFull = False
-    msid <- maybeInsertSignUp checkFull cid name email division
-    case msid of
-      Just _ -> setMessageI MsgPlayerAdded
-      Nothing -> setMessageI MsgAddPlayerFail
+    added <- maybeAddNewPlayer cid name email division
+    case added of
+      True -> setMessageI MsgPlayerAdded
+      False -> setMessageI MsgAddPlayerFail
   redirect $ CompetitionR cid
+
+-- adds new player to competition if conditions are met
+-- competition can't be finished
+-- if competition is started round must be one
+-- returns true if the player was added, false otherwise
+maybeAddNewPlayer :: CompetitionId -> Text -> Text -> Division
+  -> Handler Bool
+maybeAddNewPlayer cid name email division = do
+  -- check that current round is one or return 400
+  mround <- currentRound cid
+  case mround of
+    -- no round started so everything is good
+    Nothing -> return ()
+    -- round one started so everything is good
+    Just 1 -> return ()
+    -- higher round started so can't add new player
+    _ -> invalidArgsI [MsgNotRoundOne]
+  competition <- runDB $ get404 cid
+  case competitionState competition of
+    -- can't add player to finished competition
+    C.Finished -> return False
+    -- if competition not started only add sign up
+    C.Init -> do
+      msid <- insertSignUp cid name email division
+      return $ isJust msid
+    -- if competition started we also need to add player to a group
+    C.Started -> do
+      uid <- insertUser name email
+      msid <- runDB $ insertUnique $ SignUp uid cid True division
+      case msid of
+        Just _ -> do
+          mgroup <- addToCompetition uid cid
+          return $ isJust mgroup
+        Nothing -> return False
+
+-- add player to group one and round one
+addToCompetition :: UserId -> CompetitionId -> Handler (Maybe RoundId)
+addToCompetition uid cid = runDB $ insertUnique $
+  Round uid cid R.Started 1 1

@@ -14,7 +14,6 @@ getResultsR :: CompetitionId -> Handler Html
 getResultsR cid = do
   competition <- runDB $ get404 cid
   let lid = competitionLayoutId competition
-  layout <- runDB $ get404 lid
   holes <- runDB $ selectList
     [HoleLayoutId ==. lid] [Asc HoleNumber]
   players <- playersAndScores cid

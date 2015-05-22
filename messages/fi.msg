@@ -113,3 +113,4 @@ EditCompetition: Muokkaa kilpailua
 CompetitionUpdated: Kilpailu päivitetty
 CompetitionStartedError: Et voi muokata aloitettua kilpailua
 InputScores: Syötä tuloksia
+NotRoundOne: Voit lisätä pelaajan vain ensimmäiselle kierrokselle

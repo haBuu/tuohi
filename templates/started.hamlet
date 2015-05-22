@@ -3,6 +3,9 @@
 <form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
   ^{nextRoundFormWidget}
 
+$if currentRound_ == 1
+  <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+
 <div .panel .panel-info>
   <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
 
