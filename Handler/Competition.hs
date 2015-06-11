@@ -4,6 +4,7 @@ module Handler.Competition where
 import Import hiding(for)
 
 import Data.List(nub)
+import Data.Time.LocalTime
 
 import qualified Database.Esqueleto as E
 
@@ -35,6 +36,8 @@ initPage cid = do
 startedPage :: CompetitionId -> Handler Html
 startedPage cid = do
   competition <- runDB $ get404 cid
+  mScoreUpdate <- runDB $ selectFirst
+    [ScoreUpdateLogCompetitionId ==. cid] []
   ((_, nextRoundFormWidget), nextRoundFormEnctype) <- nextRoundForm cid
   ((_, finishFormWidget), finishFormEnctype) <- finishCompetitionForm cid
   rounds <- roundsWithNames cid
@@ -94,3 +97,14 @@ postDnfRoundR :: RoundId -> Handler Html
 postDnfRoundR rid = do
   runDB $ update rid [RoundState =. DidNotFinish]
   redirect AdminR
+
+getScoreLog :: CompetitionId -> Handler Html
+getScoreLog cid = do
+  competition <- runDB $ get404 cid
+  scoreUpdateLog <- scoreLogWithNames cid
+  -- scoreUpdateLog <- runDB $ selectList
+    -- [ScoreUpdateLogCompetitionId ==. cid] [Asc ScoreUpdateLogTime]
+  tz <- liftIO getCurrentTimeZone
+  defaultLayout $ do
+    setTitleI MsgAdminPanel
+    $(widgetFile "score-log")

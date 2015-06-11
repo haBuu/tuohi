@@ -114,3 +114,11 @@ CompetitionUpdated: Competition updated
 CompetitionStartedError: You are not allowed to modify competition once it is started
 InputScores: Input scores
 NotRoundOne: You can only add player to the first round
+ScoreInputNotAllowed: Score input is not allowed
+ConfirmEmailSignature: Thank you
+ConfirmEmailMessage: Please confirm your email address by clicking on the link below.
+ScoreLog: Score log
+UpdatedScores: Updates scores
+Player: Player
+Time: Time
+New: New

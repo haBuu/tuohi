@@ -12,6 +12,10 @@ $if currentRound_ == 1
 <div .panel .panel-info>
   <div .panel-heading>_{MsgRound}: #{currentRound_}
 
+$maybe _ <- mScoreUpdate
+  <a href=@{ScoreLog cid} .btn .btn-warning .btn-block .btn-lg>_{MsgScoreLog}
+
+
 $forall group <- groups
   <div .panel .panel-primary>
     <div .panel-heading #group data-group=#{show group}>

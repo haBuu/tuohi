@@ -114,3 +114,11 @@ CompetitionUpdated: Kilpailu päivitetty
 CompetitionStartedError: Et voi muokata aloitettua kilpailua
 InputScores: Syötä tuloksia
 NotRoundOne: Voit lisätä pelaajan vain ensimmäiselle kierrokselle
+ScoreInputNotAllowed: Tuloksen syöttäminen ei ole sallittua
+ConfirmEmailSignature: Kiitos
+ConfirmEmailMessage: Vahvista sähköpostiosoitteesi painamalla alla olevaa linkkiä.
+ScoreLog: Tulosloki
+UpdatedScores: Muokatut tulokset
+Player: Pelaaja
+Time: Aika
+New: Uusi

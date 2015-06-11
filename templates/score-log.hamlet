@@ -1,0 +1,24 @@
+<h3 .page-header>#{displayCompetition competition}
+
+<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>
+  _{MsgBack}
+
+<div .panel .panel-primary>
+  <div .panel-heading>_{MsgUpdatedScores}
+  <div .table-responsive>
+    <table .table>
+      <thead>
+        <tr>
+          <th>_{MsgPlayer}
+          <th>_{MsgHole}
+          <th>_{MsgTime}
+          <th>_{MsgPrevious}
+          <th>_{MsgNew}
+        <tbody>
+          $forall (E.Value name, E.Value hole, E.Value time, E.Value old, E.Value new) <- scoreUpdateLog
+            <tr>
+              <td>#{name}
+              <td>#{show hole}
+              <td>#{showTime tz time}
+              <td>#{show old}
+              <td>#{show new}

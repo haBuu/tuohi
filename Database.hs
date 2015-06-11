@@ -259,7 +259,7 @@ handicapScores uid sid date = runDB $ do
   -- competitions with given serie and before date
   competitions <- selectList
     [ CompetitionSerieId ==. Just sid
-    , CompetitionDate <=. date
+    , CompetitionDate <. date
     , CompetitionState ==. Finished
     ]
     []
@@ -282,6 +282,24 @@ finishedRounds uid cid = selectList
   >>= mapM (\(Entity rid round_) -> do
     scores <- selectList [ScoreRoundId ==. rid] []
     return (round_, map entityVal scores))
+
+scoreLogWithNames :: CompetitionId
+  -> Handler [(E.Value Text, E.Value Int, E.Value UTCTime, E.Value Int, E.Value Int)]
+scoreLogWithNames cid = runDB $ E.select $
+  E.from $ \(update, score, hole, round_, user) -> do
+    E.where_ $ update ^. ScoreUpdateLogScoreId E.==. score ^. ScoreId
+    E.where_ $ update ^. ScoreUpdateLogCompetitionId E.==. E.val cid
+    E.where_ $ score ^. ScoreHoleId E.==. hole ^. HoleId
+    E.where_ $ score ^. ScoreRoundId E.==. round_ ^. RoundId
+    E.where_ $ round_ ^. RoundUserId E.==. user ^. UserId
+    E.orderBy [E.asc (user ^. UserName), E.asc (hole ^. HoleNumber)]
+    return
+      ( user ^. UserName
+      , hole ^. HoleNumber
+      , update ^. ScoreUpdateLogTime
+      , update ^. ScoreUpdateLogOld
+      , update ^. ScoreUpdateLogNew
+      )
 
 holeCount :: LayoutId -> Handler Int
 holeCount lid = runDB $ count [HoleLayoutId ==. lid]
