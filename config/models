@@ -1,8 +1,8 @@
 User
   name Text
   email Text
-  password Text Maybe -- Password may not be set yet
-  verkey Text Maybe -- Used for resetting passwords
+  password Text Maybe
+  verkey Text Maybe
   verified Bool default=False
   admin Bool default=False
   superAdmin Bool default=False
@@ -16,7 +16,7 @@ Competition
   date Day
   name Text
   playerLimit Int
-  state CompetitionState default=Init
+  state CompetitionState
   password Text
   serieId SerieId Maybe
   UniqueCompetition layoutId date name
@@ -31,14 +31,14 @@ SignUp
   userId UserId
   competitionId CompetitionId
   confirmed Bool default=False
-  division Division default=MPO
+  division Division
   UniqueSignUp userId competitionId
   deriving Show
 
 Round
   userId UserId
   competitionId CompetitionId
-  state RoundState default=Started
+  state RoundState
   roundnumber Int
   groupnumber Int
   UniqueRound userId competitionId roundnumber
@@ -49,6 +49,14 @@ Score
   holeId HoleId
   score Int
   UniqueScore roundId holeId
+  deriving Show
+
+ScoreUpdateLog
+  scoreId ScoreId
+  competitionId CompetitionId
+  time UTCTime
+  old Int
+  new Int
   deriving Show
 
 Course
@@ -75,10 +83,6 @@ Notification
   user UserId
   date UTCTime
   deriving Show
-
---SignUpEmailReminder
---  userId UserId
---  deriving Show
 
 Permission
   userId UserId

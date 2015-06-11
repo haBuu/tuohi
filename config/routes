@@ -47,6 +47,8 @@
 /admin/competition/#CompetitionId/nextround CompetitionNextRoundR POST
 /admin/competition/#CompetitionId/finish CompetitionFinishR POST
 
+/admin/competition/#CompetitionId/scorelog ScoreLog GET
+
 /admin/addplayer/#CompetitionId AddPlayerR GET POST
 
 /admin/users UsersR GET
