@@ -14,11 +14,12 @@ import Model.CompetitionState
 
 deleteSignUpR :: SignUpId -> Handler Html
 deleteSignUpR sid = do
-  signup <- runDB $ get404 sid
-  competition <- runDB $ get404 $ signUpCompetitionId signup
-  -- allow deleting of signup only from competitions
-  -- that are in state Init
-  when (competitionState competition == Init) $ runDB $ delete sid
+  runDB $ do
+    signup <- get404 sid
+    competition <- get404 $ signUpCompetitionId signup
+    -- allow deleting of signup only from competitions
+    -- that are in state Init
+    when (competitionState competition == Init) $ delete sid
   redirect HomeR
 
 getSignUpsR :: CompetitionId -> Handler Html

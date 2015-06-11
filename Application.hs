@@ -13,12 +13,11 @@ module Application
     ) where
 
 import Control.Monad.Logger                 (liftLoc, runLoggingT)
-import Database.Persist.Sql                 (runMigrationUnsafe)
-import Database.Persist.Sqlite              (createSqlitePool, runSqlPool,
-                                             sqlDatabase, sqlPoolSize)
+import Database.Persist.MySQL               (createMySQLPool, runSqlPool,
+                                             myConnInfo, myPoolSize)
 import Import
 import Language.Haskell.TH.Syntax           (qLocation)
-import Network.Wai.Handler.Warp             (Settings, defaultSettings,
+import Network.Wai.Handler.Warp             (Settings, runSettings, defaultSettings,
                                              defaultShouldDisplayException,
                                              setHost, setPort,
                                              setOnException, getPort)
@@ -88,15 +87,12 @@ makeFoundation appSettings = do
       tempFoundation = mkFoundation $ error "connPool forced in tempFoundation"
       logFunc = messageLoggerSource tempFoundation appLogger
 
-  -- Create the database connection pool
-  pool <- flip runLoggingT logFunc $ createSqlitePool
-    (sqlDatabase $ appDatabaseConf appSettings)
-    (sqlPoolSize $ appDatabaseConf appSettings)
+  pool <- flip runLoggingT logFunc $ createMySQLPool
+    (myConnInfo $ appDatabaseConf appSettings)
+    (myPoolSize $ appDatabaseConf appSettings)
 
   -- Perform database migration using our application's logging settings.
   runLoggingT (runSqlPool (runMigration migrateAll) pool) logFunc
-  -- runLoggingT (runSqlPool (runMigrationUnsafe migrateAll) pool) logFunc
-
 
   -- Return the foundation
   return $ mkFoundation pool
@@ -172,8 +168,11 @@ appMain = do
   -- Generate a WAI Application from the foundation
   app <- makeApplication foundation
 
+  -- Run the application with Warp
+  runSettings (warpSettings foundation) app
+
   -- Run the application with Warp-TLS
-  runTLS warpTLSSettings (warpSettings foundation) app
+  -- runTLS warpTLSSettings (warpSettings foundation) app
 
 
 --------------------------------------------------------------
