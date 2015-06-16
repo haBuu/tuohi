@@ -123,3 +123,4 @@ Player: Player
 Time: Time
 New: New
 ConfirmNextRoundTitle: Confirm the change to next round
+ConfirmFinishCompetitionTitle: Confirm the finishing of the competition

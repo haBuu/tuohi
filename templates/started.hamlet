@@ -43,7 +43,7 @@ $forall group <- groups
     $forall (E.Value _, E.Value name) <- dnf
       <li .list-group-item>#{name}
 
-<form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
+<form #finish-competition-form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
   ^{finishFormWidget}
 
 <div #confirm-player-remove .modal>
@@ -62,6 +62,15 @@ $forall group <- groups
     <div .modal-content>
       <div .modal-header>
         <h4 .modal-title>_{MsgConfirmNextRoundTitle}
+      <div .modal-footer>
+        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
+        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
+
+<div #confirm-finish-competition .modal>
+  <div .modal-dialog>
+    <div .modal-content>
+      <div .modal-header>
+        <h4 .modal-title>_{MsgConfirmFinishCompetitionTitle}
       <div .modal-footer>
         <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
         <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}

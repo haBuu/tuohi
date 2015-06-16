@@ -123,3 +123,4 @@ Player: Pelaaja
 Time: Aika
 New: Uusi
 ConfirmNextRoundTitle: Vahvista seuraavalle kierrokselle siirtyminen
+ConfirmFinishCompetitionTitle: Vahvista kilpailun lopetus

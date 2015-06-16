@@ -2,12 +2,14 @@
 
   var dnfListPanel = $("ul#dnf-list div.panel");
   var dnfButtons = $("table button#dnf-round");
-  var nextRoundButton = $("form button");
+  var nextRoundButton = $("form#next-round-form button");
+  var finishCompetitionButton = $("form#finish-competition-form button");
 
   var selectedPlayer = undefined;
 
   var confirmModalPlayer = $('div#confirm-player-remove');
   var confirmModalNextRound = $('div#confirm-next-round');
+  var confirmModalFinishCompetition = $('div#confirm-finish-competition');
 
   $('body').on("click", "table td#player-name", function() {
     var self = $(this);
@@ -76,6 +78,14 @@
     confirmModalNextRound.modal({ backdrop: 'static', keyboard: false })
       .one('click', '#confirm-button', function (e) {
         $("form#next-round-form").submit();
+      });
+  });
+
+  finishCompetitionButton.on("click", function(e) {
+    e.preventDefault();
+    confirmModalFinishCompetition.modal({ backdrop: 'static', keyboard: false })
+      .one('click', '#confirm-button', function (e) {
+        $("form#finish-competition-form").submit();
       });
   });
 
