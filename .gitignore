@@ -3,6 +3,7 @@ static/tmp/
 static/combined/
 config/client_session_key.aes
 config/settings-prod.yml
+config/settings-dev.yml
 *.hi
 *.o
 *.sqlite3
