@@ -59,6 +59,8 @@ startedPage cid = do
     setTitleI MsgAdminPanel
     $(widgetFile "started")
 
+-- TODO: check that all the scores have been inserted or
+-- DNF players marked before accepting change to next round
 postCompetitionNextRoundR :: CompetitionId -> Handler Html
 postCompetitionNextRoundR cid = do
   ((result, _), _) <- nextRoundForm cid

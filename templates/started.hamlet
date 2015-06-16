@@ -1,6 +1,6 @@
 <h3 .page-header>#{displayCompetition competition}
 
-<form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
+<form #next-round-form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
   ^{nextRoundFormWidget}
 
 $if currentRound_ == 1
@@ -46,13 +46,22 @@ $forall group <- groups
 <form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
   ^{finishFormWidget}
 
-<div #confirm .modal>
+<div #confirm-player-remove .modal>
   <div .modal-dialog>
     <div .modal-content>
       <div .modal-header>
         <h4 .modal-title>_{MsgConfirmPlayerRemoveTitle}
       <div .modal-body>
         <p>
+      <div .modal-footer>
+        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
+        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
+
+<div #confirm-next-round .modal>
+  <div .modal-dialog>
+    <div .modal-content>
+      <div .modal-header>
+        <h4 .modal-title>_{MsgConfirmNextRoundTitle}
       <div .modal-footer>
         <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
         <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}

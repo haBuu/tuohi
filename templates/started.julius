@@ -2,10 +2,12 @@
 
   var dnfListPanel = $("ul#dnf-list div.panel");
   var dnfButtons = $("table button#dnf-round");
+  var nextRoundButton = $("form button");
 
   var selectedPlayer = undefined;
 
-  var confirmModal = $('div#confirm');
+  var confirmModalPlayer = $('div#confirm-player-remove');
+  var confirmModalNextRound = $('div#confirm-next-round');
 
   $('body').on("click", "table td#player-name", function() {
     var self = $(this);
@@ -50,8 +52,8 @@
     var item = self.parent().parent().parent();
     var url = self.data("url");
     var name = item.find("td#player-name").text();
-    confirmModal.find("div.modal-body p").text(name);
-    confirmModal.modal({ backdrop: 'static', keyboard: false })
+    confirmModalPlayer.find("div.modal-body p").text(name);
+    confirmModalPlayer.modal({ backdrop: 'static', keyboard: false })
       .one('click', '#confirm-button', function (e) {
         // remove from db
         $.ajax({
@@ -66,6 +68,14 @@
             }).appendTo(dnfListPanel);
           }
         });
+      });
+  });
+
+  nextRoundButton.on("click", function(e) {
+    e.preventDefault();
+    confirmModalNextRound.modal({ backdrop: 'static', keyboard: false })
+      .one('click', '#confirm-button', function (e) {
+        $("form#next-round-form").submit();
       });
   });
 

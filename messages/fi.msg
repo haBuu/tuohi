@@ -122,3 +122,4 @@ UpdatedScores: Muokatut tulokset
 Player: Pelaaja
 Time: Aika
 New: Uusi
+ConfirmNextRoundTitle: Vahvista seuraavalle kierrokselle siirtyminen

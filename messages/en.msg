@@ -122,3 +122,4 @@ UpdatedScores: Updates scores
 Player: Player
 Time: Time
 New: New
+ConfirmNextRoundTitle: Confirm the change to next round
