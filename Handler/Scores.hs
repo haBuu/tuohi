@@ -17,7 +17,7 @@ getScoresR cid = do
   holes <- runDB $ selectList
     [HoleLayoutId ==. lid] [Asc HoleNumber]
   let layoutPar = countPar holes
-  curRound <- currentRound cid
+  curRound <- runDB $ currentRound cid
   let roundCount = maybe 1 id curRound
   players <- playersAndScores cid
   let sortedPlayers = addPlacements holes $ playerSort holes players
@@ -49,15 +49,20 @@ requireStarted round_ = unless (roundState round_ == Started) $
   permissionDeniedI MsgScoreInputNotAllowed
 
 insertScore :: CompetitionId -> Score -> Handler ()
-insertScore cid score = runDB $ do
-  eScore <- insertBy score
-  case eScore of
-    -- new score was added
-    Right _ -> return ()
-    -- update existing score and log update
-    Left (Entity key prev) -> do
-      let new = scoreScore score
-          old = scoreScore prev
-      update key [ScoreScore =. scoreScore score]
-      time <- liftIO getCurrentTime
-      insert_ $ ScoreUpdateLog key cid time old new
+insertScore cid score = runDB $
+  -- score 0 is special value for deleting scores
+  if scoreScore score == 0
+    then deleteBy $ UniqueScore (scoreRoundId score) (scoreHoleId score)
+    else do
+      eScore <- insertBy score
+      case eScore of
+        -- new score was added
+        Right _ -> return ()
+        -- update existing score and log update if the score changed
+        Left (Entity key prev) -> do
+          let new = scoreScore score
+              old = scoreScore prev
+          when (old /= new) $ do
+            update key [ScoreScore =. scoreScore score]
+            time <- liftIO getCurrentTime
+            insert_ $ ScoreUpdateLog key cid time old new
