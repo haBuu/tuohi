@@ -5,13 +5,14 @@ import Import hiding(for)
 
 import Data.List(nub)
 import Data.Time.LocalTime
+import qualified Data.Text as T
 
 import qualified Database.Esqueleto as E
 
 import Handler.Forms
 import Handler.Division
 import Model.CompetitionState
-import Model.RoundState(RoundState(DidNotFinish))
+import qualified Model.RoundState as R
 import Database
 import Helpers
 
@@ -21,7 +22,7 @@ getCompetitionR cid = do
   case competitionState competition of
     Init -> initPage cid
     Started -> startedPage cid
-    Finished -> notFound
+    Finished -> redirect AdminR
 
 initPage :: CompetitionId -> Handler Html
 initPage cid = do
@@ -50,7 +51,7 @@ startedPage cid = do
   -- labels for how many holes they have played
   -- this could be done with the same query where we get the rounds
   scoreCounts <- forM rounds $
-    \(E.Value rid, _, _, _, _) -> scoreCount rid
+    \(E.Value rid, _, _, _, _) -> roundScoreCount rid
   -- how many holes does the layout have
   count_ <- holeCount $ competitionLayoutId competition
   -- compine rounds and score counts
@@ -59,23 +60,31 @@ startedPage cid = do
     setTitleI MsgAdminPanel
     $(widgetFile "started")
 
--- TODO: check that all the scores have been inserted or
--- DNF players marked before accepting change to next round
 postCompetitionNextRoundR :: CompetitionId -> Handler Html
 postCompetitionNextRoundR cid = do
   ((result, _), _) <- nextRoundForm cid
   formHandler result $ \res -> do
-    nextRound res
-    setMessageI MsgNextRoundChanged
+    allScores <- allScoresInserted res
+    if allScores
+      then do
+        nextRound res
+        setMessageI MsgNextRoundChanged
+      else
+        setMessageI MsgNextRoundScoresMissing
   redirect $ CompetitionR cid
 
 postCompetitionFinishR :: CompetitionId -> Handler Html
 postCompetitionFinishR cid = do
   ((result, _), _) <- finishCompetitionForm cid
   formHandler result $ \res -> do
-    finishCompetition res
-    setMessageI MsgCompetitionFinished
-  redirect AdminR
+    allScores <- allScoresInserted cid
+    if allScores
+      then do
+        finishCompetition res
+        setMessageI MsgCompetitionFinished
+      else
+        setMessageI MsgFinishCompetitionScoresMissing
+  redirect $ CompetitionR cid
 
 postCompetitionR :: CompetitionId -> Handler Html
 postCompetitionR cid = do
@@ -97,16 +106,36 @@ postRemoveSignUpR sid = do
 
 postDnfRoundR :: RoundId -> Handler Html
 postDnfRoundR rid = do
-  runDB $ update rid [RoundState =. DidNotFinish]
+  runDB $ update rid [RoundState =. R.DidNotFinish]
   redirect AdminR
 
 getScoreLog :: CompetitionId -> Handler Html
 getScoreLog cid = do
   competition <- runDB $ get404 cid
   scoreUpdateLog <- scoreLogWithNames cid
-  -- scoreUpdateLog <- runDB $ selectList
-    -- [ScoreUpdateLogCompetitionId ==. cid] [Asc ScoreUpdateLogTime]
   tz <- liftIO getCurrentTimeZone
   defaultLayout $ do
     setTitleI MsgAdminPanel
     $(widgetFile "score-log")
+
+allScoresInserted :: CompetitionId -> Handler Bool
+allScoresInserted cid = runDB $ do
+  mround <- currentRound cid
+  case mround of
+    Nothing -> return False
+    Just r -> do
+      competition <- get404 cid
+      let lid = competitionLayoutId competition
+      holes <- count [HoleLayoutId ==. lid]
+      rounds <- count $
+        [ RoundCompetitionId ==. cid
+        , RoundRoundnumber ==. r
+        , RoundState ==. R.Started
+        ]
+      -- how many scores are expected to be inserted
+      let expectedScores = holes * rounds
+      -- count scores from started rounds in this round
+      x <- scoreCount cid r
+      return $ case x of
+        [E.Value scores] -> scores == expectedScores
+        _ -> False -- this should not be reached

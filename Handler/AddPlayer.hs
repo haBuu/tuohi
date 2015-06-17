@@ -36,7 +36,7 @@ maybeAddNewPlayer :: CompetitionId -> Text -> Text -> Division
   -> Handler Bool
 maybeAddNewPlayer cid name email division = do
   -- check that current round is one or return 400
-  mround <- currentRound cid
+  mround <- runDB $ currentRound cid
   case mround of
     -- no round started so everything is good
     Nothing -> return ()

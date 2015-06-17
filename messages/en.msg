@@ -69,6 +69,8 @@ CompetitionAdded: Competition added
 CompetitionStarted: Competition started
 CompetitionFinished: Competition finished
 NextRoundChanged: Next round changed
+NextRoundScoresMissing: Next round could not be changed because not all scores have been inserted
+FinishCompetitionScoresMissing: Competition could not be finished because not all scores have been inserted
 ProfileUpdated: Profile updated
 ProfileUpdateFailure: Profile update failed
 Profile: Profile

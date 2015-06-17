@@ -69,6 +69,8 @@ CompetitionAdded: Kilpailu lisätty
 CompetitionStarted: Kilpailu aloitettu
 CompetitionFinished: Kilpailu lopetettu
 NextRoundChanged: Seuraava kierros vaihdettu
+NextRoundScoresMissing: Seuraava kierrosta ei voitu vaihtaa, koska kaikkia tuloksia ei ole lisätty
+FinishCompetitionScoresMissing: Kilpailua ei voitu lopettaa, koska kaikkia tuloksia ei ole lisätty
 ProfileUpdated: Profiili päivitetty
 ProfileUpdateFailure: Profiilin päivitys epäonnistui
 Profile: Profiili

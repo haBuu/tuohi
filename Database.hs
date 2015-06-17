@@ -127,6 +127,7 @@ roundsWithNames cid = runDB $ E.select $
   E.from $ \(round_, user, signUp) -> do
     E.where_ $ round_ ^. RoundUserId E.==. user ^. UserId
     E.where_ $ signUp ^. SignUpUserId E.==. user ^. UserId
+    E.where_ $ signUp ^. SignUpCompetitionId E.==. E.val cid
     E.where_ $ round_ ^. RoundCompetitionId E.==. E.val cid
     E.where_ $ round_ ^. RoundState E.==. E.val R.Started
     E.orderBy [E.asc (round_ ^. RoundGroupnumber)]
@@ -169,11 +170,11 @@ groupWithNames cid groupNumber = runDB $ E.select $
       )
 
 nextRound :: CompetitionId -> Handler ()
-nextRound cid = do
+nextRound cid = runDB $ do
   mroundNumber <- currentRound cid
   case mroundNumber of
     Nothing -> return ()
-    Just roundNumber -> runDB $ do
+    Just roundNumber -> do
       updateWhere
         [ RoundCompetitionId ==. cid
         , RoundRoundnumber ==. roundNumber
@@ -203,7 +204,7 @@ nextRound cid = do
 
 finishCompetition :: CompetitionId -> Handler ()
 finishCompetition cid = do
-  mroundNumber <- currentRound cid
+  mroundNumber <- runDB $ currentRound cid
   -- finish competition
   runDB $ do
     update cid [CompetitionState =. Finished]
@@ -219,9 +220,9 @@ finishCompetition cid = do
 
 -- returns highest round that has state started from
 -- given competition i.e. currently active round
-currentRound :: CompetitionId -> Handler (Maybe Int)
+currentRound :: CompetitionId -> DB (Maybe Int)
 currentRound cid = do
-  mround <- runDB $ selectFirst
+  mround <- selectFirst
     [RoundCompetitionId ==. cid, RoundState ==. R.Started]
     [Desc RoundRoundnumber]
   return $ case mround of
@@ -303,5 +304,14 @@ scoreLogWithNames cid = runDB $ E.select $
 
 holeCount :: LayoutId -> Handler Int
 holeCount lid = runDB $ count [HoleLayoutId ==. lid]
-scoreCount :: RoundId -> Handler Int
-scoreCount rid = runDB $ count [ScoreRoundId ==. rid]
+roundScoreCount :: RoundId -> Handler Int
+roundScoreCount rid = runDB $ count [ScoreRoundId ==. rid]
+
+scoreCount :: CompetitionId -> Int -> DB [E.Value Int]
+scoreCount cid roundNumber = E.select $
+  E.from $ \(score, round_) -> do
+    E.where_ $ score ^. ScoreRoundId E.==. round_ ^. RoundId
+    E.where_ $ round_ ^. RoundCompetitionId E.==. E.val cid
+    E.where_ $ round_ ^. RoundRoundnumber E.==. E.val roundNumber
+    E.where_ $ round_ ^. RoundState E.==. E.val R.Started
+    return E.countRows
