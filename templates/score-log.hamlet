@@ -10,14 +10,16 @@
       <thead>
         <tr>
           <th>_{MsgPlayer}
+          <th>_{MsgRound}
           <th>_{MsgHole}
           <th>_{MsgTime}
           <th>_{MsgPrevious}
           <th>_{MsgNew}
         <tbody>
-          $forall (E.Value name, E.Value hole, E.Value time, E.Value old, E.Value new) <- scoreUpdateLog
+          $forall (E.Value name, E.Value hole, E.Value round_, E.Value time, E.Value old, E.Value new) <- scoreUpdateLog
             <tr>
               <td>#{name}
+              <td>#{show round_}
               <td>#{show hole}
               <td>#{showTime tz time}
               <td>#{show old}

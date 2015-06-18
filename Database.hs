@@ -285,7 +285,7 @@ finishedRounds uid cid = selectList
     return (round_, map entityVal scores))
 
 scoreLogWithNames :: CompetitionId
-  -> Handler [(E.Value Text, E.Value Int, E.Value UTCTime, E.Value Int, E.Value Int)]
+  -> Handler [(E.Value Text, E.Value Int, E.Value Int, E.Value UTCTime, E.Value Int, E.Value Int)]
 scoreLogWithNames cid = runDB $ E.select $
   E.from $ \(update, score, hole, round_, user) -> do
     E.where_ $ update ^. ScoreUpdateLogScoreId E.==. score ^. ScoreId
@@ -297,6 +297,7 @@ scoreLogWithNames cid = runDB $ E.select $
     return
       ( user ^. UserName
       , hole ^. HoleNumber
+      , round_ ^. RoundRoundnumber
       , update ^. ScoreUpdateLogTime
       , update ^. ScoreUpdateLogOld
       , update ^. ScoreUpdateLogNew
