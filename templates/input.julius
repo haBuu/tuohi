@@ -26,6 +26,10 @@ window.onload = function() {
         url: buffer[i].url,
         success: function(data, textStatus, jqXHR) {
           buffer.splice(index, 1);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log("error");
+          $("div#score-input-error").toggleClass('hidden');
         }
       });
     }

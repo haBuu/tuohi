@@ -126,3 +126,4 @@ Time: Aika
 New: Uusi
 ConfirmNextRoundTitle: Vahvista seuraavalle kierrokselle siirtyminen
 ConfirmFinishCompetitionTitle: Vahvista kilpailun lopetus
+ScoreInputError: Tuloksen syöttäminen epäonnistui. Lataa sivu uudestaan.

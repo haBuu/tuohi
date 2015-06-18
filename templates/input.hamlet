@@ -2,7 +2,12 @@
   <div class="tab-content">
     $forall (hole, forms) <- holesAndForms
       <div role="tabpanel" .tab-pane :(hole == 1):.active #hole-#{show hole}>
+
+        <div #score-input-error .hidden .alert .alert-danger role="alert">
+          _{MsgScoreInputError}
+
         <a href=@{GroupsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgGroups}
+
         <h3 .page-header>_{MsgHole} #{show hole}
         $forall ((_, formWidget), formEnctype) <- forms
           <form .form-horizontal method=post enctype=#{formEnctype}>
