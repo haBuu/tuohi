@@ -218,13 +218,11 @@ finishCompetition cid = do
           [RoundState =. R.Finished]
       Nothing -> return ()
 
--- returns highest round that has state started from
--- given competition i.e. currently active round
+-- returns highest round number of the competition
 currentRound :: CompetitionId -> DB (Maybe Int)
 currentRound cid = do
   mround <- selectFirst
-    [RoundCompetitionId ==. cid, RoundState ==. R.Started]
-    [Desc RoundRoundnumber]
+    [RoundCompetitionId ==. cid] [Desc RoundRoundnumber]
   return $ case mround of
     Just (Entity _ round_) -> Just $ roundRoundnumber round_
     Nothing -> Nothing
