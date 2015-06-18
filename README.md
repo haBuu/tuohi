@@ -19,8 +19,8 @@ Puhdas funktionaalinen ohjelmointikieli. Päädyin valitsemaan Haskellin ohjelmo
 ##### Yesod
 Web-ohjelmistokehys Haskell ohjelmointikielelle. Yesod tarjoaa esimerkiksi tyyppiturvalliset url-osoitteet ja tukea XSS- ja CSRF-hyökkäyksiä vastaan. Valitsin Yesodin alustaksi, koska se vaikutti ominaisuuksiltaan parhaimmailta alustalta. Useita kirjastoa ja ominaisuuksia valmiina kuten sessioiden hallinta, sähköposti autentikointi ja eri tietokannat.
 
-##### SQLite
-Sovellus käyttää tiedon tallentamiseen SQLite-tietokantaa. Sovellusta ei ole kuitenkaan sidottu kyseiseen tietokantaan ja sen vaihtaminen tarvittaessa on helppoa.
+##### MySQL/MariaDB
+Sovellus käyttää tiedon tallentamiseen MySQL/MariaDB-tietokantaa. Sovellusta ei ole kuitenkaan sidottu kyseisiinn tietokantoihin ja sen vaihtaminen tarvittaessa on helppoa.
 
 ##### jQuery
 JavaScript-kirjasto HTML-dokumentin muokkaamiseen, tapahtumine käsittelyyn, animointiin ja Ajax:iin (Asynchronous JavaScript and XML). Useat sovelluksen osat käyttävät jQuery kirjastoa asiakaspäässä mahdollisimman hyvän käyttettävyyden saavuttamiseen. Esimerkiksi tulosten syöttäminen.
