@@ -2,6 +2,9 @@
 
   var confirmed = $("table#confirmed");
 
+  var startCompetitionButton = $("form#start-competition-form button");
+  var confirmModalStartCompetition = $('div#confirm-start-competition');
+
   $('body').on("click", "button#remove-signup", function() {
     var self = $(this);
     var item = self.parent().parent().parent();
@@ -33,6 +36,14 @@
         confirmed.append('<tr><td class="middle">' + name + '</td><td><div class="pull-right"><button data-url=' + rmUrl + ' id="remove-signup" type="button" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove"></span></button></div></td> ');
       }
     });
+  });
+
+  startCompetitionButton.on("click", function(e) {
+    e.preventDefault();
+    confirmModalStartCompetition.modal({ backdrop: 'static', keyboard: false })
+      .one('click', '#confirm-button', function (e) {
+        $("form#start-competition-form").submit();
+      });
   });
 
 })();

@@ -1,6 +1,6 @@
 <h3 .page-header>#{displayCompetition competition}
 
-<form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
+<form #start-competition-form method=post action=@{CompetitionR cid}#form enctype=#{formEnctype}>
   ^{formWidget}
 
 <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
@@ -35,3 +35,12 @@
               <div .pull-right>
                 <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
                   <span class="glyphicon glyphicon-remove">
+
+<div #confirm-start-competition .modal>
+  <div .modal-dialog>
+    <div .modal-content>
+      <div .modal-header>
+        <h4 .modal-title>_{MsgConfirmStartCompetitionTitle}
+      <div .modal-footer>
+        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
+        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
