@@ -8,6 +8,7 @@ import Handler.Division
 
 import Helpers
 import Model.Permission
+import Model.EventLog
 import Model.CompetitionState
 import Model.RoundState hiding(Finished)
 

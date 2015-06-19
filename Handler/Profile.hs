@@ -28,5 +28,6 @@ postProfileR = do
     -- check that the email does not exist
     handle E.emailExists $ do
       updateProfile uid name email
+      logInfo "Updated profile"
       setMessageI MsgProfileUpdated
   redirect ProfileR

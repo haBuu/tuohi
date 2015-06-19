@@ -68,6 +68,7 @@ postCompetitionNextRoundR cid = do
     if allScores
       then do
         nextRound res
+        logInfo "Round changed"
         setMessageI MsgNextRoundChanged
       else
         setMessageI MsgNextRoundScoresMissing
@@ -81,6 +82,7 @@ postCompetitionFinishR cid = do
     if allScores
       then do
         finishCompetition res
+        logInfo "Competition finished"
         setMessageI MsgCompetitionFinished
       else
         setMessageI MsgFinishCompetitionScoresMissing
@@ -91,6 +93,7 @@ postCompetitionR cid = do
   ((result, _), _) <- startCompetitionForm cid
   formHandler result $ \res -> do
     startCompetition res
+    logInfo "Competition started"
     setMessageI MsgCompetitionStarted
   redirect $ CompetitionR cid
 

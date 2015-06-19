@@ -127,3 +127,7 @@ New: New
 ConfirmNextRoundTitle: Confirm the change to next round
 ConfirmFinishCompetitionTitle: Confirm the finishing of the competition
 ScoreInputError: Score input failed. Please reload the page.
+EventLog: Event log
+Level: Level
+Event: Event
+ConfirmStartCompetitionTitle: Confirm the starting of the competition

@@ -49,6 +49,7 @@ library
                      Handler.FinishedCompetitions
                      Handler.SignUp
                      Handler.EditCompetition
+                     Handler.EventLog
                      Helpers
                      Database
                      Competition.Competition

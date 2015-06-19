@@ -12,6 +12,7 @@ import Handler.Division
 import Competition.Groups
 import Competition.Competition
 import Model.Permission
+import Model.EventLog
 import Model.User
 import Helpers(today)
 
@@ -321,3 +322,19 @@ scoreCount cid roundNumber = E.select $
     E.where_ $ round_ ^. RoundRoundnumber E.==. E.val roundNumber
     E.where_ $ round_ ^. RoundState E.==. E.val R.Started
     return E.countRows
+
+-- event logging
+logEvent :: Level -> Text -> Handler ()
+logEvent level event = do
+  Entity uid _ <- requireAuth
+  time <- liftIO getCurrentTime
+  runDB $ insert_ $ EventLog uid time level event
+
+logError :: Text -> Handler ()
+logError = logEvent Error
+
+logWarn :: Text -> Handler ()
+logWarn = logEvent Warning
+
+logInfo :: Text -> Handler ()
+logInfo = logEvent Info

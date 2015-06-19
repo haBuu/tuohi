@@ -88,3 +88,10 @@ Permission
   userId UserId
   type PermissionType
   deriving Show
+
+EventLog
+  userId UserId
+  time UTCTime
+  level Level
+  event Text
+  deriving Show

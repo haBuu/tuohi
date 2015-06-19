@@ -58,3 +58,4 @@
 /admin/notification/#NotificationId NotificationR PUT DELETE
 
 /admin/permissions PermissionsR GET POST
+/admin/eventlog EventLogR GET

@@ -9,14 +9,14 @@
           <th>UID
           $forall permissionType <- permissionTypes
             <th>#{show permissionType}
-        <tbody>
-          $forall (Entity uid user) <- users
-            <tr>
-              <td>#{userName user}
-              $forall permissionType <- permissionTypes
-                $if check permissions uid permissionType
-                  <td>
-                    <span .glyphicon .glyphicon-ok .permission>
-                $else
-                  <td>
-                    <span .glyphicon .glyphicon-remove .no-permission>
+      <tbody>
+        $forall (Entity uid user) <- users
+          <tr>
+            <td>#{userName user}
+            $forall permissionType <- permissionTypes
+              $if check permissions uid permissionType
+                <td>
+                  <span .glyphicon .glyphicon-ok .permission>
+              $else
+                <td>
+                  <span .glyphicon .glyphicon-remove .no-permission>

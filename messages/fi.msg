@@ -127,3 +127,7 @@ New: Uusi
 ConfirmNextRoundTitle: Vahvista seuraavalle kierrokselle siirtyminen
 ConfirmFinishCompetitionTitle: Vahvista kilpailun lopetus
 ScoreInputError: Tuloksen syöttäminen epäonnistui. Lataa sivu uudestaan.
+EventLog: Tapahtumaloki
+Level: Taso
+Event: Tapahtuma
+ConfirmStartCompetitionTitle: Vahvista kilpailun aloittaminen

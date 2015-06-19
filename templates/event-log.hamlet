@@ -1,0 +1,19 @@
+<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+<div .panel .panel-primary>
+  <div .panel-heading>_{MsgEventLog}
+  <div .table-responsive>
+    <table .table>
+      <thead>
+        <tr>
+          <th>_{MsgUser}
+          <th>_{MsgLevel}
+          <th>_{MsgTime}
+          <th>_{MsgEvent}
+      <tbody>
+        $forall (E.Value name, Entity _ event) <- events
+          <tr>
+            <td>#{name}
+            <td>#{show $ eventLogLevel event}
+            <td>#{showTime tz $ eventLogTime event}
+            <td>#{eventLogEvent event}

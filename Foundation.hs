@@ -71,7 +71,8 @@ instance Yesod App where
   -- default session idle timeout is 120 minutes
   makeSessionBackend _
     | development = session
-    | otherwise = sslOnlySessions session
+    | otherwise = session
+    -- | otherwise = sslOnlySessions session
     where
       session = fmap Just $ defaultClientSessionBackend
         120 -- timeout in minutes
@@ -79,7 +80,8 @@ instance Yesod App where
 
   yesodMiddleware
     | development = defaultYesodMiddleware
-    | otherwise = (sslOnlyMiddleware 120) . defaultYesodMiddleware
+    | otherwise = defaultYesodMiddleware
+    -- | otherwise = (sslOnlyMiddleware 120) . defaultYesodMiddleware
 
   defaultLayout widget = do
     master <- getYesod
@@ -142,10 +144,7 @@ instance Yesod App where
   isAuthorized UsersR _ = isSuperAdmin
   isAuthorized (UserR _) _ = isSuperAdmin
   isAuthorized PermissionsR _ = isSuperAdmin
-
-  -- Default to Authorized for now.
-  -- TODO: REMOVE THIS
-  isAuthorized _ _ = return Authorized
+  isAuthorized EventLogR _ = isSuperAdmin
 
   -- This function creates static content files in the static folder
   -- and names them based on a hash of their content. This allows
@@ -258,7 +257,7 @@ instance YesodAuthEmail App where
 
   sendVerifyEmail email _ verurl = do
     liftIO $ print verurl
-    liftIO $ renderSendMail (emptyMail $ Address Nothing "noreply")
+    liftIO $ renderSendMail (emptyMail $ Address (Just "Tampereen Frisbeeseura") "noreply@kisa.tfs.fi")
       { mailTo = [Address Nothing email]
       , mailHeaders =
           [ ("Subject", "Verify your email address")
