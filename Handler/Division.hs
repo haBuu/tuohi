@@ -6,6 +6,6 @@ import Prelude
 import Database.Persist.TH
 
 data Division = MPO | FPO | MJ2 | MPM
-  deriving (Show, Read, Eq, Enum, Bounded)
+  deriving (Show, Read, Eq, Enum, Bounded, Ord)
 
 derivePersistField "Division"

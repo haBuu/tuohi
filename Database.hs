@@ -191,12 +191,19 @@ nextRound cid = runDB $ do
       holes <- selectList [HoleLayoutId ==. lid] [Asc HoleNumber]
       -- make groups
       let groups_ = groups (length holes) (length rounds)
-      -- get players and scores so we can put them in order
+      -- get players, scores and divisions so we can put them in order
       players <- forM rounds $ \(Entity _ r) -> do
-        scores <- playerRoundsAndScores (roundUserId r) cid
-        -- MPO is dummy
-        return (roundUserId r, MPO, scores)
-      let sortedPlayers = playerSort holes players
+        let uid = roundUserId r
+        -- get division of the player from the sign up
+        mSignUp <- liftM (fmap entityVal) $ getBy $ UniqueSignUp uid cid
+        -- default to MPO but this can't happen ever since sign up
+        -- can't be removed after the competition has started
+        -- so it will always be in the database
+        let division = maybe MPO signUpDivision mSignUp
+        scores <- playerRoundsAndScores uid cid
+        return (roundUserId r, division, scores)
+      -- sort players by results and divisions
+      let sortedPlayers = playerSortByDivision holes players
       -- insert round for each player
       forM_ (zip sortedPlayers groups_) $ \((pid, _, _), groupNumber) ->
         void $ insertBy $ Round pid cid R.Started

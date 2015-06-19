@@ -5,6 +5,7 @@ module Competition.Competition
 , countRoundTotal
 , countRoundToPar
 , playerSort
+, playerSortByDivision
 , addPlacements
 , dnf
 )
@@ -15,6 +16,7 @@ import Import
 import Data.List(foldl)
 
 import Model.RoundState
+import Handler.Division
 import Helpers
 
 countPar :: [Entity Hole] -> Int
@@ -42,11 +44,23 @@ holePar' holes score = maybe 0 (\(Entity _ hole) -> holePar hole) $
   find (\(Entity hid _) -> hid == scoreHoleId score) holes
 
 -- sorts players according to their current to par result
-playerSort :: [Entity Hole] -> [(a, b, [(Round, [Score])])]
-  -> [(a, b, [(Round, [Score])])]
-playerSort holes players = flip sortBy players $
-  \(_, _, rounds1) (_, _, rounds2) ->
-    let
+playerSort :: [Entity Hole] -> [(a, Division, [(Round, [Score])])]
+  -> [(a, Division, [(Round, [Score])])]
+playerSort holes players = sortBy (byResult holes) players
+
+-- sorts players according to their current to par result and division
+-- NOTE: use only for sorting players to groups after first round
+playerSortByDivision :: [Entity Hole]
+  -> [(a, Division, [(Round, [Score])])]
+  -> [(a, Division, [(Round, [Score])])]
+playerSortByDivision holes players =
+  sortBy byDivision $ sortBy (byResult holes) players
+
+-- sorts players only by to par result
+byResult :: [Entity Hole] -> (a, b, [(Round, [Score])])
+  -> (a, b, [(Round, [Score])]) -> Ordering
+byResult holes (_, _, rounds1) (_, _, rounds2) =
+  let
       total1 = countToPar holes rounds1
       total2 = countToPar holes rounds2
     in
@@ -57,6 +71,14 @@ playerSort holes players = flip sortBy players $
             && total1 >= total2) -- order by result
             || (dnf rounds1 && not (dnf rounds2)) -- order by dnf
         then GT else LT
+
+-- sorts players only by division
+-- NOTE: does not compare dnf so don't call
+-- this with results that have dnf players
+-- use only for sorting players to groups after first round
+byDivision :: (a, Division, [(Round, [Score])])
+  -> (a, Division, [(Round, [Score])]) -> Ordering
+byDivision = compare `on` snd3
 
 addPlacements :: [Entity Hole] -> [(a, b, [(Round, [Score])])]
   -> [(Int, (a, b, [(Round, [Score])]))]
