@@ -21,3 +21,4 @@ config/key.pem
 .ghci
 .dir-locals.el
 deploy.sh
+*.txt
