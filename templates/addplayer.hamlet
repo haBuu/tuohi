@@ -2,7 +2,7 @@
 <select .form-control .margin-bottom>
   <option>
   $forall Entity _ user <- users
-    <option data-email=#{userEmail user}>#{userName user}
+    <option data-email=#{userEmail user}>#{userName user} (#{userEmail user})
 
 <form method=post action=@{AddPlayerR cid}#form enctype=#{formEnctype}>
   ^{formWidget}
