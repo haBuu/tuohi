@@ -11,6 +11,7 @@ import Model.User
 getUserR :: UserId -> Handler Html
 getUserR uid = do
   user <- runDB $ get404 uid
+  let verified = userVerified user
   let types = [minBound..]
   permissions <- runDB $ selectList
     [PermissionUserId ==. uid] [Asc PermissionType]

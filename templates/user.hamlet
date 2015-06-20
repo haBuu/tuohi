@@ -3,6 +3,13 @@
 
 <a href=@{UsersR} .btn .btn-default .btn-block .btn-lg>_{MsgCancel}
 
+$if verified
+  <div .panel .panel-success>
+    <div .panel-heading>_{MsgVerified}
+$else
+  <div .panel .panel-danger>
+    <div .panel-heading>_{MsgNotVerified}
+
 <ul .list-group>
   <div .panel .panel-primary>
     <div .panel-heading>_{MsgPermissions}

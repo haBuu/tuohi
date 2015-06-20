@@ -131,3 +131,5 @@ EventLog: Tapahtumaloki
 Level: Taso
 Event: Tapahtuma
 ConfirmStartCompetitionTitle: Vahvista kilpailun aloittaminen
+Verified: Tunnus on vahvistettu
+NotVerified: Tunnusta ei ole vahvistettu

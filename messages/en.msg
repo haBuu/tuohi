@@ -131,3 +131,5 @@ EventLog: Event log
 Level: Level
 Event: Event
 ConfirmStartCompetitionTitle: Confirm the starting of the competition
+Verified: Account is verified
+NotVerified: Account is not verified
