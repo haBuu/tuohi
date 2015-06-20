@@ -16,8 +16,7 @@ import Model.EventLog
 import Model.User
 import Helpers(today)
 
-type DB a = forall (m :: * -> *).
-  (MonadIO m, Functor m) => ReaderT SqlBackend m a
+type DB a = ReaderT SqlBackend Handler a
 
 requireAdmin :: Handler ()
 requireAdmin = do

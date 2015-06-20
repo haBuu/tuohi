@@ -5,6 +5,7 @@ import Import
 
 import Handler.Forms
 import Model.CompetitionState
+import Database
 
 -- name of the temp session
 -- this can be anything
@@ -36,14 +37,30 @@ competitionAuth cid pw = do
   when (pw == password && state == Started) $ do
     setSession sessionName pw
 
+-- returns true if the player has valid auth for the competition
+-- or he is logged in and signed up for the competition
 isCompetitionAuth :: CompetitionId -> Handler Bool
 isCompetitionAuth cid = do
+  maid <- maybeAuthId
   mSession <- lookupSession sessionName
   competition <- runDB $ get404 cid
   let password = competitionPassword competition
       state = competitionState competition
-  return $ case mSession of
-    Just pw -> if pw == password && state == Started
-      then True
-      else False
+      -- does the player have valid competition auth
+      compAuth = checkCompetitionAuth mSession password
+  -- is the player logged in and signed up for the competition
+  loggedInAndSignedUp <- maybe (return False) (checkSignUp cid) maid
+  return $ state == Started && (compAuth || loggedInAndSignedUp)
+
+checkCompetitionAuth :: Maybe Text -> Text -> Bool
+checkCompetitionAuth mSessionPw competitionPw =
+  case mSessionPw of
+    Just sessionPw -> sessionPw == competitionPw
     _ -> False
+
+checkSignUp :: CompetitionId -> UserId -> Handler Bool
+checkSignUp cid uid = do
+  mSignUp <- runDB $ getBy $ UniqueSignUp uid cid
+  return $ case mSignUp of
+    Nothing -> False
+    Just (Entity _ signUp) -> signUpConfirmed signUp
