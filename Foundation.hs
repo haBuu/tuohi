@@ -119,6 +119,7 @@ instance Yesod App where
   isAuthorized (SignUpsR _) _ = return Authorized
   isAuthorized (ScoresR _) _ = return Authorized
   isAuthorized (CompetitionAuthR _) _ = return Authorized
+  isAuthorized FinishedCompetitionsR _ = return Authorized
 
   -- user
   isAuthorized ProfileR _ = isUser
@@ -145,6 +146,9 @@ instance Yesod App where
   isAuthorized (UserR _) _ = isSuperAdmin
   isAuthorized PermissionsR _ = isSuperAdmin
   isAuthorized EventLogR _ = isSuperAdmin
+
+  -- TODO: remove this
+  isAuthorized _ _ = return Authorized
 
   -- This function creates static content files in the static folder
   -- and names them based on a hash of their content. This allows
