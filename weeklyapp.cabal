@@ -61,6 +61,7 @@ library
                      Model.User
                      Model.CompetitionState
                      Model.RoundState
+                     Model.EventLog
                      Error
                      Datepicker
 
