@@ -11,7 +11,6 @@ import qualified Model.RoundState as R
 import Handler.Division
 import Competition.Groups
 import Competition.Competition
-import Model.Permission
 import Model.EventLog
 import Model.User
 import Helpers(today)
@@ -292,9 +291,9 @@ finishedRounds uid cid = selectList
 scoreLogWithNames :: CompetitionId
   -> Handler [(E.Value Text, E.Value Int, E.Value Int, E.Value UTCTime, E.Value Int, E.Value Int)]
 scoreLogWithNames cid = runDB $ E.select $
-  E.from $ \(update, score, hole, round_, user) -> do
-    E.where_ $ update ^. ScoreUpdateLogScoreId E.==. score ^. ScoreId
-    E.where_ $ update ^. ScoreUpdateLogCompetitionId E.==. E.val cid
+  E.from $ \(scoreUpdate, score, hole, round_, user) -> do
+    E.where_ $ scoreUpdate ^. ScoreUpdateLogScoreId E.==. score ^. ScoreId
+    E.where_ $ scoreUpdate ^. ScoreUpdateLogCompetitionId E.==. E.val cid
     E.where_ $ score ^. ScoreHoleId E.==. hole ^. HoleId
     E.where_ $ score ^. ScoreRoundId E.==. round_ ^. RoundId
     E.where_ $ round_ ^. RoundUserId E.==. user ^. UserId
@@ -303,9 +302,9 @@ scoreLogWithNames cid = runDB $ E.select $
       ( user ^. UserName
       , hole ^. HoleNumber
       , round_ ^. RoundRoundnumber
-      , update ^. ScoreUpdateLogTime
-      , update ^. ScoreUpdateLogOld
-      , update ^. ScoreUpdateLogNew
+      , scoreUpdate ^. ScoreUpdateLogTime
+      , scoreUpdate ^. ScoreUpdateLogOld
+      , scoreUpdate ^. ScoreUpdateLogNew
       )
 
 holeCount :: LayoutId -> Handler Int

@@ -5,7 +5,6 @@ import Import
 
 import Handler.Forms
 import Model.CompetitionState
-import Database
 
 -- name of the temp session
 -- this can be anything

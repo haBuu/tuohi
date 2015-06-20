@@ -3,9 +3,7 @@ module Handler.User where
 
 import Import
 import Handler.Forms
-import Database
 import qualified Error as E
-import Model.Permission
 import Model.User
 
 getUserR :: UserId -> Handler Html

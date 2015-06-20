@@ -4,5 +4,5 @@ module Error where
 import Import
 
 emailExists :: SomeException -> Handler ()
-emailExists e = do
+emailExists _ = do
   setMessageI MsgEmailExists

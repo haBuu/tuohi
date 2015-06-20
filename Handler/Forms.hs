@@ -9,7 +9,6 @@ import qualified Data.Text as T
 import Model.CompetitionState
 import DivisionMessages
 import qualified Handler.Division as D
-import Model.Permission
 import Helpers
 
 -- form handler with default action for FormFailure and FormMissing
@@ -346,6 +345,7 @@ signUpFormLoggedIn user extra = do
 
 -- helper
 -- adds message renderer to divisions so that forms can display them
+divisionsRender :: (AppMessage -> Text) -> [(Text, D.Division)]
 divisionsRender mr = map (\(d, msg) -> (mr msg, d)) divisions
 
 scoreForm :: CompetitionId -> HoleId -> RoundId -> Text -> Maybe Int

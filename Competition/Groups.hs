@@ -25,7 +25,7 @@ groupSize holes players =
     else
       -- size can't be smaller than min group size
       max (decreaseSize cond minGroupSize) $
-      ceiling $ (fromIntegral players) / (fromIntegral holes)
+      ceiling $ ((fromIntegral players) / (fromIntegral holes) :: Double)
   where
     -- i don't know... this just works
     cond = (mod players minGroupSize) == 2

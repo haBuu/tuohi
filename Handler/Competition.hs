@@ -5,12 +5,10 @@ import Import hiding(for)
 
 import Data.List(nub)
 import Data.Time.LocalTime
-import qualified Data.Text as T
 
 import qualified Database.Esqueleto as E
 
 import Handler.Forms
-import Handler.Division
 import Model.CompetitionState
 import qualified Model.RoundState as R
 import Database

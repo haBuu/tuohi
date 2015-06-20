@@ -4,7 +4,6 @@ module Handler.Notifications where
 import Import
 
 import Handler.Forms
-import Database
 
 -- how many notifications gets displayed
 -- this will also limit the ability to edit old notifications

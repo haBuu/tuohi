@@ -15,8 +15,6 @@ import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
 import Network.Mail.Mime
 import Text.Shakespeare.Text (stext)
 import qualified Data.Text.Lazy.Encoding
-import Data.Text(isInfixOf)
-import Helpers
 
 import qualified Yesod.Auth.Message as Msg
 import qualified Yesod.Form.I18n.Finnish as FF
@@ -178,12 +176,14 @@ instance Yesod App where
 
   makeLogger = return . appLogger
 
+isUser :: Handler AuthResult
 isUser = do
   maid <- maybeAuthId
   return $ case maid of
     Just _ -> Authorized
     Nothing -> AuthenticationRequired
 
+isAdmin :: Handler AuthResult
 isAdmin = do
   mr <- getMessageRender
   muser <- maybeAuth
@@ -197,6 +197,7 @@ isAdmin = do
     -- not logged in
     Nothing -> AuthenticationRequired
 
+isSuperAdmin :: Handler AuthResult
 isSuperAdmin = do
   mr <- getMessageRender
   muser <- maybeAuth
@@ -378,8 +379,6 @@ myConfirmationEmailSentResponse identifier = do
   where
     msg = Msg.ConfirmationEmailSent identifier
 
--- TODO: type?
--- mySetPasswordHandler :: YesodAuthEmail master => Bool -> AuthHandler master TypedContent
 mySetPasswordHandler needOld = do
   tp <- getRouteToParent
   mr <- lift getMessageRender

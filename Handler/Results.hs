@@ -47,6 +47,8 @@ getResultsR cid = do
     setTitleI MsgResults
     $(widgetFile "results")
 
+countOrFilter :: ((a, b, [(Round, [Score])]), Maybe Double)
+ -> Maybe ((a, b, [(Round, [Score])]), Double)
 countOrFilter (u, mhc) =
   case mhc of
     Just hc -> Just (u, H.countHandicapTotal (thd u, hc))
