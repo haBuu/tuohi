@@ -8,7 +8,7 @@ getFinishedCompetitionsR :: Handler Html
 getFinishedCompetitionsR = do
   finished <- runDB $ selectList
     [CompetitionState ==. Finished]
-    [Asc CompetitionDate]
+    [Desc CompetitionDate]
   defaultLayout $ do
     setTitleI MsgCompetitions
     $(widgetFile "finished-competitions")
