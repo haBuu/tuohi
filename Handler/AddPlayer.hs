@@ -13,14 +13,15 @@ getAddPlayerR cid = do
   -- if the competition does not exist return 404
   competition <- runDB $ get404 cid
   users <- runDB $ selectList [] [Asc UserName]
-  ((_, formWidget), formEnctype) <- runFormPost addPlayerForm
+  ((_, formWidget), formEnctype) <- runFormPost $ addPlayerForm cid
   defaultLayout $ do
     setTitleI MsgAddPlayer
     $(widgetFile "addplayer")
 
+-- TODO: check that the division is allowed in the competition
 postAddPlayerR :: CompetitionId -> Handler Html
 postAddPlayerR cid = do
-  ((result, _), _) <- runFormPost addPlayerForm
+  ((result, _), _) <- runFormPost $ addPlayerForm cid
   formHandler result $ \(name, email, division) -> do
     added <- maybeAddNewPlayer cid name email division
     case added of
@@ -52,7 +53,7 @@ maybeAddNewPlayer cid name email division = do
     C.Init -> do
       msid <- insertSignUp cid name email division
       return $ isJust msid
-    -- if competition started we also need to add player to a group
+    -- if competition is started we also need to add player to a group
     C.Started -> do
       uid <- insertUser name email
       msid <- runDB $ insertUnique $ SignUp uid cid True division

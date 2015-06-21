@@ -9,3 +9,6 @@ data Division = MPO | FPO | MJ2 | MPM
   deriving (Show, Read, Eq, Enum, Bounded, Ord)
 
 derivePersistField "Division"
+
+defaultDivisions :: [Division]
+defaultDivisions = [MPO, FPO, MJ2, MPM]

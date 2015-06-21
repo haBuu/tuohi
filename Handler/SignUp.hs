@@ -26,30 +26,34 @@ getSignUpsR :: CompetitionId -> Handler Html
 getSignUpsR cid = do
   -- if the competition does not exist return 404
   competition <- runDB $ get404 cid
+  requireInit competition
   full <- competitionFull cid
   muser <- maybeAuthUser
   ((_, formWidget), formEnctype) <- case muser of
     -- user is logged in
-    Just user -> runFormPost $ signUpFormLoggedIn user
+    Just user -> runFormPost $ signUpFormLoggedIn cid user
     -- user is not logged in
-    Nothing -> runFormPost signUpForm
+    Nothing -> runFormPost $ signUpForm cid
   signups <- signUpsWithName cid
   defaultLayout $ do
     addScriptRemote "https://www.google.com/recaptcha/api.js"
     $(widgetFile "signup")
 
+-- TODO: check the the division given is allowed in the competition
 postSignUpsR :: CompetitionId -> Handler Html
 postSignUpsR cid = do
+  competition <- runDB $ get404 cid
+  requireInit competition
   muser <- maybeAuthUser
   ((result, _), _) <- case muser of
     -- user is logged in
-    Just user -> runFormPost $ signUpFormLoggedIn user
+    Just user -> runFormPost $ signUpFormLoggedIn cid user
     -- user is not logged in
     Nothing -> do
       -- short-circuit recaptcha
       checkRecaptcha >>= flip unless (recaptchaError cid)
       -- if recaptcha fails we won't reach here
-      runFormPost signUpForm
+      runFormPost $ signUpForm cid
   formHandler result $ \(name, email, division) -> do
     let checkFull = True
     msid <- maybeInsertSignUp checkFull cid name email division
@@ -57,6 +61,10 @@ postSignUpsR cid = do
       Just _ -> setMessageI MsgSignUpSuccess
       Nothing -> setMessageI MsgSignUpFail
   redirect $ SignUpsR cid
+
+requireInit :: Competition -> Handler ()
+requireInit comp = unless (competitionState comp == Init) $
+  permissionDeniedI MsgSignUpNotAllowed
 
 -- recaptcha
 checkRecaptcha :: Handler Bool

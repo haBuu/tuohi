@@ -42,6 +42,7 @@ Update: Update
 Name: Name
 Email: Email
 Division: Division
+Divisions: Divisions
 SignUp: Sign up
 FinishCompetition: Finish competition
 NextRound: Next round
@@ -133,3 +134,4 @@ Event: Event
 ConfirmStartCompetitionTitle: Confirm the starting of the competition
 Verified: Account is verified
 NotVerified: Account is not verified
+SignUpNotAllowed: Sign-up not allowed

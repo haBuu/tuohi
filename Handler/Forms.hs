@@ -23,32 +23,42 @@ formHandler result f =
 submitButton :: a -> BootstrapSubmit a
 submitButton msg = BootstrapSubmit msg "btn btn-default btn-block btn-lg" []
 
-newCompetitionForm :: UserId -> Html
-  -> MForm Handler (FormResult Competition, Widget)
-newCompetitionForm uid extra = do
+competitionForm :: UserId -> Maybe Competition -> [D.Division] -> Html
+  -> MForm Handler (FormResult (Competition, [D.Division]), Widget)
+competitionForm uid mCompetition divisions extra = do
   mr <- getMessageRender
   (layoutRes, layoutView) <- mreq (selectField layouts)
-    (bfs MsgLayout) Nothing
+    (bfs MsgLayout)
+    (fmap competitionLayoutId mCompetition)
   (dayRes, dayView) <- mreq dayField
-    (withPlaceholder (mr MsgDate) $ bfs MsgDate) Nothing
+    (withPlaceholder (mr MsgDate) $ bfs MsgDate)
+    (fmap competitionDate mCompetition)
   (nameRes, nameView) <- mreq textField
-    (withPlaceholder (mr MsgCompetitionName) $ bfs MsgCompetitionName) Nothing
+    (withPlaceholder (mr MsgCompetitionName) $ bfs MsgCompetitionName)
+    (fmap competitionName mCompetition)
   (playersRes, playersView) <- mreq intField
     (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
-      [("min","1"),("max", "200"), ("class", "form-control")]) (Just 54)
+      [("min","1"),("max", "200"), ("class", "form-control")])
+    (Just $ maybe 54 competitionPlayerLimit mCompetition)
   (pwRes, pwView) <- mreq textField
-    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword) Nothing
+    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword)
+    (fmap competitionPassword mCompetition)
   (serieRes, serieView) <- mopt (selectField series)
-    (bfs MsgSerie) Nothing
+    (bfs MsgSerie)
+    (fmap competitionSerieId mCompetition)
+  (divisionRes, divisionView) <- mreq (checkboxesFieldList (divisionsRender mr))
+    (FieldSettings (SomeMessage MsgDivisions) Nothing Nothing Nothing
+      []) (Just divisions)
   let competitionRes = Competition
                         <$> (pure uid)
                         <*> layoutRes
                         <*> dayRes
                         <*> nameRes
                         <*> playersRes
-                        <*> (pure Init)
+                        <*> (pure $ maybe Init competitionState mCompetition)
                         <*> pwRes
                         <*> serieRes
+  let result = (,) <$> competitionRes <*> divisionRes
   let widget = [whamlet|
         #{extra}
         <div .form-group>
@@ -73,82 +83,16 @@ newCompetitionForm uid extra = do
           <label .control-label>^{fvLabel pwView}
           ^{fvInput pwView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddCompetition}>
+          <label>^{fvLabel divisionView}
+          <div .checkbox>
+            ^{fvInput divisionView}
+        <div .form-group>
+          $if isJust mCompetition
+            <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgEditCompetition}>
+          $else
+            <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgNewCompetition}>
       |]
-  return (competitionRes, widget)
-  where
-    -- get layouts from db
-    layouts :: Handler (OptionList LayoutId)
-    layouts = do
-      entities <- runDB $ selectList [] [Asc LayoutName]
-      optionsPairs $ for entities $
-        \(Entity lid layout) -> (layoutName layout, lid)
-    -- get series from db
-    series :: Handler (OptionList SerieId)
-    series = do
-      entities <- runDB $ selectList [] [Asc SerieName]
-      optionsPairs $ for entities $
-        \(Entity sid serie) -> (serieName serie, sid)
-
-editCompetitionForm :: Competition -> Html
-  -> MForm Handler (FormResult Competition, Widget)
-editCompetitionForm competition extra = do
-  mr <- getMessageRender
-  (layoutRes, layoutView) <- mreq (selectField layouts)
-    (bfs MsgLayout)
-    (Just $ competitionLayoutId competition)
-  (dayRes, dayView) <- mreq dayField
-    (withPlaceholder (mr MsgDate) $ bfs MsgDate)
-    (Just $ competitionDate competition)
-  (nameRes, nameView) <- mreq textField
-    (withPlaceholder (mr MsgCompetitionName) $ bfs MsgCompetitionName)
-    (Just $ competitionName competition)
-  (playersRes, playersView) <- mreq intField
-    (FieldSettings (SomeMessage MsgPlayerLimit) Nothing Nothing Nothing
-      [("min","1"),("max", "200"), ("class", "form-control")])
-    (Just $ competitionPlayerLimit competition)
-  (pwRes, pwView) <- mreq textField
-    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword)
-    (Just $ competitionPassword competition)
-  (serieRes, serieView) <- mopt (selectField series)
-    (bfs MsgSerie)
-    (Just $ competitionSerieId competition)
-  let competitionRes = Competition
-                        <$> (pure $ competitionUserId competition)
-                        <*> layoutRes
-                        <*> dayRes
-                        <*> nameRes
-                        <*> playersRes
-                        <*> (pure $ competitionState competition)
-                        <*> pwRes
-                        <*> serieRes
-  let widget = [whamlet|
-        #{extra}
-        <div .form-group>
-          <label .control-label>^{fvLabel layoutView}
-          ^{fvInput layoutView}
-        <div .form-group>
-          <label .control-label>^{fvLabel dayView}
-          <div .input-group .date>
-            ^{fvInput dayView}
-            <span .input-group-addon>
-              <i .glyphicon .glyphicon-calendar>
-        <div .form-group>
-          <label .control-label>^{fvLabel serieView}
-          ^{fvInput serieView}
-        <div .form-group>
-          <label .control-label>^{fvLabel nameView}
-          ^{fvInput nameView}
-        <div .form-group>
-          <label .control-label>^{fvLabel playersView}
-          ^{fvInput playersView}
-        <div .form-group>
-          <label .control-label>^{fvLabel pwView}
-          ^{fvInput pwView}
-        <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgEditCompetition}>
-      |]
-  return (competitionRes, widget)
+  return (result, widget)
   where
     -- get layouts from db
     layouts :: Handler (OptionList LayoutId)
@@ -257,16 +201,17 @@ finishCompetitionForm cid = do
     renderBootstrap3 BootstrapBasicForm $ (pure cid)
       <* bootstrapSubmit (submitButton MsgFinishCompetition)
 
-addPlayerForm :: Html
+addPlayerForm :: CompetitionId -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
-addPlayerForm extra = do
+addPlayerForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (withPlaceholder (mr MsgName) $ bfs MsgName) Nothing
   (emailRes, emailView) <- mreq emailField
     (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) Nothing
-  (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
-    (bfs MsgDivision) Nothing
+  (divisionRes, divisionView) <- mreq (radioField (competitionDivisions cid))
+    (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
+      []) Nothing
   let result = (,,)
                 <$> nameRes
                 <*> emailRes
@@ -288,15 +233,15 @@ addPlayerForm extra = do
       |]
   return (result, widget)
 
-signUpForm :: Html
+signUpForm :: CompetitionId -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
-signUpForm extra = do
+signUpForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
     (withPlaceholder (mr MsgName) $ bfs MsgName) Nothing
   (emailRes, emailView) <- mreq emailField
     (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) Nothing
-  (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
+  (divisionRes, divisionView) <- mreq (radioField (competitionDivisions cid))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
   let result = (,,)
@@ -321,11 +266,10 @@ signUpForm extra = do
       |]
   return (result, widget)
 
-signUpFormLoggedIn :: User -> Html
+signUpFormLoggedIn :: CompetitionId -> User -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
-signUpFormLoggedIn user extra = do
-  mr <- getMessageRender
-  (divisionRes, divisionView) <- mreq (radioFieldList (divisionsRender mr))
+signUpFormLoggedIn cid user extra = do
+  (divisionRes, divisionView) <- mreq (radioField (competitionDivisions cid))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
   let result = (,,)
@@ -342,6 +286,18 @@ signUpFormLoggedIn user extra = do
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgSignUp}>
       |]
   return (result, widget)
+
+competitionDivisions :: CompetitionId -> Handler (OptionList D.Division)
+competitionDivisions cid = do
+  mr <- getMessageRender
+  entities <- runDB $ selectList
+    [CompetitionDivisionCompetitionId ==. cid] []
+  optionsPairs $ for entities $
+    \(Entity _ compDiv) ->
+      let
+        division = competitionDivisionDivision compDiv
+      in
+        (mr $ divisionMsg division, division)
 
 -- helper
 -- adds message renderer to divisions so that forms can display them

@@ -42,6 +42,7 @@ Update: Päivitä
 Name: Nimi
 Email: Sähköposti
 Division: Luokka
+Divisions: Luokat
 SignUp: Ilmoittaudu
 FinishCompetition: Lopeta kilpailu
 NextRound: Seuraava kierros
@@ -133,3 +134,4 @@ Event: Tapahtuma
 ConfirmStartCompetitionTitle: Vahvista kilpailun aloittaminen
 Verified: Tunnus on vahvistettu
 NotVerified: Tunnusta ei ole vahvistettu
+SignUpNotAllowed: Ilmoittautuminen ei ole sallittua

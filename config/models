@@ -95,3 +95,8 @@ EventLog
   level Level
   event Text
   deriving Show
+
+CompetitionDivision
+  competitionId CompetitionId
+  division Division
+  deriving Show
