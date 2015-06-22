@@ -66,14 +66,14 @@ instance Yesod App where
   approot = ApprootMaster $ appRoot . appSettings
 
   -- Store session data on the client in encrypted cookies,
-  -- default session idle timeout is 120 minutes
+  -- default session idle timeout is one month
   makeSessionBackend _
     | development = session
     | otherwise = session
     -- | otherwise = sslOnlySessions session
     where
       session = fmap Just $ defaultClientSessionBackend
-        120 -- timeout in minutes
+        (60 * 24 * 30) -- timeout in minutes, one month
         "config/client_session_key.aes"
 
   yesodMiddleware
