@@ -8,6 +8,7 @@ import Competition.Competition
 import Database
 import qualified DivisionMessages as D
 import qualified Competition.Handicap as H
+import Model.CompetitionState
 import Helpers
 
 getResultsR :: CompetitionId -> Handler Html
@@ -21,17 +22,20 @@ getResultsR cid = do
   let date = competitionDate competition
 
   -- <handicap>
-  -- not tested yet
   -- filter out dnfs
   let finished = filter (\(_, _, rounds) -> not $ dnf rounds) players
-  handicapsAll <- case competitionSerieId competition of
-    Just sid ->
+      state = competitionState competition
+      msid = competitionSerieId competition
+  -- calculate handicaps if the competition is finished
+  -- and belongs to a serie
+  handicapsAll <- case (msid, state) of
+    (Just sid, Finished) ->
       forM finished $ \u@(user, _, _) -> do
         entity <- runDB $ getBy404 $ UniqueUser $ userEmail user
         handicapScores_ <- handicapScores (entityKey entity) sid date
         let mhc = H.handicap handicapScores_
         return (u, mhc)
-    Nothing -> return []
+    _ -> return []
   -- filter out handicaps that are Nothing and count to
   -- total to handicap results for rest
   let handicaps = mapMaybe countOrFilter handicapsAll
@@ -47,6 +51,7 @@ getResultsR cid = do
     setTitleI MsgResults
     $(widgetFile "results")
 
+-- helper
 countOrFilter :: ((a, b, [(Round, [Score])]), Maybe Double)
  -> Maybe ((a, b, [(Round, [Score])]), Double)
 countOrFilter (u, mhc) =
