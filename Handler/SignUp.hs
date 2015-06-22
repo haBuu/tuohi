@@ -92,3 +92,6 @@ verifyUrl :: String -> String -> String
 verifyUrl secret res =
   "https://www.google.com/recaptcha/api/siteverify?secret="
     ++ secret ++ "&response=" ++ res
+
+count d signups =
+  length $ filter (\(_, _, E.Value d1, _) -> d == d1) signups
