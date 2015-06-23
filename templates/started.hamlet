@@ -3,18 +3,19 @@
 <form #next-round-form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
   ^{nextRoundFormWidget}
 
-$if currentRound_ == 1
-  <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
-
 <div .panel .panel-info>
   <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
 
 <div .panel .panel-info>
   <div .panel-heading>_{MsgRound}: #{currentRound_}
 
-$maybe _ <- mScoreUpdate
-  <a href=@{ScoreLog cid} .btn .btn-warning .btn-block .btn-lg>_{MsgScoreLog}
+$if currentRound_ == 1
+  <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
 
+<a href=@{ScoreEditPlayersR cid} .btn .btn-default .btn-block .btn-lg>_{MsgEditScores}
+
+$maybe _ <- mScoreUpdate
+  <a href=@{ScoreLogR cid} .btn .btn-warning .btn-block .btn-lg>_{MsgScoreLog}
 
 $forall group <- groups
   <div .panel .panel-primary>

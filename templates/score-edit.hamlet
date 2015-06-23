@@ -1,0 +1,13 @@
+<a href=@{ScoreEditPlayersR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+<h3 .page-header>#{userName user}
+
+<div #score-input-error .hidden .alert .alert-danger role="alert">
+  _{MsgScoreInputError}
+
+$forall (roundNumber, forms) <- roundsAndForms
+  <h4 .page-header>_{MsgRound} #{show roundNumber}
+  $forall ((_, formWidget), formEnctype) <- forms
+    <form .form-horizontal method=post enctype=#{formEnctype}>
+      ^{formWidget}
+

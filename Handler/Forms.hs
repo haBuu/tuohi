@@ -318,18 +318,40 @@ divisionsRender mr = map (\(d, msg) -> (mr msg, d)) divisions
 
 scoreForm :: CompetitionId -> HoleId -> RoundId -> Text -> Maybe Int
   -> Html -> MForm Handler (FormResult Score, Widget)
-scoreForm cid hid rid name score extra = do
+scoreForm cid hid rid name mScore extra = do
   r <- getUrlRender
   let set = (FieldSettings "" Nothing Nothing Nothing
         [ ("data-url", r (ScoreR cid rid hid))
         , ("class", "form-control")
         ])
-  (scoreRes, scoreView) <- mreq (selectFieldList scores) set score
+  (scoreRes, scoreView) <- mreq (selectFieldList scores) set mScore
   let result = Score <$> (pure rid) <*> (pure hid) <*> scoreRes
   let widget = [whamlet|
       #{extra}
       <div .form-group>
         <label .col-sm-1 .control-label>#{name}
+        <div .col-sm-2 .pull-right>
+          ^{fvInput scoreView}
+    |]
+  return (result, widget)
+  where
+    scores :: [(Text, Int)]
+    scores = ("#", 0) : [(pack (show i), i) | i <- [1..99]]
+
+scoreEditForm :: CompetitionId -> HoleId -> RoundId -> Int -> Maybe Int
+  -> Html -> MForm Handler (FormResult Score, Widget)
+scoreEditForm cid hid rid hole mScore extra = do
+  r <- getUrlRender
+  let set = (FieldSettings "" Nothing Nothing Nothing
+        [ ("data-url", r (ScoreEditR cid rid hid))
+        , ("class", "form-control")
+        ])
+  (scoreRes, scoreView) <- mreq (selectFieldList scores) set mScore
+  let result = Score <$> (pure rid) <*> (pure hid) <*> scoreRes
+  let widget = [whamlet|
+      #{extra}
+      <div .form-group>
+        <label .col-sm-1 .control-label>_{MsgHole} #{show hole}
         <div .col-sm-2 .pull-right>
           ^{fvInput scoreView}
     |]

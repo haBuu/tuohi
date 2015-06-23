@@ -110,8 +110,8 @@ postDnfRoundR rid = do
   runDB $ update rid [RoundState =. R.DidNotFinish]
   redirect AdminR
 
-getScoreLog :: CompetitionId -> Handler Html
-getScoreLog cid = do
+getScoreLogR :: CompetitionId -> Handler Html
+getScoreLogR cid = do
   competition <- runDB $ get404 cid
   scoreUpdateLog <- scoreLogWithNames cid
   tz <- liftIO getCurrentTimeZone

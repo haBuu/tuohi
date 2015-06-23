@@ -34,6 +34,7 @@ getInputR cid groupNumber = do
         return (holeNumber hole, forms)
       defaultLayout $ do
         setTitleI $ MsgGroupNumber groupNumber
+        $(widgetFile "input-scores")
         $(widgetFile "input")
     else do
       -- set ultimate destination to current url

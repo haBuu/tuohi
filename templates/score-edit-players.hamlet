@@ -1,0 +1,9 @@
+<h3 .page-header>#{displayCompetition competition}
+
+<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+<ul .list-group>
+  <div .panel .panel-primary>
+    <div .panel-heading>_{MsgChoosePlayer}
+    $forall Entity uid user <- players
+      <a href=@{ScoreEditPlayerR cid uid} .list-group-item>#{userName user}
