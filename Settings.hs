@@ -52,8 +52,6 @@ data AppSettings = AppSettings
     -- ^ Copyright text to appear in the footer of the page
     , appAnalytics              :: Maybe Text
     -- ^ Google Analytics code
-    , appRecaptcha              :: Maybe String
-    -- ^ Google reCAPTCHA Secret key
     }
 
 instance FromJSON AppSettings where
@@ -78,7 +76,6 @@ instance FromJSON AppSettings where
         appSkipCombining          <- o .:? "skip-combining"   .!= defaultDev
 
         appCopyright              <- o .: "copyright"
-        appRecaptcha              <- o .:? "recaptcha"
         appAnalytics              <- o .:? "analytics"
 
         return AppSettings {..}

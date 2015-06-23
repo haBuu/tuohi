@@ -2,10 +2,6 @@ module Handler.SignUp where
 
 import Import
 
-import qualified Data.ByteString.Lazy as L
-import qualified Data.ByteString.Lazy.Char8 as C
-import qualified Network.HTTP.Conduit as HTTP
-
 import Handler.Forms
 import qualified Database.Esqueleto as E
 import Database
@@ -36,10 +32,9 @@ getSignUpsR cid = do
     Nothing -> runFormPost $ signUpForm cid
   signups <- signUpsWithName cid
   defaultLayout $ do
-    addScriptRemote "https://www.google.com/recaptcha/api.js"
     $(widgetFile "signup")
 
--- TODO: check the the division given is allowed in the competition
+-- TODO: check that the division given is allowed in the competition
 postSignUpsR :: CompetitionId -> Handler Html
 postSignUpsR cid = do
   competition <- runDB $ get404 cid
@@ -49,49 +44,23 @@ postSignUpsR cid = do
     -- user is logged in
     Just user -> runFormPost $ signUpFormLoggedIn cid user
     -- user is not logged in
-    Nothing -> do
-      -- short-circuit recaptcha
-      checkRecaptcha >>= flip unless (recaptchaError cid)
-      -- if recaptcha fails we won't reach here
-      runFormPost $ signUpForm cid
-  formHandler result $ \(name, email, division) -> do
-    let checkFull = True
-    msid <- maybeInsertSignUp checkFull cid name email division
-    case msid of
-      Just _ -> setMessageI MsgSignUpSuccess
-      Nothing -> setMessageI MsgSignUpFail
+    Nothing -> runFormPost $ signUpForm cid
+  formHandler result $ \(name, email, division, pw) -> do
+    -- check that the user gave correct password
+    if (competitionPassword competition == pw)
+      then do
+        let checkFull = True
+        msid <- maybeInsertSignUp checkFull cid name email division
+        case msid of
+          Just _ -> setMessageI MsgSignUpSuccess
+          Nothing -> setMessageI MsgSignUpFail
+      else
+        setMessageI MsgSignUpFail
   redirect $ SignUpsR cid
 
 requireInit :: Competition -> Handler ()
 requireInit comp = unless (competitionState comp == Init) $
   permissionDeniedI MsgSignUpNotAllowed
-
--- recaptcha
-checkRecaptcha :: Handler Bool
-checkRecaptcha = do
-  mrecaptcha <- lookupPostParam "g-recaptcha-response"
-  -- get recaptcha secret key
-  master <- getYesod
-  let mkey = appRecaptcha $ appSettings master
-  case (mrecaptcha, mkey) of
-    (Just response, Just key) -> do
-      req <- HTTP.parseUrl $ verifyUrl key $ unpack response
-      res <- HTTP.withManager $ HTTP.httpLbs req
-      return $ verifyResponse $ HTTP.responseBody res
-    _ -> return False
-
-recaptchaError :: CompetitionId -> Handler ()
-recaptchaError cid = do
-  setMessageI MsgRecaptchaError
-  redirect $ SignUpsR cid
-
-verifyResponse :: L.ByteString -> Bool
-verifyResponse = isInfixOf "\"success\": true" . C.unpack
-
-verifyUrl :: String -> String -> String
-verifyUrl secret res =
-  "https://www.google.com/recaptcha/api/siteverify?secret="
-    ++ secret ++ "&response=" ++ res
 
 count d signups =
   length $ filter (\(_, _, E.Value d1, _) -> d == d1) signups

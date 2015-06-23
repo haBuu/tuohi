@@ -234,7 +234,7 @@ addPlayerForm cid extra = do
   return (result, widget)
 
 signUpForm :: CompetitionId -> Html
-  -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
+  -> MForm Handler (FormResult (Text, Text, D.Division, Text), Widget)
 signUpForm cid extra = do
   mr <- getMessageRender
   (nameRes, nameView) <- mreq textField
@@ -244,10 +244,13 @@ signUpForm cid extra = do
   (divisionRes, divisionView) <- mreq (radioField (competitionDivisions cid))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
-  let result = (,,)
+  (pwRes, pwView) <- mreq passwordField
+    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword) Nothing
+  let result = (,,,)
                 <$> nameRes
                 <*> emailRes
                 <*> divisionRes
+                <*> pwRes
   let widget = [whamlet|
         #{extra}
         <div .form-group>
@@ -260,28 +263,37 @@ signUpForm cid extra = do
           <label>^{fvLabel divisionView}
           <div .radio>
             ^{fvInput divisionView}
-        <div .margin-bottom .g-recaptcha data-sitekey="6Ldnwv4SAAAAAFJePhKQwFx7SP0tSiheSbp-7WME">
+        <div .form-group>
+          <label .control-label>^{fvLabel pwView}
+          ^{fvInput pwView}
         <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgSignUp}>
       |]
   return (result, widget)
 
 signUpFormLoggedIn :: CompetitionId -> User -> Html
-  -> MForm Handler (FormResult (Text, Text, D.Division), Widget)
+  -> MForm Handler (FormResult (Text, Text, D.Division, Text), Widget)
 signUpFormLoggedIn cid user extra = do
+  mr <- getMessageRender
   (divisionRes, divisionView) <- mreq (radioField (competitionDivisions cid))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
-  let result = (,,)
+  (pwRes, pwView) <- mreq passwordField
+    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword) Nothing
+  let result = (,,,)
                 <$> pure (userName user)
                 <*> pure (userEmail user)
                 <*> divisionRes
+                <*> pwRes
   let widget = [whamlet|
         #{extra}
         <div .form-group>
           <label>^{fvLabel divisionView}
           <div .radio>
             ^{fvInput divisionView}
+        <div .form-group>
+          <label .control-label>^{fvLabel pwView}
+          ^{fvInput pwView}
         <div .form-group>
           <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgSignUp}>
       |]
