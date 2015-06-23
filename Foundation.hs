@@ -110,17 +110,25 @@ instance Yesod App where
   isAuthorized (AuthR _) _ = return Authorized
   isAuthorized FaviconR _ = return Authorized
   isAuthorized RobotsR _ = return Authorized
+  isAuthorized (StaticR _) _ = return Authorized
 
   -- public
   isAuthorized HomeR _ = return Authorized
   isAuthorized (GroupsR _) _ = return Authorized
   isAuthorized (SignUpsR _) _ = return Authorized
   isAuthorized (ScoresR _) _ = return Authorized
+  isAuthorized (ResultsR _) _ = return Authorized
+  isAuthorized (HandicapsR _) _ = return Authorized
+  isAuthorized (ScoreR _ _ _) _ = return Authorized
   isAuthorized (CompetitionAuthR _) _ = return Authorized
   isAuthorized FinishedCompetitionsR _ = return Authorized
+  isAuthorized LanguageR _ = return Authorized
+  isAuthorized InfoR _ = return Authorized
+  isAuthorized (InputR _ _) _ = return Authorized
 
   -- user
   isAuthorized ProfileR _ = isUser
+  isAuthorized (SignUpR _) _ = isUser
 
   -- admin
   isAuthorized AdminR _ = isAdmin
@@ -138,15 +146,18 @@ instance Yesod App where
   isAuthorized NotificationsR _ = isAdmin
   isAuthorized (NotificationR _) _ = isAdmin
   isAuthorized (AddPlayerR _) _ = isAdmin
+  isAuthorized (ScoreLogR _) _ = isAdmin
+  isAuthorized (ScoreEditPlayersR _) _ = isAdmin
+  isAuthorized (ScoreEditPlayerR _ _) _ = isAdmin
+  isAuthorized (ScoreEditR _ _ _) _ = isAdmin
+  isAuthorized (EditCompetitionR _) _ = isAdmin
+  isAuthorized (ChangeGroupR _ _) _ = isAdmin
 
   -- super admin
   isAuthorized UsersR _ = isSuperAdmin
   isAuthorized (UserR _) _ = isSuperAdmin
   isAuthorized PermissionsR _ = isSuperAdmin
   isAuthorized EventLogR _ = isSuperAdmin
-
-  -- TODO: remove this
-  isAuthorized _ _ = return Authorized
 
   -- This function creates static content files in the static folder
   -- and names them based on a hash of their content. This allows
