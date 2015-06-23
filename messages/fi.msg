@@ -135,3 +135,5 @@ ConfirmStartCompetitionTitle: Vahvista kilpailun aloittaminen
 Verified: Tunnus on vahvistettu
 NotVerified: Tunnusta ei ole vahvistettu
 SignUpNotAllowed: Ilmoittautuminen ei ole sallittua
+EditScores: Muokkaa tuloksia
+Forbidden: Kielletty

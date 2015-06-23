@@ -135,3 +135,5 @@ ConfirmStartCompetitionTitle: Confirm the starting of the competition
 Verified: Account is verified
 NotVerified: Account is not verified
 SignUpNotAllowed: Sign-up not allowed
+EditScores: Edit scores
+Forbidden: Forbidden

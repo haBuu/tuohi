@@ -10,8 +10,11 @@ import Model.CompetitionState
 
 deleteSignUpR :: SignUpId -> Handler Html
 deleteSignUpR sid = do
+  (Entity uid _) <- requireAuth
   runDB $ do
     signup <- get404 sid
+    -- check that the user is trying to delete his own sign up
+    unless (signUpUserId signup == uid) $ permissionDeniedI MsgForbidden
     competition <- get404 $ signUpCompetitionId signup
     -- allow deleting of signup only from competitions
     -- that are in state Init
