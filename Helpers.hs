@@ -3,7 +3,7 @@ module Helpers
 , showDay
 , textualScore
 , safeHead
-, thd, snd3
+, thd, snd3, fst3
 , language
 , showTime
 , today
@@ -24,6 +24,9 @@ today = getCurrentTime
 
 thd :: (t1,t2,t3) -> t3
 thd (_, _, x) = x
+
+fst3 :: (t1,t2,t3) -> t1
+fst3 (x, _, _) = x
 
 snd3 :: (t1,t2,t3) -> t2
 snd3 (_, x, _) = x

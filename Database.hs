@@ -188,8 +188,6 @@ nextRound cid = runDB $ do
       -- competiton layout id
       let lid = competitionLayoutId competition
       holes <- selectList [HoleLayoutId ==. lid] [Asc HoleNumber]
-      -- make groups
-      let groups_ = groups (length holes) (length rounds)
       -- get players, scores and divisions so we can put them in order
       players <- forM rounds $ \(Entity _ r) -> do
         let uid = roundUserId r
@@ -203,8 +201,10 @@ nextRound cid = runDB $ do
         return (roundUserId r, division, scores)
       -- sort players by results and divisions
       let sortedPlayers = playerSortByDivision holes players
+          -- divide players to groups
+          groupedPlayers = divide (length holes) sortedPlayers
       -- insert round for each player
-      forM_ (zip sortedPlayers groups_) $ \((pid, _, _), groupNumber) ->
+      forM_ groupedPlayers $ \(groupNumber, (pid, _, _)) ->
         void $ insertBy $ Round pid cid R.Started
           (roundNumber + 1) groupNumber
 
