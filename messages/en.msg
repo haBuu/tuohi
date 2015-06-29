@@ -137,3 +137,4 @@ NotVerified: Account is not verified
 SignUpNotAllowed: Sign-up not allowed
 EditScores: Edit scores
 Forbidden: Forbidden
+CompetitionPassword: Competition password

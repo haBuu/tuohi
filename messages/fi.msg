@@ -137,3 +137,4 @@ NotVerified: Tunnusta ei ole vahvistettu
 SignUpNotAllowed: Ilmoittautuminen ei ole sallittua
 EditScores: Muokkaa tuloksia
 Forbidden: Kielletty
+CompetitionPassword: Kilpailun salasana

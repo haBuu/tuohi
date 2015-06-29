@@ -244,8 +244,8 @@ signUpForm cid extra = do
   (divisionRes, divisionView) <- mreq (radioField (competitionDivisions cid))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
-  (pwRes, pwView) <- mreq passwordField
-    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword) Nothing
+  (pwRes, pwView) <- mreq textField
+    (withPlaceholder (mr MsgCompetitionPassword) $ bfs MsgCompetitionPassword) Nothing
   let result = (,,,)
                 <$> nameRes
                 <*> emailRes
@@ -278,8 +278,8 @@ signUpFormLoggedIn cid user extra = do
   (divisionRes, divisionView) <- mreq (radioField (competitionDivisions cid))
     (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
       []) Nothing
-  (pwRes, pwView) <- mreq passwordField
-    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword) Nothing
+  (pwRes, pwView) <- mreq textField
+    (withPlaceholder (mr MsgCompetitionPassword) $ bfs MsgCompetitionPassword) Nothing
   let result = (,,,)
                 <$> pure (userName user)
                 <*> pure (userEmail user)
@@ -399,12 +399,12 @@ userForm user extra = do
       |]
   return (result, widget)
 
-tempAuthForm :: Handler ((FormResult Text, Widget), Enctype)
-tempAuthForm = do
+competitionAuthForm :: Handler ((FormResult Text, Widget), Enctype)
+competitionAuthForm = do
   mr <- getMessageRender
-  let settings = withPlaceholder (mr MsgPassword) $ bfs MsgPassword
+  let settings = withPlaceholder (mr MsgCompetitionPassword) $ bfs MsgCompetitionPassword
   runFormPost $ renderBootstrap3 BootstrapBasicForm $
-    areq passwordField settings Nothing
+    areq textField settings Nothing
     <* bootstrapSubmit (submitButton MsgLogIn)
 
 notificationForm :: UserId -> UTCTime

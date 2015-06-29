@@ -13,14 +13,14 @@ sessionName = "_COMPETITION_AUTH"
 
 getCompetitionAuthR :: CompetitionId -> Handler Html
 getCompetitionAuthR cid = do
-  ((_, formWidget), formEnctype) <- tempAuthForm
+  ((_, formWidget), formEnctype) <- competitionAuthForm
   defaultLayout $ do
     setTitle "WeeklyApp"
     $(widgetFile "competitionauth")
 
 postCompetitionAuthR :: CompetitionId -> Handler Html
 postCompetitionAuthR cid = do
-  ((result, _), _) <- tempAuthForm
+  ((result, _), _) <- competitionAuthForm
   formHandler result $ competitionAuth cid
   -- redirect to ultimate destination what should be
   -- the input page where the user wanted to go
