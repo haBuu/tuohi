@@ -41,7 +41,7 @@ competitionForm uid mCompetition divisions extra = do
       [("min","1"),("max", "200"), ("class", "form-control")])
     (Just $ maybe 54 competitionPlayerLimit mCompetition)
   (pwRes, pwView) <- mreq textField
-    (withPlaceholder (mr MsgPassword) $ bfs MsgPassword)
+    (withPlaceholder (mr MsgCompetitionPassword) $ bfs MsgCompetitionPassword)
     (fmap competitionPassword mCompetition)
   (serieRes, serieView) <- mopt (selectField series)
     (bfs MsgSerie)
