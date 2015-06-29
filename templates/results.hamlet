@@ -7,24 +7,23 @@ $forall (d, msg) <- divisions
     <div .panel-heading>_{msg}
     <table .table>
       <tbody>
-        $forall (user, division, rounds) <- sortedPlayers
-          $if division == d
-            <tr>
-              <td .middle>
-                #{userName user}
-              <td>
-                <div .pull-right .result>
-                  $if dnf rounds
-                    DNF
+        $forall (place, (user, division, rounds)) <- addPlacements holes $ filterByDivision d sortedPlayers
+          <tr>
+            <td .middle>
+              #{show place}. #{userName user}
+            <td>
+              <div .pull-right .result>
+                $if dnf rounds
+                  DNF
+                $else
+                  #{countTotal rounds} (
+                  $if countToPar holes rounds == 0
+                    E
                   $else
-                    #{countTotal rounds} (
-                    $if countToPar holes rounds == 0
-                      E
-                    $else
-                      $if countToPar holes rounds > 0
-                        +
-                      #{countToPar holes rounds}
-                    )
+                    $if countToPar holes rounds > 0
+                      +
+                    #{countToPar holes rounds}
+                  )
 
 $if length sortedHandicaps > 0
   <div .panel .panel-primary>

@@ -9,6 +9,7 @@ import Database
 import qualified DivisionMessages as D
 import qualified Competition.Handicap as H
 import Model.CompetitionState
+import Handler.Division
 import Helpers
 
 getResultsR :: CompetitionId -> Handler Html
@@ -51,10 +52,14 @@ getResultsR cid = do
     setTitleI MsgResults
     $(widgetFile "results")
 
--- helper
+-- helpers
 countOrFilter :: ((a, b, [(Round, [Score])]), Maybe Double)
  -> Maybe ((a, b, [(Round, [Score])]), Double)
 countOrFilter (u, mhc) =
   case mhc of
     Just hc -> Just (u, H.countHandicapTotal (thd u, hc))
     Nothing -> Nothing
+
+filterByDivision :: Division -> [(a, Division, [(Round, [Score])])]
+  -> [(a, Division, [(Round, [Score])])]
+filterByDivision d = filter (\(_, d1, _) -> d == d1)
