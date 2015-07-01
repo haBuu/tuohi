@@ -10,4 +10,4 @@
             #{userName user}
           <td>
             <div .pull-right>
-              #{show hc}
+              #{showHandicap hc}

@@ -9,10 +9,8 @@ import Helpers
 getHandicapsR :: SerieId -> Handler Html
 getHandicapsR sid = do
   serie <- runDB $ get404 sid
-  -- <handicap>
-  -- not tested yet
-  date <- liftIO today
   users <- runDB $ selectList [] []
+  date <- liftIO today
   handicapsAll <- forM users $ \user -> do
     handicapScores_ <- handicapScores (entityKey user) sid date
     return (entityVal user, H.handicap handicapScores_)
@@ -20,7 +18,6 @@ getHandicapsR sid = do
   -- did not have any results in the serie
   let filtered = mapMaybe justHc handicapsAll
       handicaps = sortBy (comparing snd) filtered
-  -- </handicap>
   defaultLayout $ do
     setTitleI MsgHandicaps
     $(widgetFile "handicaps")

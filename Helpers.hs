@@ -7,6 +7,7 @@ module Helpers
 , language
 , showTime
 , today
+, showHandicap
 )
 where
 
@@ -14,6 +15,7 @@ import Prelude
 import Data.Time
 import Data.List(find)
 import Data.Text(Text)
+import Text.Printf
 import qualified Data.Text
 
 import System.Locale
@@ -47,6 +49,23 @@ showTime tz time =
     day = showDay $ localDay local
   in
     day ++ " " ++ formatTime defaultTimeLocale "%H:%M" local
+
+showHandicap :: Double -> String
+showHandicap = trimZeroes . printf "%.2f"
+
+-- remove multiple trailing zeroes
+-- e.g.
+-- 1.00 -> 1.0
+-- 1.30 -> 1.3
+trimZeroes :: String -> String
+trimZeroes str =
+  let
+    integer = takeWhile (/= '.') str
+    decimals = dropWhile (/= '.') str
+    trimmed = reverse $ dropWhile (== '0') $ reverse decimals
+    trimmedDecimals = if trimmed == "." then ".0" else trimmed
+  in
+    integer ++ trimmedDecimals
 
 safeHead :: [a] -> Maybe a
 safeHead [] = Nothing
