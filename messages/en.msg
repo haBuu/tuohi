@@ -56,6 +56,7 @@ NotAdmin: You must be an admin
 NotSuperAdmin: You must be a super admin
 SignUpSuccess: Signed up succesfully
 SignUpFail: Sign up failed
+SignUpWrongPassword: Incorrect competition password
 UserUpdatedSuccess: User updated
 FormMissing: Error: Form missing
 FormFailure err@Text: Error: #{err}

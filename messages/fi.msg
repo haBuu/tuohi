@@ -56,6 +56,7 @@ NotAdmin: Sinun pitää olla ylläpitäjä
 NotSuperAdmin: Sinun pitää olla pääylläpitäjä
 SignUpSuccess: Ilmoittautuminen onnistui
 SignUpFail: Ilmoittautuminen epäonnistui
+SignUpWrongPassword: Virheellinen kilpailun salasana
 UserUpdatedSuccess: Käyttäjän tiedot päivitetty
 FormMissing: Virhe: Lomake puuttuu
 FormFailure err@Text: Virhe: #{err}

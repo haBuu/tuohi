@@ -58,7 +58,7 @@ postSignUpsR cid = do
           Just _ -> setMessageI MsgSignUpSuccess
           Nothing -> setMessageI MsgSignUpFail
       else
-        setMessageI MsgSignUpFail
+        setMessageI MsgSignUpWrongPassword
   redirect $ SignUpsR cid
 
 requireInit :: Competition -> Handler ()
