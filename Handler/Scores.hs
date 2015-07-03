@@ -5,10 +5,12 @@ import Import
 
 import qualified Database.Esqueleto as E
 import Database.Esqueleto((^.))
+import Text.Julius(rawJS)
 
 import Handler.CompetitionAuth
 import Handler.Forms
 import Model.RoundState(RoundState(..))
+import qualified Model.CompetitionState as CS
 import Competition.Competition
 import Database
 import Helpers
@@ -16,6 +18,7 @@ import Helpers
 getScoresR :: CompetitionId -> Handler TypedContent
 getScoresR cid = do
   competition <- runDB $ get404 cid
+  let live = competitionState competition /= CS.Finished
   let lid = competitionLayoutId competition
   holes <- runDB $ selectList
     [HoleLayoutId ==. lid] [Asc HoleNumber]

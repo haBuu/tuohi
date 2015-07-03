@@ -1,9 +1,10 @@
 <h3.page-header>#{displayCompetition competition}
 
-<div .checkbox>
-  <label>
-    <input name="live-update" type="checkbox" checked="checked">
-      _{MsgReloadPage}
+$if live
+  <div .checkbox>
+    <label>
+      <input name="live-update" type="checkbox" checked="checked">
+        _{MsgReloadPage}
 
 <div .table-responsive>
   <table #score-table>

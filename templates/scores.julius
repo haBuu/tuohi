@@ -1,7 +1,7 @@
 (function() {
 
   var table = $("table#score-table");
-  var live = true;
+  var live = #{rawJS live};
 
   $("input[name='live-update']").change(function(e) {
     live = $(this).prop("checked");
