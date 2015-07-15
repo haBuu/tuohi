@@ -134,4 +134,5 @@ confirmedPlayers cid = E.select $
     E.where_ $ signUp ^. SignUpUserId E.==. user ^. UserId
     E.where_ $ signUp ^. SignUpCompetitionId E.==. E.val cid
     E.where_ $ signUp ^. SignUpConfirmed E.==. E.val True
+    E.orderBy [E.asc (user ^. UserName)]
     return user
