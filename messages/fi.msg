@@ -139,3 +139,6 @@ SignUpNotAllowed: Ilmoittautuminen ei ole sallittua
 EditScores: Muokkaa tuloksia
 Forbidden: Kielletty
 CompetitionPassword: Kilpailun salasana
+ScoreRangeError: Tulos ei ole sallitulla alueella (0-99)
+ScoreMissing: Tulos puuttuu
+InputNumber: Syötä numero

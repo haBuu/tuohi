@@ -4,7 +4,6 @@ module Handler.Input where
 import Import hiding(group)
 
 import Handler.CompetitionAuth
-import Handler.Forms
 import qualified Database.Esqueleto as E
 import Database
 
@@ -23,15 +22,16 @@ getInputR cid groupNumber = do
       scores <- runDB $ selectList
         [ScoreRoundId <-. (map (\(E.Value rid, _, _,_) -> rid) group)]
         []
-      holesAndForms <- forM holes $ \(Entity hid hole) -> do
-        forms <- forM group $ \(E.Value rid, _, _, E.Value name) -> do
-          -- try to find existing score for the form
+      r <- getUrlRender
+      holesAndPlayers <- forM holes $ \(Entity hid hole) -> do
+        players <- forM group $ \(E.Value rid, _, _, E.Value name) -> do
+          -- try to find existing score
           let mScore = flip find scores $ \(Entity _ score) ->
                 scoreRoundId score == rid && scoreHoleId score == hid
           -- get actual value of the score from Maybe (Entity Score)
-          let value = fmap (scoreScore . entityVal) mScore
-          runFormPost $ scoreForm cid hid rid name value
-        return (holeNumber hole, forms)
+          let mValue = fmap (scoreScore . entityVal) mScore
+          return (rid, name, mValue)
+        return ((hid, holeNumber hole), zip [1..] players)
       defaultLayout $ do
         setTitleI $ MsgGroupNumber groupNumber
         $(widgetFile "input-scores")
@@ -42,3 +42,7 @@ getInputR cid groupNumber = do
       -- url after he has given the correct password
       setUltDestCurrent
       redirect $ CompetitionAuthR cid
+
+-- helper
+firstHoleFirstPlayer :: Int -> Int -> Bool
+firstHoleFirstPlayer hole player = hole == 1 && player == 1

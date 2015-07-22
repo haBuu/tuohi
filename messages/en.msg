@@ -139,3 +139,6 @@ SignUpNotAllowed: Sign-up not allowed
 EditScores: Edit scores
 Forbidden: Forbidden
 CompetitionPassword: Competition password
+ScoreRangeError: Score is not within allowed range (0-99)
+ScoreMissing: Missing score
+InputNumber: Input number

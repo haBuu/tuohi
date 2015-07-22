@@ -1,21 +1,40 @@
 <div role="tabpanel">
-  <div class="tab-content">
-    $forall (hole, forms) <- holesAndForms
+  <div .tab-content>
+    $forall ((hid, hole), players) <- holesAndPlayers
       <div role="tabpanel" .tab-pane :(hole == 1):.active #hole-#{show hole}>
 
         <div #score-input-error .hidden .alert .alert-danger role="alert">
           _{MsgScoreInputError}
 
-        <a href=@{GroupsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgGroups}
-
         <h3 .page-header>_{MsgHole} #{show hole}
-        $forall ((_, formWidget), formEnctype) <- forms
-          <form .form-horizontal method=post enctype=#{formEnctype}>
-            ^{formWidget}
-        <footer .footer>
-          <div .btn-group .btn-group-lg .btn-group-justified>
-            $if hole == 1
-              <a href=#hole-#{length holesAndForms} #prev .btn .btn-default role="tab" data-toggle="tab">_{MsgPrevious}
-            $else
-              <a href=#hole-#{show (hole - 1)} #prev .btn .btn-default role="tab" data-toggle="tab">_{MsgPrevious}
-            <a href=#hole-#{mod hole (length holesAndForms) + 1} #next .btn .btn-default role="tab" data-toggle="tab">_{MsgNext}
+
+        <table #score-input>
+          <tbody>
+            $forall (n, (rid, name, mValue)) <- players
+              <tr onClick="setScoreFocus(#{n})">
+                <th>#{name}
+                $maybe value <- mValue
+                  <td data-url=@{ScoreR cid rid hid} :(firstHoleFirstPlayer hole n):.score-focus>#{show value}
+                $nothing
+                  <td data-url=@{ScoreR cid rid hid} :(firstHoleFirstPlayer hole n):.score-focus>
+
+        <div #keyboard>
+          <a .btn .btn-default .rounded-ul onClick="inputScore(0)">0
+          <a .btn .btn-default onClick="inputScore(1)">1
+          <a .btn .btn-default onClick="inputScore(2)">2
+          <a .btn .btn-default onClick="inputScore(3)">3
+          <a #double-digit .btn .btn-default .rounded-ur onClick="doubleDigit()">> 9
+          $if hole == 1
+            <a href=#hole-#{length holesAndPlayers} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
+              <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
+          $else
+            <a href=#hole-#{show (hole - 1)} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
+              <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
+          <a .btn .btn-default onClick="inputScore(4)">4
+          <a .btn .btn-default onClick="inputScore(5)">5
+          <a .btn .btn-default onClick="inputScore(6)">6
+          <a href=#hole-#{mod hole (length holesAndPlayers) + 1} #next .arrow .arrow-right .rounded-lr .btn .btn-default role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true">
+          <a .btn .btn-default onClick="inputScore(7)">7
+          <a .btn .btn-default onClick="inputScore(8)">8
+          <a .btn .btn-default onClick="inputScore(9)">9

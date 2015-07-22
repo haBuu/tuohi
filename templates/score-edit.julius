@@ -1,0 +1,47 @@
+window.onload = function() {
+  var body = $('body');
+
+  var buffer = [];
+
+  body.on('change', 'form select', function() {
+    var self = $(this);
+    var url = self.data("url");
+    var form = self.closest('form');
+    handle(form, url)
+  });
+
+  var handle = function(form, url) {
+    var obj = {
+      'data': form.serialize(),
+      'type': form.attr('method'),
+      'url': url
+    }
+    removeDuplicateUrls(buffer, obj);
+    buffer.push(obj);
+    for (var i = 0; i < buffer.length; ++i) {
+      var index = i;
+      $.ajax({
+        type: buffer[i].type,
+        data: buffer[i].data,
+        url: buffer[i].url,
+        success: function(data, textStatus, jqXHR) {
+          buffer.splice(index, 1);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log("error");
+          $("div#score-input-error").toggleClass('hidden');
+        }
+      });
+    }
+  }
+
+  function removeDuplicateUrls(list, item) {
+    var result = [];
+    $.each(list, function(i, e) {
+      if (e.url == item.url) {
+        list.splice(i, 1);
+      }
+    });
+  }
+
+}

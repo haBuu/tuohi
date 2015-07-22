@@ -42,9 +42,9 @@ postScoreR cid rid hid = do
       -- make sure that the round is in state started
       requireStarted round_
       user <- runDB $ get404 $ roundUserId round_
-      ((result, _), _) <- runFormPost $ scoreForm cid hid rid
-        (userName user) Nothing
-      formHandler result $ \res -> insertScore cid res
+      value <- runInputPost $ ireq (checkScore intField) "score"
+      let score = Score rid hid value
+      insertScore cid score
       redirect $ InputR (roundCompetitionId round_)
         (roundGroupnumber round_)
     else
@@ -82,10 +82,8 @@ insertScore cid score = runDB $
 
 getScoreEditPlayersR :: CompetitionId -> Handler Html
 getScoreEditPlayersR cid = do
-  (competition, players) <- runDB $ do
-    c <- get404 cid
-    p <- confirmedPlayers cid
-    return (c, p)
+  competition <- runDB $ get404 cid
+  players <- runDB $ confirmedPlayers cid
   defaultLayout $ do
     setTitleI MsgEditScores
     $(widgetFile "score-edit-players")
@@ -116,7 +114,6 @@ getScoreEditPlayerR cid uid = do
     return (roundRoundnumber round_, forms)
   defaultLayout $ do
     setTitleI MsgEditScores
-    $(widgetFile "input-scores")
     $(widgetFile "score-edit")
 
 postScoreEditR :: CompetitionId -> RoundId -> HoleId -> Handler Html
