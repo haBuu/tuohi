@@ -66,7 +66,6 @@ function reloadTemplates() {
   # send reload and update commands to repl
   echo "reloading..."
   tmux select-window -t yesod:repl
-  tmux send-keys -t yesod:repl "DevelMain.shutdown" C-m
   tmux send-keys -t yesod:repl ":l DevelMain" C-m
   tmux send-keys -t yesod:repl "DevelMain.update" C-m
 }
