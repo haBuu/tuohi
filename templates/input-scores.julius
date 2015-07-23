@@ -42,7 +42,7 @@ $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
   setScoreFocus(1);
 })
 
-// change focus to next player or remove if last
+// change focus to next player or stay if last player
 function next() {
   if (currentScore) {
     var nextScore = $(currentScore).parent().next().find("td");
