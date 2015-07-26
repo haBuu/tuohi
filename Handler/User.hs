@@ -9,6 +9,7 @@ import Model.User
 getUserR :: UserId -> Handler Html
 getUserR uid = do
   user <- runDB $ get404 uid
+  requireReal user
   let verified = userVerified user
   let types = [minBound..]
   permissions <- runDB $ selectList
@@ -21,6 +22,7 @@ getUserR uid = do
 postUserR :: UserId -> Handler Html
 postUserR uid = do
   user <- runDB $ get404 uid
+  requireReal user
   ((result, _), _) <- runFormPost $ userForm user
   formHandler result $ \(name, email, admin) -> do
     -- check that the email does not exist

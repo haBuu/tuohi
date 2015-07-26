@@ -12,7 +12,7 @@ getAddPlayerR :: CompetitionId -> Handler Html
 getAddPlayerR cid = do
   -- if the competition does not exist return 404
   competition <- runDB $ get404 cid
-  users <- runDB $ selectList [] [Asc UserName]
+  users <- runDB $ selectList [UserRealUser ==. True] [Asc UserName]
   ((_, formWidget), formEnctype) <- runFormPost $ addPlayerForm cid
   defaultLayout $ do
     setTitleI MsgAddPlayer
@@ -49,7 +49,7 @@ maybeAddNewPlayer cid name email division = do
   case competitionState competition of
     -- can't add player to finished competition
     C.Finished -> return False
-    -- if competition not started only add sign up
+    -- if competition is not started only add sign up
     C.Init -> do
       msid <- insertSignUp cid name email division
       return $ isJust msid

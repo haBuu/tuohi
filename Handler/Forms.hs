@@ -49,6 +49,9 @@ competitionForm uid mCompetition divisions extra = do
   (divisionRes, divisionView) <- mreq (checkboxesFieldList (divisionsRender mr))
     (FieldSettings (SomeMessage MsgDivisions) Nothing Nothing Nothing
       []) (Just divisions)
+  (pdgaRes, pdgaView) <- mreq checkBoxField
+    (FieldSettings (SomeMessage MsgPDGACompetition) Nothing Nothing Nothing
+      []) (fmap competitionPdga mCompetition)
   let competitionRes = Competition
                         <$> (pure uid)
                         <*> layoutRes
@@ -58,6 +61,7 @@ competitionForm uid mCompetition divisions extra = do
                         <*> (pure $ maybe Init competitionState mCompetition)
                         <*> pwRes
                         <*> serieRes
+                        <*> pdgaRes
   let result = (,) <$> competitionRes <*> divisionRes
   let widget = [whamlet|
         #{extra}
@@ -86,6 +90,9 @@ competitionForm uid mCompetition divisions extra = do
           <label>^{fvLabel divisionView}
           <div .checkbox>
             ^{fvInput divisionView}
+        <div .checkbox>
+          <label>
+            ^{fvInput pdgaView}^{fvLabel pdgaView}
         <div .form-group>
           $if isJust mCompetition
             <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgEditCompetition}>
@@ -282,7 +289,7 @@ signUpFormLoggedIn cid user extra = do
     (withPlaceholder (mr MsgCompetitionPassword) $ bfs MsgCompetitionPassword) Nothing
   let result = (,,,)
                 <$> pure (userName user)
-                <*> pure (userEmail user)
+                <*> maybe (FormMissing) pure (userEmail user)
                 <*> divisionRes
                 <*> pwRes
   let widget = [whamlet|
@@ -314,7 +321,7 @@ competitionDivisions cid = do
 -- helper
 -- adds message renderer to divisions so that forms can display them
 divisionsRender :: (AppMessage -> Text) -> [(Text, D.Division)]
-divisionsRender mr = map (\(d, msg) -> (mr msg, d)) divisions
+divisionsRender mr = map (\(d, msg) -> (mr msg, d)) allDivisions
 
 scoreEditForm :: CompetitionId -> HoleId -> RoundId -> Int -> Maybe Int
   -> Html -> MForm Handler (FormResult Score, Widget)
@@ -351,7 +358,7 @@ profileForm user = do
       settings2 = withPlaceholder (mr MsgEmail) $ bfs MsgEmail
   runFormPost $ renderBootstrap3 BootstrapBasicForm $ (,)
     <$> areq textField settings1 (Just $ userName user)
-    <*> areq emailField settings2 (Just $ userEmail user)
+    <*> areq emailField settings2 (userEmail user)
     <*  bootstrapSubmit (submitButton MsgUpdate)
 
 userForm :: User -> Html
@@ -361,7 +368,7 @@ userForm user extra = do
   (nameRes, nameView) <- mreq textField
     (withPlaceholder (mr MsgName) $ bfs MsgName) (Just $ userName user)
   (emailRes, emailView) <- mreq emailField
-    (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) (Just $ userEmail user)
+    (withPlaceholder (mr MsgEmail) $ bfs MsgEmail) (userEmail user)
   (adminRes, adminView) <- mreq checkBoxField
     "" (Just $ userAdmin user)
   let result = (,,) <$> nameRes <*> emailRes <*> adminRes
@@ -400,3 +407,15 @@ notificationForm uid time = do
     <*> pure uid
     <*> pure time
     <* bootstrapSubmit (submitButton MsgAddNotification)
+
+importPlayersForm :: Handler ((FormResult Textarea, Widget), Enctype)
+importPlayersForm = do
+  mr <- getMessageRender
+  let settings = withRows "30" $ withPlaceholder (mr MsgAddPlayers) $ bfs MsgAddPlayers
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $
+    areq textareaField settings Nothing
+    <* bootstrapSubmit (submitButton MsgAddPlayers)
+
+withRows :: Text -> FieldSettings site -> FieldSettings site
+withRows n fs = fs { fsAttrs = newAttrs }
+  where newAttrs = ("rows", n) : fsAttrs fs

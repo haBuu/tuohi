@@ -5,7 +5,7 @@ import Import
 
 getUsersR :: Handler Html
 getUsersR = do
-  users <- runDB $ selectList [] [Asc UserName]
+  users <- runDB $ selectList [UserRealUser ==. True] [Asc UserName]
   defaultLayout $ do
     setTitleI MsgUsers
     $(widgetFile "users")

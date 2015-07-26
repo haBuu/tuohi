@@ -13,8 +13,11 @@ Round: Round
 Total: Total
 MPO: Open
 FPO: Women
-MJ2: Junior-16
 MPM: Master
+MJ1: Junior-19
+MJ2: Junior-16
+MA2: Amateur Intermediate
+MA3: Amateur Recreational
 Password: Password
 Courses: Courses
 Series: Series
@@ -142,3 +145,9 @@ CompetitionPassword: Competition password
 ScoreRangeError: Score is not within allowed range (0-99)
 ScoreMissing: Missing score
 InputNumber: Input number
+ImportPlayers: Import players
+PlayersImported: Players imported
+PlayersImportError err@Text: Player import failed: #{err}
+AddPlayers: Add players
+PDGACompetition: PDGA competition
+UserIsNotRealUser: User is not real user

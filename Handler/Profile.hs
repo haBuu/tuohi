@@ -13,6 +13,7 @@ import Model.User
 getProfileR :: Handler Html
 getProfileR = do
   (Entity uid user) <- requireAuth
+  requireReal user
   activeSignUps <- getActiveSignUps uid
   ((_, formWidget), formEnctype) <- profileForm user
   defaultLayout $ do
@@ -23,6 +24,7 @@ getProfileR = do
 postProfileR :: Handler Html
 postProfileR = do
   (Entity uid user) <- requireAuth
+  requireReal user
   ((result, _), _) <- profileForm user
   formHandler result $ \(name, email) -> do
     -- check that the email does not exist

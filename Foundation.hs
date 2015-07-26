@@ -152,6 +152,7 @@ instance Yesod App where
   isAuthorized (ScoreEditR _ _ _) _ = isAdmin
   isAuthorized (EditCompetitionR _) _ = isAdmin
   isAuthorized (ChangeGroupR _ _) _ = isAdmin
+  isAuthorized (ImportPlayersR _) _ = isAdmin
 
   -- super admin
   isAuthorized UsersR _ = isSuperAdmin
@@ -245,7 +246,7 @@ instance YesodAuth App where
   logoutDest _ = HomeR
 
   getAuthId creds = runDB $ do
-    x <- getBy $ UniqueUser (credsIdent creds)
+    x <- getBy $ UniqueUser (Just $ credsIdent creds)
     return $ case x of
       Just (Entity uid _) -> Just uid
       Nothing -> Nothing
@@ -269,7 +270,7 @@ instance YesodAuthEmail App where
   afterPasswordRoute _ = HomeR
 
   addUnverified email verkey = runDB $ insert $
-    User "N/A" email Nothing (Just verkey) False False False
+    User "N/A" (Just email) Nothing (Just verkey) False False False True
 
   sendVerifyEmail email _ verurl = do
     liftIO $ print verurl
@@ -324,7 +325,7 @@ instance YesodAuthEmail App where
   setPassword uid pass = runDB $ update uid [UserPassword =. Just pass]
 
   getEmailCreds email = runDB $ do
-    muser <- getBy $ UniqueUser email
+    muser <- getBy $ UniqueUser $ Just email
     case muser of
       Nothing -> return Nothing
       Just (Entity uid user) -> return $ Just EmailCreds
@@ -335,7 +336,7 @@ instance YesodAuthEmail App where
         , emailCredsEmail = email
         }
 
-  getEmail = runDB . fmap (fmap userEmail) . get
+  getEmail = runDB . fmap (join . fmap userEmail) . get
 
   registerHandler = myRegisterHandler
   confirmationEmailSentResponse = myConfirmationEmailSentResponse

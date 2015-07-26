@@ -13,8 +13,11 @@ Round: Kierros
 Total: Yhteensä
 MPO: Avoin
 FPO: Naiset
-MJ2: Juniorit-16
 MPM: Seniorit-40
+MJ1: Juniorit-19
+MJ2: Juniorit-16
+MA2: Amateur Intermediate
+MA3: Amateur Recreational
 Password: Salasana
 Courses: Radat
 Series: Sarjat
@@ -142,3 +145,9 @@ CompetitionPassword: Kilpailun salasana
 ScoreRangeError: Tulos ei ole sallitulla alueella (0-99)
 ScoreMissing: Tulos puuttuu
 InputNumber: Syötä numero
+ImportPlayers: Syötä pelaajia
+PlayersImported: Pelaajat lisätty
+PlayersImportError err@Text: Pelaajien lisäys epäonnistui: #{err}
+AddPlayers: Lisää pelaajat
+PDGACompetition: PDGA kilpailu
+UserIsNotRealUser: Käyttäjä ei ole oikea käyttäjä

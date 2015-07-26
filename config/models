@@ -1,12 +1,13 @@
 User
   name Text
-  email Text
+  email Text Maybe
   password Text Maybe
   verkey Text Maybe
   verified Bool default=False
   admin Bool default=False
   superAdmin Bool default=False
-  UniqueUser email
+  realUser Bool default=True
+  UniqueUser email !force
   deriving Typeable
   deriving Show
 
@@ -19,6 +20,7 @@ Competition
   state CompetitionState
   password Text
   serieId SerieId Maybe
+  pdga Bool
   UniqueCompetition layoutId date name
   deriving Show
 

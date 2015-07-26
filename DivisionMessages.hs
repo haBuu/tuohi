@@ -5,13 +5,19 @@ import Import
 
 import Handler.Division
 
-divisions :: [(Division, AppMessage)]
-divisions = map (\d -> (d, divisionMsg d)) [minBound..]
+allDivisions :: [(Division, AppMessage)]
+allDivisions = map (\d -> (d, divisionMsg d)) [minBound..]
+
+withMessages :: [Division] -> [(Division, AppMessage)]
+withMessages = map (\d -> (d, divisionMsg d))
 
 divisionMsg :: Division -> AppMessage
 divisionMsg division =
   case division of
     MPO -> MsgMPO
     FPO -> MsgFPO
-    MJ2 -> MsgMJ2
     MPM -> MsgMPM
+    MJ1 -> MsgMJ1
+    MJ2 -> MsgMJ2
+    MA2 -> MsgMA2
+    MA3 -> MsgMA3

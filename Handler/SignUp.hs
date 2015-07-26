@@ -28,12 +28,17 @@ getSignUpsR cid = do
   requireInit competition
   full <- competitionFull cid
   muser <- maybeAuthUser
+  signups <- signUpsWithName cid
+  competitionDivisions <- runDB $ selectList
+    [CompetitionDivisionCompetitionId ==. cid]
+    []
+  let divisions = fmap (competitionDivisionDivision . entityVal)
+        competitionDivisions
   ((_, formWidget), formEnctype) <- case muser of
     -- user is logged in
     Just user -> runFormPost $ signUpFormLoggedIn cid user
     -- user is not logged in
     Nothing -> runFormPost $ signUpForm cid
-  signups <- signUpsWithName cid
   defaultLayout $ do
     $(widgetFile "signup")
 

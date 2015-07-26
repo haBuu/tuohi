@@ -9,7 +9,7 @@ $else
     ^{formWidget}
 
 <ul .list-group>
-  $forall (d, msg) <- divisions
+  $forall (d, msg) <- withMessages divisions
     <div .panel .panel-primary>
       <div .panel-heading>_{msg} (#{show $ count d signups})
       $forall (_, _, E.Value division, E.Value name) <- signups

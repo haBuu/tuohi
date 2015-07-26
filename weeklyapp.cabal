@@ -50,6 +50,7 @@ library
                      Handler.SignUp
                      Handler.EditCompetition
                      Handler.EventLog
+                     Handler.ImportPlayers
                      Helpers
                      Database
                      Competition.Competition
@@ -130,6 +131,7 @@ library
                  , blaze-html                    >= 0.7.0.3    && < 0.8
                  , foreign-store                 >= 0.1
                  , old-locale                    >= 1.0.0.5
+                 , cassava                       >= 0.4.3.1
 
 executable         weeklyapp
     if flag(library-only)
