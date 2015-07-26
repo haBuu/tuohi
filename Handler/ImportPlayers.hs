@@ -37,15 +37,15 @@ postImportPlayersR cid = do
           deleteWhere [SignUpCompetitionId ==. cid]
           V.forM_ (players :: V.Vector PDGAPlayer) $ \p -> do
             let name = (firstName p) ++ " " ++ (lastName p)
-            uid <- insertUserNoEmail $ pack name
+            uid <- insertUserNoEmail name $ pdga p
             void $ insertUnique $ SignUp uid cid True (division p)
           setMessageI MsgPlayersImported
   redirect $ CompetitionR cid
 
 data PDGAPlayer = PDGAPlayer
   { division :: !Division
-  , firstName :: !String
-  , lastName :: !String
+  , firstName :: !Text
+  , lastName :: !Text
   , pdga :: !(Maybe Int)
   } deriving (Show)
 

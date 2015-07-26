@@ -51,6 +51,7 @@ library
                      Handler.EditCompetition
                      Handler.EventLog
                      Handler.ImportPlayers
+                     Handler.ExportScores
                      Helpers
                      Database
                      Competition.Competition

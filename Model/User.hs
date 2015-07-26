@@ -4,21 +4,23 @@ import Import
 
 insertUser :: Text -> Text -> Handler UserId
 insertUser name email = do
-  eitherUser <- runDB $ insertBy $ buildUser name (Just email) True
+  eitherUser <- runDB $ insertBy $
+    buildUser name (Just email) True Nothing
   return $ case eitherUser of
     Left (Entity uid _) -> uid
     Right uid -> uid
 
-insertUserNoEmail :: Text -> ReaderT SqlBackend Handler UserId
-insertUserNoEmail name = do
-  eitherUser <- insertBy $ buildUser name Nothing False
+-- this is for players added by CSV from SFL Kisakone
+insertUserNoEmail :: Text -> Maybe Int -> ReaderT SqlBackend Handler UserId
+insertUserNoEmail name mPdga = do
+  eitherUser <- insertBy $ buildUser name Nothing False mPdga
   return $ case eitherUser of
     Left (Entity uid _) -> uid
     Right uid -> uid
 
-buildUser :: Text -> Maybe Text -> Bool -> User
-buildUser name mEmail real =
-  User name mEmail Nothing Nothing False False False real
+buildUser :: Text -> Maybe Text -> Bool -> Maybe Int -> User
+buildUser name mEmail real mPdga =
+  User name mEmail Nothing Nothing False False False real mPdga
 
 updateUser :: UserId -> Text -> Text -> Bool -> Handler ()
 updateUser uid name email admin = runDB $ update uid

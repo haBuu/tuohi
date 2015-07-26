@@ -12,6 +12,9 @@
 $if currentRound_ == 1
   <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
 
+$if competitionPdga competition
+  <a href=@{ExportScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgPDGAScores}
+
 <a href=@{ScoreEditPlayersR cid} .btn .btn-default .btn-block .btn-lg>_{MsgEditScores}
 
 $maybe _ <- mScoreUpdate

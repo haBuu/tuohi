@@ -151,3 +151,6 @@ PlayersImportError err@Text: Player import failed: #{err}
 AddPlayers: Add players
 PDGACompetition: PDGA competition
 UserIsNotRealUser: User is not real user
+PDGAScores: PDGA scores
+UserNoPDGANumber: User does not have a PDGA number
+NotPDGACompetition: Competition is not a PDGA competition

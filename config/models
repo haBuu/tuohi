@@ -7,6 +7,7 @@ User
   admin Bool default=False
   superAdmin Bool default=False
   realUser Bool default=True
+  pdgaNumber Int Maybe
   UniqueUser email !force
   deriving Typeable
   deriving Show

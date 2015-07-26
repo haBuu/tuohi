@@ -62,3 +62,4 @@
 
 /admin/permissions PermissionsR GET POST
 /admin/eventlog EventLogR GET
+/admin/competition/#CompetitionId/export/scores ExportScoresR GET

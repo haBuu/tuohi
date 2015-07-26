@@ -153,6 +153,7 @@ instance Yesod App where
   isAuthorized (EditCompetitionR _) _ = isAdmin
   isAuthorized (ChangeGroupR _ _) _ = isAdmin
   isAuthorized (ImportPlayersR _) _ = isAdmin
+  isAuthorized (ExportScoresR _) _ = isAdmin
 
   -- super admin
   isAuthorized UsersR _ = isSuperAdmin
@@ -270,7 +271,14 @@ instance YesodAuthEmail App where
   afterPasswordRoute _ = HomeR
 
   addUnverified email verkey = runDB $ insert $
-    User "N/A" (Just email) Nothing (Just verkey) False False False True
+    User "N/A" (Just email)
+      Nothing -- password
+      (Just verkey) -- verkey
+      False -- verified
+      False -- admin
+      False -- super admin
+      True -- real user
+      Nothing -- pdga number
 
   sendVerifyEmail email _ verurl = do
     liftIO $ print verurl

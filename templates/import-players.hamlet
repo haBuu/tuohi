@@ -1,4 +1,4 @@
+<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
 <form method=post action=@{ImportPlayersR cid}#form enctype=#{formEnctype}>
   ^{formWidget}
-
-<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

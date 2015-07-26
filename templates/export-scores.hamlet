@@ -1,0 +1,7 @@
+<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+<form>
+  <textarea .form-control rows=#{length rows + 2}>
+    #{header rounds}
+    $forall row <- rows
+      #{row}
