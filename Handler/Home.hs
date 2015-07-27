@@ -23,9 +23,14 @@ getHomeR = do
   mactiveRound <- maybe (return Nothing) getActiveRound maid
   tz <- liftIO getCurrentTimeZone
   activeCompetitions <- runDB $ selectList
-    [CompetitionState !=. Finished] [Desc CompetitionDate]
+    [ CompetitionState !=. Finished
+    , CompetitionPrivate !=. True
+    ]
+    [Desc CompetitionDate]
   finished <- runDB $ selectList
-    [CompetitionState ==. Finished]
+    [ CompetitionState ==. Finished
+    , CompetitionPrivate !=. True
+    ]
     [Desc CompetitionDate, LimitTo (finishedLimit + 1)]
   notifications <- runDB $ selectList []
     [Desc NotificationDate, LimitTo notificationLimit]

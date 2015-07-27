@@ -9,6 +9,10 @@
 <div .panel .panel-info>
   <div .panel-heading>_{MsgRound}: #{currentRound_}
 
+$if competitionPrivate competition
+  <div .panel .panel-info>
+    <div .panel-heading>_{MsgCompetitionUrl}: @{GroupsR cid}
+
 $if currentRound_ == 1
   <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
 

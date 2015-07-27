@@ -21,7 +21,8 @@ Competition
   state CompetitionState
   password Text
   serieId SerieId Maybe
-  pdga Bool
+  pdga Bool default=False
+  private Bool default=False
   UniqueCompetition layoutId date name
   deriving Show
 

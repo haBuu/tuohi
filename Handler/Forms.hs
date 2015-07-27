@@ -52,6 +52,9 @@ competitionForm uid mCompetition divisions extra = do
   (pdgaRes, pdgaView) <- mreq checkBoxField
     (FieldSettings (SomeMessage MsgPDGACompetition) Nothing Nothing Nothing
       []) (fmap competitionPdga mCompetition)
+  (privateRes, privateView) <- mreq checkBoxField
+    (FieldSettings (SomeMessage MsgPrivateCompetition) Nothing Nothing Nothing
+      []) (fmap competitionPrivate mCompetition)
   let competitionRes = Competition
                         <$> (pure uid)
                         <*> layoutRes
@@ -62,6 +65,7 @@ competitionForm uid mCompetition divisions extra = do
                         <*> pwRes
                         <*> serieRes
                         <*> pdgaRes
+                        <*> privateRes
   let result = (,) <$> competitionRes <*> divisionRes
   let widget = [whamlet|
         #{extra}
@@ -93,6 +97,9 @@ competitionForm uid mCompetition divisions extra = do
         <div .checkbox>
           <label>
             ^{fvInput pdgaView}^{fvLabel pdgaView}
+        <div .checkbox>
+          <label>
+            ^{fvInput privateView}^{fvLabel privateView}
         <div .form-group>
           $if isJust mCompetition
             <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgEditCompetition}>

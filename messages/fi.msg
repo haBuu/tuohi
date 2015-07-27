@@ -154,3 +154,6 @@ UserIsNotRealUser: Käyttäjä ei ole oikea käyttäjä
 PDGAScores: PDGA tulokset
 UserNoPDGANumber: Käyttäjällä ei ole PDGA numeroa
 NotPDGACompetition: Kilpailu ei ole PDGA kilpailu
+PrivateCompetition: Yksityinen kilpailu
+CompetitionUrl: Kilpailun osoite
+
