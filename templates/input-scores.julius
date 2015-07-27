@@ -10,14 +10,6 @@ function setScoreFocus(n) {
 }
 
 function inputScore(value) {
-  if (doubleDigitActive && currentScore.text()) {
-    var currentValue = currentScore.text();
-    value = currentValue + value;
-    doubleDigit();
-    if (value > 99) {
-      return;
-    }
-  }
   if (currentScore) {
     var url = currentScore.data("url");
     console.log(value);
@@ -31,9 +23,7 @@ function inputScore(value) {
     });
     value = value == 0 ? "" : value
     currentScore.text(value);
-    if (!doubleDigitActive) {
-      next();
-    }
+    next();
   }
 }
 
@@ -54,9 +44,12 @@ function next() {
   }
 }
 
-var doubleDigitActive = false;
-
-function doubleDigit() {
-  doubleDigitActive = !doubleDigitActive;
-  $("a#double-digit").toggleClass("active");
+function changeKeyboard(doubleDigit) {
+  if (doubleDigit) {
+    $("div#keyboard.zero-to-nine").addClass("hidden");
+    $("div#keyboard.ten-to-nineteen").removeClass("hidden");
+  } else {
+    $("div#keyboard.ten-to-nineteen").addClass("hidden");
+    $("div#keyboard.zero-to-nine").removeClass("hidden");
+  }
 }

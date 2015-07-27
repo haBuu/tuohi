@@ -18,12 +18,12 @@
                 $nothing
                   <td data-url=@{ScoreR cid rid hid} :(firstHoleFirstPlayer hole n):.score-focus>
 
-        <div #keyboard>
+        <div #keyboard .zero-to-nine>
           <a .btn .btn-default .rounded-ul onClick="inputScore(0)">0
           <a .btn .btn-default onClick="inputScore(1)">1
           <a .btn .btn-default onClick="inputScore(2)">2
           <a .btn .btn-default onClick="inputScore(3)">3
-          <a #double-digit .btn .btn-default .rounded-ur onClick="doubleDigit()">> 9
+          <a #double-digit .btn .btn-default .rounded-ur onClick="changeKeyboard(true)">10-19
           $if hole == 1
             <a href=#hole-#{length holesAndPlayers} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
               <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
@@ -38,3 +38,24 @@
           <a .btn .btn-default onClick="inputScore(7)">7
           <a .btn .btn-default onClick="inputScore(8)">8
           <a .btn .btn-default onClick="inputScore(9)">9
+
+        <div #keyboard .ten-to-nineteen .hidden>
+          <a .btn .btn-default .rounded-ul onClick="inputScore(10)">10
+          <a .btn .btn-default onClick="inputScore(11)">11
+          <a .btn .btn-default onClick="inputScore(12)">12
+          <a .btn .btn-default onClick="inputScore(13)">13
+          <a #double-digit .btn .btn-default .rounded-ur onClick="changeKeyboard(false)">0-9
+          $if hole == 1
+            <a href=#hole-#{length holesAndPlayers} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
+              <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
+          $else
+            <a href=#hole-#{show (hole - 1)} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
+              <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
+          <a .btn .btn-default onClick="inputScore(14)">14
+          <a .btn .btn-default onClick="inputScore(15)">15
+          <a .btn .btn-default onClick="inputScore(16)">16
+          <a href=#hole-#{mod hole (length holesAndPlayers) + 1} #next .arrow .arrow-right .rounded-lr .btn .btn-default role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true">
+          <a .btn .btn-default onClick="inputScore(17)">17
+          <a .btn .btn-default onClick="inputScore(18)">18
+          <a .btn .btn-default onClick="inputScore(19)">19
