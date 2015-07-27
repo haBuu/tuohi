@@ -18,7 +18,7 @@ getExportScoresR cid = do
   holes <- runDB $ selectList
     [HoleLayoutId ==. lid] [Asc HoleNumber]
   players <- playersAndScores cid
-  let sortedPlayers = playerSort holes players
+  let sortedPlayers = playerSortByDivision holes players
       sortedInDivisions = groupByDivision sortedPlayers
       withPlaces = concatMap (addPlacements holes) sortedInDivisions
       rows = map toRow withPlaces
