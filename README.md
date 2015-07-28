@@ -17,4 +17,7 @@ cabal install --only-dependencies
 ```
 2. Set up MySQL. See settings.yml for database config.
 3. Edit settings.yml as you like
-4. Start application by running `yesod devel`.
+4. Start application by running `yesod devel`
+
+### ghci
+run-devel.sh can be used to run application inside. It will watch for modifications and reload the application.
