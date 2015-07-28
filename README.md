@@ -22,5 +22,5 @@ Instructions for installing Haskell and Yesod are available at http://www.yesodw
 
 4. Start application by running `yesod devel`
 
-### Alternative to yesod devel
+### Running in ghci
 run-devel.sh can be used to run application in ghci. It will watch for modifications and reload the application. It has some issues but works most of the time.
