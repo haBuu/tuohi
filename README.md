@@ -1,129 +1,26 @@
-Sähköinen kilpailutulospalvelu
+WeeklyApp
 ==============================
 
-Yleiskuvaus
------------
+Web application for disc golf competition live scoring. Currently used in Tampere's disc golf club's weekly and PDGA competitions. Includes player import from SFL Kisakone and score export to PDGA. 
 
-Verkkosovellus frisbeegolfkilpailuiden tulosten kirjaamiseen, arkistointiin ja katselmointiin. Tulosten syöttäminen tapahtuu yleensä älypuhelimilla, mutta sovellus on toteutettu siten, että sen käyttö onnistuu kaikilla alustoilla. Käyttöliittymä on kuitenkin suunniteltu toimimaan pienellä näytöllä.
+### Requirements
+You must have Haskell, Yesod and MySQL/MariaDB installed.
 
-Sovelluksella on muutamia erilaisia käyttötapauksia. Kaikki pelaajat voivat käyttää sitä omilla laitteillaan omien tuloksiensa kirjaamiseen, yksi pelaaja voi kirjata useiden pelaajien tuloksia, erillinen toimitsija voi kirjata muiden pelaajien tulokset tai mitä tilanne sitten vaatikaan. Yksittäinen pelaaja voi myös käyttää sovellusta omien tuloksiensa kirjaamiseen esimerkiksi harjoituskierroksella.
+Instructions for installing Haskell and Yesod are available at http://www.yesodweb.com/page/quickstart
 
-Käyttäjät voivat tehdä sovellukseen oman tunnuksen, mutta se ei ole pakollista. Tunnuksen tarkoitus on helpottaa sovelluksen käyttämistä, mutta se ei tarjoa lisäominaisuuksia käyttäjälle.
+### Installation
+1. Clone repo and install packages
+  ```
+  git clone https://github.com/haBuu/tuohi.git
+  cabal sandbox init
+  cabal install --only-dependencies
+  ```
 
-Tekniikat
----------
+2. Set up MySQL. See config/settings.yml for database config.
 
-##### Haskell
-Puhdas funktionaalinen ohjelmointikieli. Päädyin valitsemaan Haskellin ohjelmointikieleksi, koska se on turvallisuuden kannalta erinomainen valinta. Käännettävyys, staattinen ja vahva tyypitus tarjoavat hyvän pohjan lähteä rakentamaan turvallista ohjelmaa.
+3. Edit config/settings.yml as needed
 
-##### Yesod
-Web-ohjelmistokehys Haskell ohjelmointikielelle. Yesod tarjoaa esimerkiksi tyyppiturvalliset url-osoitteet ja tukea XSS- ja CSRF-hyökkäyksiä vastaan. Valitsin Yesodin alustaksi, koska se vaikutti ominaisuuksiltaan parhaimmailta alustalta. Useita kirjastoa ja ominaisuuksia valmiina kuten sessioiden hallinta, sähköposti autentikointi ja eri tietokannat.
+4. Start application by running `yesod devel`
 
-##### MySQL/MariaDB
-Sovellus käyttää tiedon tallentamiseen MySQL/MariaDB-tietokantaa. Sovellusta ei ole kuitenkaan sidottu kyseisiinn tietokantoihin ja sen vaihtaminen tarvittaessa on helppoa.
-
-##### jQuery
-JavaScript-kirjasto HTML-dokumentin muokkaamiseen, tapahtumine käsittelyyn, animointiin ja Ajax:iin (Asynchronous JavaScript and XML). Useat sovelluksen osat käyttävät jQuery kirjastoa asiakaspäässä mahdollisimman hyvän käyttettävyyden saavuttamiseen. Esimerkiksi tulosten syöttäminen.
-
-##### Bootstrap
-HTML-, CSS- ja JavaScript-kehys responsiivisten web-sovellusten tekoon.
-
-
-Ominaisuudet
-------------
-Kaikkia ominaisuuksia ei ole vielä toteutettu tai tämän hetkinen toteutus on ristiriitainen dokumentaation kanssa.
-
-##### Käyttäjä
-Jokaiselle pelaajalla luodaan käyttäjätunnus, mutta sen aktivointi on vapaaehtoista ja käyttäjän vastuulle. Aktivointi tehdään sähköpostitse. Käyttäjä antaa oman sähköpostinsa, jonne sovellus lähettää aktivointilinkin. Käyttäjä voi sitten seurata linkkiä ja aktivoida oman tunnuksensa.
-
-##### Kilpailu
-Kilpailu koostuu layoutista, päivästä, nimestä, pelaajamäärästä ja tilasta. Ylläpitäjä luo sovellukseen uuden kilpailun johon käyttäjät joko ilmoittautuvat itse tai ylläpitäjä lisää heidät manuaalisesti. Ylläpitäjä voi sitten hallita kilpailuaan haluamallaan tavalla. Pelaajien poistaminen, kilpailun aloittaminen, seuraavan kierroksen aloittaminen, ryhmien järjestely jne.
-
-##### Rata, layout ja väylä
-Rata koostuu aina vähintään yhdestä layoutista. Ylläpitäjä voi lisätä uusia ratoja ja niille uusia layoutteja sekä muokata vanhoja. Rata koostuu vain nimestä. Layouttia sidotaan johonkin rataan ja silleannetaan nimi ja kuvaus. Jokaiseen layouttiin sidotaan rajaton määrä väyliä joille määritellään numero ja ihannetulos (par).
-
-##### Ilmoittautuminen
-Kun kilpailu luodaan, sille tehdään automaattisesti ilmoittautumis-sivu, jonka kautta käyttäjät voivat ilmoittautua kilpailuun.
-
-##### Käyttäjien hallinta
-Pääylläpitäjä voi katsella ja muokata käyttäjien tietoja sekä luoda tavallisia ylläpitäjä.
-
-##### Sarja
-Useita erillisiä kilpailuja voi kytkeä toisiinsa määrittelemällä ne kuulumaan samaan sarjaan.
-
-##### Tasoitukset
-Ylläpitäjä voi määritella haluaako hän, että kilpailulle lasketaan tasoitetut tulokset. Tasoitettu tulos tarkoittaa tulosta, jossa pelaajan aikaisemmat tulokset vaikuttavat hänen lopulliseen tulokseensa.
-
-##### Käyttäjien tunnistaminen väliaikaiselle salasanalla
-Käyttäjät, jotka eivät ole kirjautuneet sisään omalla tunnukselleen tunnistetaan väliaikaisen salasanan avulla. Sovellus generoi salasanan ja ylläpitäjä kertoo sen käyttäjille eli pelaajille. Väliaikaisen salasanan käyttäminen voidaan myös pakottaa, vaikka käyttäjä olisikin kirjautunut.
-
-##### Tulosten pitäminen muistissa, jos verkkoyhteys on poikki
-Tilanteessa, jossa laitteella ei ole verkkoyhteyttä, sovellus pitää syötettyjä tuloksia laitteen muistissa ja lähettää ne palvelimelle välittömästi yhteyden palautuessa.
-
-Toteutus
----------
-
-Reitit, niihin liittyvien resurssien nimet ja sallitut metodit on määritelty config/routes tiedostossa. Resurssien käsittelijät löytyvät Handler-kansiosta.
-
-Esim. config/routes: "/ HomeR GET" ja vastaava käsittelijä Handler/Home.hs: "getHomeR"
-
-Tietokantafunktiot löytyvät Database.hs tiedostosta.
-
-Foundation.hs määrittelee mm. autentikoinnin, istunnot ja lukuisia muita sovelluksen yleisiä asetuksia.
-
-Mallit löytyvät config/models tiedostosta.
-
-messages hakemisto sisältää käännöstiedostot (suomi ja englanti).
-
-Turvallisuus
-------------
-
-##### Istunnot
-
-Käyttäjien istunnot säilytetään salatuissa eväisteissä (AES-256). Evästeissä on asetettu lisäksi SecureFlag, jotta selaimet eivät lähetä evästeitä salaamattoman HTTP-pyynnön mukana.
-
-https://www.owasp.org/index.php/SecureFlag
-
-##### Lomakkeet
-
-Jokaisessa lomakkeessa on piilotettu token CSRF-hyökkäyksiä vastaan. Yesod ja Haskellin tyyppijärjestelmä takaavat lisäksi, että lomakkeista tuleva tieto on aina vähintään oikeaa tyyppiä ja lomake vastaa sitä mitä odotettiinkin.
-
-##### SQL-injektiot
-
-Persistent kirjasto pitää huolen, että SQL-injektiot eivät ole mahdollisia.
-
-##### XSS-injektiot
-
-Yesod siivoaa lomakkeista saapuvan html:n automaattisesti.
-
-##### Salasanat ja rekisteröityminen
-
-Yesod.Auth(.Email)-kirjasto huolehtii salasanojen suolauksesta ja salaamisesta. Käyttäjien tunnukset aktivoidaan lähettämällä käyttäjän antamaan sähköpostiin aktivointilinkki.
-
-##### HTTPS
-
-sslOnlyMiddleware lisää Strict-Transport-Security otsakkeen kaikkiin vastauksiin. Otsake kertoo selaimille, että kyseiseen osoitteeseen ei tule tehdä HTTP-pyyntöjä.
-
-##### Yesod: Type-safe Security
-
-http://www.yesodweb.com/page/about
-
-1. Injection. Persistent will escape any SQL injections.
-
-2. XSS injection. Any html coming back from a form will be efficiently sanitized just once on arrival. Unsanitized strings will be sanitized before being displayed.
-
-3. Authentication & Session Management: Yesod uses cryptographic libraries to keep your data secure.
-
-4. Insecure Reference: Yesod Forms do not allow sending extra parameters
-
-5. CSRF: Forms have special tokens to block CSRF attacks.
-
-6. Security Misconfiguration: Yesod simplifies this process by simplifying deployments.
-
-7. Insecure Cryptographic Storage: Passwords are encrypted
-
-8. Failure to Restrict URL access: Yesod exposes declarative access controls.
-
-9. Insufficient Transport Layer Protection: Yesod supports SSL through industry standards like nginx or apache.
-
-10. Unvalidated Redirects and Forwards: Yesod encourage use of type-safe urls. Any route can be checked to see if it is valid.
+### Running in ghci
+run-devel.sh can be used to run application in ghci. It will watch for modifications and reload the application. It has some issues but works most of the time.
