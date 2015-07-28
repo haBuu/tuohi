@@ -4,7 +4,7 @@
 static-dir:     "_env:STATIC_DIR:static"
 host:           "_env:HOST:*4" # any IPv4 host
 port:           "_env:PORT:3000"
-approot:        "_env:APPROOT:http://dev.habuu.me:3000"
+approot:        "_env:APPROOT:<insert approot here>"
 ip-from-header: "_env:IP_FROM_HEADER:false"
 
 # Optional values with the following production defaults.
@@ -17,10 +17,14 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 # mutable-static: false
 # skip-combining: false
 
+# mysql
 database:
-  database: "_env:SQLITE_DATABASE:weeklyapp.sqlite3"
-  poolsize: "_env:SQLITE_POOLSIZE:10"
+  user:     "_env:MYSQL_USER:<user>"
+  password: "_env:MYSQL_PASSWORD:<password>"
+  host:     "_env:MYSQL_HOST:<host>"
+  port:     "_env:MYSQL_PORT:<port>"
+  database: "_env:MYSQL_DATABASE:<database>"
+  poolsize: "_env:MYSQL_POOLSIZE:<poolsize>"
 
 copyright: Insert copyright statement here
-# recaptcha: KEY
 # analytics: UA-YOURCODE
