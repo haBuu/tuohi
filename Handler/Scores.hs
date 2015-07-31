@@ -43,7 +43,8 @@ postScoreR cid rid hid = do
       requireStarted round_
       user <- runDB $ get404 $ roundUserId round_
       value <- runInputPost $ ireq (checkScore intField) "score"
-      let score = Score rid hid value
+      now <- liftIO $ getCurrentTime
+      let score = Score rid hid value now
       insertScore cid score
       redirect $ InputR (roundCompetitionId round_)
         (roundGroupnumber round_)
@@ -76,9 +77,11 @@ insertScore cid score = runDB $
           let new = scoreScore score
               old = scoreScore prev
           when (old /= new) $ do
-            update key [ScoreScore =. scoreScore score]
-            time <- liftIO getCurrentTime
-            insert_ $ ScoreUpdateLog key cid time old new
+            update key
+              [ ScoreScore =. scoreScore score
+              , ScoreTime =. scoreTime score
+              ]
+            insert_ $ ScoreUpdateLog key cid (scoreTime score) old new
 
 getScoreEditPlayersR :: CompetitionId -> Handler Html
 getScoreEditPlayersR cid = do
@@ -124,6 +127,20 @@ postScoreEditR cid rid hid = do
     scoreEditForm cid hid rid (holeNumber hole) Nothing
   formHandler result $ \res -> insertScore cid res
   redirect $ ScoreEditPlayerR cid (roundUserId round_)
+
+getLatestScoreTimeR :: CompetitionId -> Handler Value
+getLatestScoreTimeR cid = do
+  scores <- runDB $ latestScore cid
+  returnJson $ map (scoreTime . entityVal) scores
+
+latestScore :: CompetitionId -> DB [Entity Score]
+latestScore cid = E.select $
+  E.from $ \(round_, score) -> do
+    E.where_ $ round_ ^. RoundCompetitionId E.==. E.val cid
+    E.where_ $ score ^. ScoreRoundId E.==. round_ ^. RoundId
+    E.orderBy [E.desc (score ^. ScoreTime)]
+    E.limit 1
+    return score
 
 confirmedPlayers :: CompetitionId -> DB [Entity User]
 confirmedPlayers cid = E.select $

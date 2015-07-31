@@ -333,6 +333,7 @@ divisionsRender mr = map (\(d, msg) -> (mr msg, d)) allDivisions
 scoreEditForm :: CompetitionId -> HoleId -> RoundId -> Int -> Maybe Int
   -> Html -> MForm Handler (FormResult Score, Widget)
 scoreEditForm cid hid rid hole mScore extra = do
+  now <- liftIO $ getCurrentTime
   r <- getUrlRender
   let set = (FieldSettings "" Nothing Nothing Nothing
         [ ("data-url", r (ScoreEditR cid rid hid))
@@ -340,7 +341,7 @@ scoreEditForm cid hid rid hole mScore extra = do
         ])
   (scoreRes, scoreView) <- mreq (checkScore $ selectFieldList scores)
     set mScore
-  let result = Score <$> (pure rid) <*> (pure hid) <*> scoreRes
+  let result = Score <$> (pure rid) <*> (pure hid) <*> scoreRes <*> (pure now)
   let widget = [whamlet|
       #{extra}
       <div .form-group>

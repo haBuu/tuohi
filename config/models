@@ -52,6 +52,7 @@ Score
   roundId RoundId
   holeId HoleId
   score Int
+  time UTCTime
   UniqueScore roundId holeId
   deriving Show
 

@@ -68,7 +68,7 @@ Present: Present
 Information: Information
 AdminPanel: Admin panel
 WrongAnswer: Wrong answer
-ReloadPage: Reload the page if the scores change
+ReloadPage: Reload the page automatically
 DNF: DNF
 CompetitionAdded: Competition added
 CompetitionStarted: Competition started

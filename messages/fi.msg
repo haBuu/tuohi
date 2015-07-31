@@ -68,7 +68,7 @@ Present: Paikalla
 Information: Tiedot
 AdminPanel: Hallinta
 WrongAnswer: Väärä vastaus
-ReloadPage: Lataa sivu uudestaan tulosten muuttuessa
+ReloadPage: Päivitä sivu automaattisesti
 DNF: DNF
 CompetitionAdded: Kilpailu lisätty
 CompetitionStarted: Kilpailu aloitettu

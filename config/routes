@@ -18,6 +18,7 @@
 
 /score/#CompetitionId/#RoundId/#HoleId ScoreR POST
 /scores/#CompetitionId ScoresR GET
+/scores/latest/#CompetitionId LatestScoreTimeR GET
 /results/#CompetitionId ResultsR GET
 
 /serie/#SerieId/handicaps HandicapsR GET

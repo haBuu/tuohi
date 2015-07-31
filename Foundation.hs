@@ -117,6 +117,7 @@ instance Yesod App where
   isAuthorized (GroupsR _) _ = return Authorized
   isAuthorized (SignUpsR _) _ = return Authorized
   isAuthorized (ScoresR _) _ = return Authorized
+  isAuthorized (LatestScoreTimeR _) _ = return Authorized
   isAuthorized (ResultsR _) _ = return Authorized
   isAuthorized (HandicapsR _) _ = return Authorized
   isAuthorized (ScoreR _ _ _) _ = return Authorized

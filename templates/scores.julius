@@ -9,28 +9,8 @@
 
   setInterval(function() {
     if (live) {
-      fetch();
+      location.reload(true);
     }
   }, 60000); // 60 seconds
-
-  // get rid of this
-  function fetch() {
-    $.getJSON('@{ScoresR cid}' , function(data) {
-      var players = data;
-      for (var i = 0; i < players.length; ++i) {
-        var rounds = players[i][1][2];
-        for (var j = 0; j < rounds.length; ++j) {
-          var scores = rounds[j][1];
-          for (var k = 0; k < scores.length; ++k) {
-            var td = table.find("td div[data-hid=" + scores[k].hid + "][data-rid=" + scores[k].rid + "]");
-            var current = td.text();
-            if (current != scores[k].score) {
-              location.reload();
-            }
-          }
-        }
-      }
-    });
-  }
 
 })();
