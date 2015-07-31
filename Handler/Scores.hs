@@ -1,17 +1,20 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Scores where
 
-import Import
+import Import hiding (for)
 
 import qualified Database.Esqueleto as E
 import Database.Esqueleto((^.))
 import Text.Julius(rawJS)
+import Data.List(nub)
 
 import Handler.CompetitionAuth
+import Handler.Division
 import Handler.Forms
 import Model.RoundState(RoundState(..))
 import qualified Model.CompetitionState as CS
 import Competition.Competition
+import qualified DivisionMessages as D
 import Database
 import Helpers
 
@@ -26,7 +29,11 @@ getScoresR cid = do
   curRound <- runDB $ currentRound cid
   let roundCount = maybe 1 id curRound
   players <- playersAndScores cid
-  let sortedPlayers = addPlacements holes $ playerSort holes players
+  let sortedPlayers = playerSort holes players
+  -- for hamlet template so it will create table only for
+  -- divisions which had competitors
+  let divisions = map (\d -> (d, D.divisionMsg d)) $ nub $
+                    for sortedPlayers $ \(_, d, _) -> d
   -- Accept: application/json will return JSON
   -- Accept: text/html will return HTML
   defaultLayoutJson
@@ -150,3 +157,8 @@ confirmedPlayers cid = E.select $
     E.where_ $ signUp ^. SignUpConfirmed E.==. E.val True
     E.orderBy [E.asc (user ^. UserName)]
     return user
+
+filterByDivision :: Division
+  -> [(a, Division, [(Round, [Score])])]
+  -> [(a, Division, [(Round, [Score])])]
+filterByDivision d = filter (\(_, d1, _) -> d == d1)

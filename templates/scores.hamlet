@@ -6,62 +6,66 @@ $if live
       <input name="live-update" type="checkbox" checked="checked">
         _{MsgReloadPage}
 
-<div .table-responsive>
-  <table #score-table>
-    <thead>
-      <tr>
-        <th>
-        <th>_{MsgHole}
-        $forall (Entity _ hole) <- holes
-          <th>#{holeNumber hole}
-        <th>+/-
-        <th>_{MsgRound}
-        <th>+/-
-        <th>_{MsgTotal}
-      <tr>
-        <th>
-        <th>Par
-        $forall (Entity _ hole) <- holes
-          <th>#{holePar hole}
-        <th>
-        <th>#{show layoutPar}
-        <th>
-        <th>#{show $ layoutPar * roundCount}
-    <tbody>
-      $forall (place, (user, _, rounds)) <- sortedPlayers
-        $forall (round_, scores) <- rounds
+$forall (d, msg) <- divisions
+  <div .panel .panel-primary>
+    <div .panel-heading>_{msg}
+
+    <div .table-responsive>
+      <table #score-table>
+        <thead>
           <tr>
-            $if roundRoundnumber round_ == 1
-              <td rowspan=#{length rounds}>#{show place}
-              <td rowspan=#{length rounds}>#{userName user}
-            $forall (Entity hid hole) <- holes
-              <td>
-                $forall score <- scores
-                  $if scoreHoleId score == hid
-                    <div data-hid=#{toPathPiece $ scoreHoleId score} data-rid=#{toPathPiece $ scoreRoundId score} class=#{textualScore (holePar hole) (scoreScore score)}>
-                      #{scoreScore score}
-            <td>
-              $if countRoundToPar holes scores == 0
-                E
-              $else
-                $if countRoundToPar holes scores > 0
-                  +
-                #{countRoundToPar holes scores}
-            <td>
-              $if roundState round_ == DidNotFinish
-                DNF
-              $else
-                #{countRoundTotal scores}
-            $if roundRoundnumber round_ == 1
-              <td rowspan=#{length rounds}>
-                $if countToPar holes rounds == 0
-                  E
-                $else
-                  $if countToPar holes rounds > 0
-                    +
-                  #{countToPar holes rounds}
-              <td rowspan=#{length rounds}>
-                $if dnf rounds
-                  DNF
-                $else
-                  #{countTotal rounds}
+            <th>
+            <th>_{MsgHole}
+            $forall (Entity _ hole) <- holes
+              <th>#{holeNumber hole}
+            <th>+/-
+            <th>_{MsgRound}
+            <th>+/-
+            <th>_{MsgTotal}
+          <tr>
+            <th>
+            <th>Par
+            $forall (Entity _ hole) <- holes
+              <th>#{holePar hole}
+            <th>
+            <th>#{show layoutPar}
+            <th>
+            <th>#{show $ layoutPar * roundCount}
+        <tbody>
+          $forall (place, (user, _, rounds)) <- addPlacements holes $ filterByDivision d sortedPlayers
+            $forall (round_, scores) <- rounds
+              <tr>
+                $if roundRoundnumber round_ == 1
+                  <td rowspan=#{length rounds}>#{show place}
+                  <td rowspan=#{length rounds}>#{userName user}
+                $forall (Entity hid hole) <- holes
+                  <td>
+                    $forall score <- scores
+                      $if scoreHoleId score == hid
+                        <div data-hid=#{toPathPiece $ scoreHoleId score} data-rid=#{toPathPiece $ scoreRoundId score} class=#{textualScore (holePar hole) (scoreScore score)}>
+                          #{scoreScore score}
+                <td>
+                  $if countRoundToPar holes scores == 0
+                    E
+                  $else
+                    $if countRoundToPar holes scores > 0
+                      +
+                    #{countRoundToPar holes scores}
+                <td>
+                  $if roundState round_ == DidNotFinish
+                    DNF
+                  $else
+                    #{countRoundTotal scores}
+                $if roundRoundnumber round_ == 1
+                  <td rowspan=#{length rounds}>
+                    $if countToPar holes rounds == 0
+                      E
+                    $else
+                      $if countToPar holes rounds > 0
+                        +
+                      #{countToPar holes rounds}
+                  <td rowspan=#{length rounds}>
+                    $if dnf rounds
+                      DNF
+                    $else
+                      #{countTotal rounds}

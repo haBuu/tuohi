@@ -5,7 +5,6 @@ table#score-table
   text-align: center
   border-collapse: collapse
   width: 100%
-  margin-bottom: 20px
 
 table#score-table tr th
   border: 1px solid #bab7a8
