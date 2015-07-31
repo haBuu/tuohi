@@ -44,7 +44,22 @@ function next() {
   }
 }
 
+// inverse of next()
+function prev() {
+  if (currentScore) {
+    var prevScore = $(currentScore).parent().prev().find("td");
+    if (prevScore.length > 0) {
+      currentScore.removeClass("score-focus");
+      currentScore = prevScore;
+      prevScore.addClass("score-focus");
+    }
+  }
+}
+
+var doubleDigitActive = false;
+
 function changeKeyboard(doubleDigit) {
+  doubleDigitActive = doubleDigit;
   if (doubleDigit) {
     $("div#keyboard.zero-to-nine").addClass("hidden");
     $("div#keyboard.ten-to-nineteen").removeClass("hidden");
@@ -53,3 +68,34 @@ function changeKeyboard(doubleDigit) {
     $("div#keyboard.zero-to-nine").removeClass("hidden");
   }
 }
+
+$(document).keypress(function(e) {
+  // check if arrow or +/-
+  if (e.keyCode == 37) {
+    $("div.active").find("a#prev").click();
+    return;
+  } else if (e.keyCode == 39) {
+    $("div.active").find("a#next").click();
+    return;
+  } else if (e.keyCode == 38) {
+    prev();
+    return;
+  } else if (e.keyCode == 40) {
+    next();
+    return;
+  } else if (e.charCode == 43) {
+    changeKeyboard(true);
+    return;
+  } else if (e.charCode == 45) {
+    changeKeyboard(false);
+    return;
+  }
+  // check if number key
+  if (e.which >= 48 && e.which <= 57) {
+    var number = parseInt(e.key);
+    if (doubleDigitActive) {
+      number += 10;
+    }
+    inputScore(number);
+  }
+});
