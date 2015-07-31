@@ -51,5 +51,11 @@ toRow (place, (user, division, rounds)) =
   where
     pdga = maybe "" tshow $ userPdgaNumber user
     (firstName, lastName) = break isSpace $ userName user
-    roundScores = map (countRoundTotal . snd) rounds
-    scores = foldl' (\a r -> a ++ tshow r ++ "\t") "" roundScores
+    roundResults = map showRound rounds
+    scores = foldl' (\a r -> a ++ r ++ "\t") "" roundResults
+
+showRound :: (Round, [Score]) -> Text
+showRound r =
+  if roundDnf r
+    then "999"
+    else tshow $ countRoundTotal $ snd r

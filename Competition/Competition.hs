@@ -7,7 +7,7 @@ module Competition.Competition
 , playerSort
 , playerSortByDivision
 , addPlacements
-, dnf
+, dnf, roundDnf
 )
 where
 
@@ -95,5 +95,7 @@ addPlacements holes (x:xs) = loop 2 (1, x) xs
         else [previous] ++ loop (idx + 1) (idx, x) xs
 
 dnf :: [(Round, [Score])] -> Bool
-dnf rounds = flip any rounds $
-  \(round_, _) -> roundState round_ == DidNotFinish
+dnf rounds = flip any rounds roundDnf
+
+roundDnf :: (Round, [Score]) -> Bool
+roundDnf (r, _) = roundState r == DidNotFinish
