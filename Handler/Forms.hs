@@ -247,6 +247,42 @@ addPlayerForm cid extra = do
       |]
   return (result, widget)
 
+addPDGAPlayerForm :: CompetitionId -> Html
+  -> MForm Handler (FormResult (Text, Maybe Int, D.Division), Widget)
+addPDGAPlayerForm cid extra = do
+  mr <- getMessageRender
+  (nameRes, nameView) <- mreq textField
+    (withPlaceholder (mr MsgName) $ bfs MsgName) Nothing
+  (pdgaRes, pdgaView) <- mopt (checkPDGANumber intField)
+    (withPlaceholder (mr MsgPDGANumber) $ bfs MsgPDGANumber) Nothing
+  (divisionRes, divisionView) <- mreq (radioField (competitionDivisions cid))
+    (FieldSettings (SomeMessage MsgDivision) Nothing Nothing Nothing
+      []) Nothing
+  let result = (,,)
+                <$> nameRes
+                <*> pdgaRes
+                <*> divisionRes
+  let widget = [whamlet|
+        #{extra}
+        <div .form-group>
+          <label .control-label>^{fvLabel nameView}
+          ^{fvInput nameView}
+        <div .form-group>
+          <label .control-label>^{fvLabel pdgaView}
+          ^{fvInput pdgaView}
+        <div .form-group>
+          <label>^{fvLabel divisionView}
+          <div .radio>
+            ^{fvInput divisionView}
+        <div .form-group>
+          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddPlayer}>
+      |]
+  return (result, widget)
+
+checkPDGANumber :: Field Handler Int -> Field Handler Int
+checkPDGANumber field = checkBool
+  (\v -> v >= 0) MsgNegativePDGANumber field
+
 signUpForm :: CompetitionId -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division, Text), Widget)
 signUpForm cid extra = do

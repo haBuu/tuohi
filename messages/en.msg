@@ -156,3 +156,5 @@ UserNoPDGANumber: User does not have a PDGA number
 NotPDGACompetition: Competition is not a PDGA competition
 PrivateCompetition: Private competition
 CompetitionUrl: Competition URL
+PDGANumber: PDGA number
+NegativePDGANumber: PDGA number can't be negative

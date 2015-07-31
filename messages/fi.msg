@@ -156,4 +156,5 @@ UserNoPDGANumber: Käyttäjällä ei ole PDGA numeroa
 NotPDGACompetition: Kilpailu ei ole PDGA kilpailu
 PrivateCompetition: Yksityinen kilpailu
 CompetitionUrl: Kilpailun osoite
-
+PDGANumber: PDGA numero
+NegativePDGANumber: PDGA numero ei voi olla negatiivinen

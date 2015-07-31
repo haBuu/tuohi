@@ -155,6 +155,7 @@ instance Yesod App where
   isAuthorized (ChangeGroupR _ _) _ = isAdmin
   isAuthorized (ImportPlayersR _) _ = isAdmin
   isAuthorized (ExportScoresR _) _ = isAdmin
+  isAuthorized (AddPDGAPlayerR _) _ = isAdmin
 
   -- super admin
   isAuthorized UsersR _ = isSuperAdmin

@@ -7,7 +7,11 @@ $if competitionPrivate competition
   <div .panel .panel-info>
     <div .panel-heading>_{MsgCompetitionUrl}: @{GroupsR cid}
 
-<a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+$if competitionPdga competition
+  <a href=@{AddPDGAPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+$else
+  <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+
 $if competitionPdga competition
   <a href=@{ImportPlayersR cid} .btn .btn-default .btn-block .btn-lg>_{MsgImportPlayers}
 <a href=@{EditCompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgEditCompetition}

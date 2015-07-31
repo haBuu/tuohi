@@ -1,11 +1,16 @@
-<label .control-label>_{MsgChoosePlayer}
-<select .form-control .margin-bottom>
-  <option>
-  $forall Entity _ user <- users
-    $maybe email <- userEmail user
-      <option data-email=#{email}>#{userName user} (#{email})
+$if not $ competitionPdga competition
+  <label .control-label>_{MsgChoosePlayer}
+  <select .form-control .margin-bottom>
+    <option>
+    $forall Entity _ user <- users
+      $maybe email <- userEmail user
+        <option data-email=#{email}>#{userName user} (#{email})
 
-<form method=post action=@{AddPlayerR cid}#form enctype=#{formEnctype}>
-  ^{formWidget}
+$if competitionPdga competition
+  <form method=post action=@{AddPDGAPlayerR cid}#form enctype=#{formEnctype}>
+    ^{formWidget}
+$else
+  <form method=post action=@{AddPlayerR cid}#form enctype=#{formEnctype}>
+    ^{formWidget}
 
 <a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}

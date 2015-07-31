@@ -14,7 +14,10 @@ $if competitionPrivate competition
     <div .panel-heading>_{MsgCompetitionUrl}: @{GroupsR cid}
 
 $if currentRound_ == 1
-  <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+  $if competitionPdga competition
+    <a href=@{AddPDGAPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+  $else
+    <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
 
 $if competitionPdga competition
   <a href=@{ExportScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgPDGAScores}
