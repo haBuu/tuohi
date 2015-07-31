@@ -13,4 +13,9 @@
     }
   }, 60000); // 60 seconds
 
+
 })();
+
+function toggle(table) {
+  $(table).find("table#score-table").toggleClass("hidden");
+}

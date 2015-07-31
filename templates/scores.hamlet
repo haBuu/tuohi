@@ -7,7 +7,7 @@ $if live
         _{MsgReloadPage}
 
 $forall (d, msg) <- divisions
-  <div .panel .panel-primary>
+  <div .panel .panel-primary onClick=toggle(this)>
     <div .panel-heading>_{msg}
 
     <div .table-responsive>
