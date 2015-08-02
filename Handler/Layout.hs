@@ -4,6 +4,7 @@ module Handler.Layout where
 import Import
 
 import Handler.Forms
+import Database
 
 getLayoutR :: CourseId -> LayoutId -> Handler Html
 getLayoutR cid lid = do
@@ -21,5 +22,6 @@ postLayoutR cid lid = do
   formHandler result $ \res -> do
     forM_ res $ \(hid, par) -> do
       runDB $ update hid [HolePar =. par]
+      logInfo "Layout updated"
     setMessageI MsgLayoutUpdated
   redirect $ LayoutR cid lid
