@@ -16,6 +16,6 @@
 
 })();
 
-function toggle(table) {
-  $(table).find("table#score-table").toggleClass("hidden");
+function toggle(header) {
+  $(header).parent().find("table#score-table").toggleClass("hidden");
 }
