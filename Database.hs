@@ -297,7 +297,7 @@ scoreLogWithNames cid = runDB $ E.select $
     E.where_ $ score ^. ScoreHoleId E.==. hole ^. HoleId
     E.where_ $ score ^. ScoreRoundId E.==. round_ ^. RoundId
     E.where_ $ round_ ^. RoundUserId E.==. user ^. UserId
-    E.orderBy [E.asc (user ^. UserName), E.asc (hole ^. HoleNumber)]
+    E.orderBy [E.desc (scoreUpdate ^. ScoreUpdateLogTime)]
     return
       ( user ^. UserName
       , hole ^. HoleNumber
