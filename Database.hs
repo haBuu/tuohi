@@ -258,16 +258,9 @@ playerRoundsAndScores uid cid = selectList
 -- returns list where each item is one competition for the player
 -- and that competition consist of par of the layout that was played
 -- rounds and corresponding scores
-handicapScores :: UserId -> SerieId -> Day
-  -> Handler [(Int, [(Round, [Score])])]
-handicapScores uid sid date = runDB $ do
-  -- competitions with given serie and before date
-  competitions <- selectList
-    [ CompetitionSerieId ==. Just sid
-    , CompetitionDate <. date
-    , CompetitionState ==. Finished
-    ]
-    []
+handicapScores :: UserId -> [Entity Competition]
+  -> DB [(Int, [(Round, [Score])])]
+handicapScores uid competitions = do
   unfiltered <- forM competitions $ \(Entity cid competition) -> do
     -- layout id for this competion
     let lid = competitionLayoutId competition

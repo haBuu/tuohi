@@ -30,10 +30,16 @@ getResultsR cid = do
   -- calculate handicaps if the competition is finished
   -- and belongs to a serie
   handicapsAll <- case (msid, state) of
-    (Just sid, Finished) ->
+    (Just sid, Finished) -> do
+      competitions <- runDB $ selectList
+        [ CompetitionSerieId ==. Just sid
+        , CompetitionDate <. date
+        , CompetitionState ==. Finished
+        ]
+        []
       forM finished $ \u@(user, _, _) -> do
         entity <- runDB $ getBy404 $ UniqueUser $ userEmail user
-        handicapScores_ <- handicapScores (entityKey entity) sid date
+        handicapScores_ <- runDB $ handicapScores (entityKey entity) competitions
         let mhc = H.handicap handicapScores_
         return (u, mhc)
     _ -> return []
