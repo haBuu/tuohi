@@ -13,6 +13,9 @@ $if competitionPrivate competition
   <div .panel .panel-info>
     <div .panel-heading>_{MsgCompetitionUrl}: @{GroupsR cid}
 
+<form method=post action=@{LockCompetitionR cid}#form enctype=#{lockFormEnctype}>
+  ^{lockFormWidget}
+
 $if currentRound_ == 1
   $if competitionPdga competition
     <a href=@{AddPDGAPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}

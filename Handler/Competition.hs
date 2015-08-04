@@ -39,6 +39,8 @@ startedPage cid = do
     [ScoreUpdateLogCompetitionId ==. cid] []
   ((_, nextRoundFormWidget), nextRoundFormEnctype) <- nextRoundForm cid
   ((_, finishFormWidget), finishFormEnctype) <- finishCompetitionForm cid
+  let locked = competitionLocked competition
+  ((_, lockFormWidget), lockFormEnctype) <- lockCompetitionForm cid locked
   rounds <- roundsWithNames cid
   dnf <- dnfRoundsWithNames cid
   -- for hamlet so it can put dividers between groups
@@ -93,6 +95,19 @@ postCompetitionR cid = do
     startCompetition res
     logInfo "Competition started"
     setMessageI MsgCompetitionStarted
+  redirect $ CompetitionR cid
+
+postLockCompetitionR :: CompetitionId -> Handler Html
+postLockCompetitionR cid = do
+  competition <- runDB $ get404 cid
+  let locked = competitionLocked competition
+  ((result, _), _) <- lockCompetitionForm cid locked
+  formHandler result $ \res -> do
+    runDB $ update res [CompetitionLocked =. not locked]
+    let msg = if locked
+                then MsgCompetitionOpened
+                else MsgCompetitionLocked
+    setMessageI msg
   redirect $ CompetitionR cid
 
 postConfirmSignUpR :: SignUpId -> Handler Html

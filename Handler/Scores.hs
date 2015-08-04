@@ -42,6 +42,8 @@ getScoresR cid = do
 
 postScoreR :: CompetitionId -> RoundId -> HoleId -> Handler Html
 postScoreR cid rid hid = do
+  -- if competition is locked do not allow score to be inserted
+  (runDB $ get404 cid) >>= requireNotLocked
   auth <- isCompetitionAuth cid
   if auth
     then do
@@ -61,6 +63,10 @@ postScoreR cid rid hid = do
 requireStarted :: Round -> Handler ()
 requireStarted round_ = unless (roundState round_ == Started) $
   permissionDeniedI MsgScoreInputNotAllowed
+
+requireNotLocked :: Competition -> Handler ()
+requireNotLocked competition = when (competitionLocked competition) $
+  permissionDeniedI MsgCompetitionLocked
 
 insertScore :: CompetitionId -> Score -> Handler ()
 insertScore cid score = runDB $

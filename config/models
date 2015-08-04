@@ -23,6 +23,7 @@ Competition
   serieId SerieId Maybe
   pdga Bool default=False
   private Bool default=False
+  locked Bool default=False
   UniqueCompetition layoutId date name
   deriving Show
 

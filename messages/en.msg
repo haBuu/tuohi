@@ -158,3 +158,7 @@ PrivateCompetition: Private competition
 CompetitionUrl: Competition URL
 PDGANumber: PDGA number
 NegativePDGANumber: PDGA number can't be negative
+LockCompetition: Lock competition
+OpenCompetition: Open competition
+CompetitionLocked: Competition locked
+CompetitionOpened: Competition opened

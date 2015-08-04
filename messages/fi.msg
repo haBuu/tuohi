@@ -158,3 +158,7 @@ PrivateCompetition: Yksityinen kilpailu
 CompetitionUrl: Kilpailun osoite
 PDGANumber: PDGA numero
 NegativePDGANumber: PDGA numero ei voi olla negatiivinen
+LockCompetition: Lukitse kilpailu
+OpenCompetition: Avaa kilpailu
+CompetitionLocked: Kilpailu lukittu
+CompetitionOpened: Kilpailu avattu

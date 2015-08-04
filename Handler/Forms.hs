@@ -66,6 +66,7 @@ competitionForm uid mCompetition divisions extra = do
                         <*> serieRes
                         <*> pdgaRes
                         <*> privateRes
+                        <*> (pure False)
   let result = (,) <$> competitionRes <*> divisionRes
   let widget = [whamlet|
         #{extra}
@@ -214,6 +215,13 @@ finishCompetitionForm cid = do
   runFormPost $ identifyForm "finish" $
     renderBootstrap3 BootstrapBasicForm $ (pure cid)
       <* bootstrapSubmit (submitButton MsgFinishCompetition)
+
+lockCompetitionForm :: CompetitionId -> Bool
+  -> Handler ((FormResult CompetitionId, Widget), Enctype)
+lockCompetitionForm cid locked = do
+  let msg = if locked then MsgOpenCompetition else MsgLockCompetition
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $ (pure cid)
+    <* bootstrapSubmit (submitButton msg)
 
 addPlayerForm :: CompetitionId -> Html
   -> MForm Handler (FormResult (Text, Text, D.Division), Widget)

@@ -52,6 +52,7 @@
 /admin/competition/#CompetitionId/scores/user/#UserId ScoreEditPlayerR GET
 /admin/competition/#CompetitionId/score/#RoundId/#HoleId ScoreEditR POST
 /admin/competition/#CompetitionId/import/players ImportPlayersR GET POST
+/admin/competition/#CompetitionId/lock/ LockCompetitionR POST
 
 /admin/addplayer/#CompetitionId AddPlayerR GET POST
 /admin/addplayer/pdga/#CompetitionId AddPDGAPlayerR GET POST
