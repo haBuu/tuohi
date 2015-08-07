@@ -1,0 +1,10 @@
+var currentScore = null;
+
+function setScoreFocus(score) {
+  score = $(score);
+  if (currentScore) {
+    currentScore.removeClass("score-focus");
+  }
+  score.addClass("score-focus");
+  currentScore = score;
+}

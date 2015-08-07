@@ -2,6 +2,9 @@
 
 <a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
 
+$forall r <- rounds
+  <a href=@{ScoresInputR cid r} .btn .btn-default .btn-block .btn-lg>_{MsgRound} #{show r}
+
 <ul .list-group>
   <div .panel .panel-primary>
     <div .panel-heading>_{MsgChoosePlayer}

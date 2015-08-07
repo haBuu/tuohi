@@ -1,0 +1,35 @@
+<a href=@{ScoreEditPlayersR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+
+<h3.page-header>#{displayCompetition competition}
+
+<div #score-input-error .hidden .alert .alert-danger role="alert">
+  _{MsgScoreInputError}
+
+<table #score-input-admin>
+  <thead>
+    <th>_{MsgName}
+    <th>PDGA
+    $forall (Entity hid hole) <- holes
+      <th .center data-par=#{holePar hole}>#{holeNumber hole}
+    <th .center>_{MsgPenaltyShort}
+    <th .center>_{MsgSuddenDeathShort}
+    <th .center>_{MsgResult}
+    <th .center>+/-
+  <tbody>
+    $forall (E.Value rid, E.Value name, E.Value mpdga) <- rounds
+      <tr>
+        <th>#{name}
+        $maybe pdga <- mpdga
+          <th>#{show pdga}
+        $nothing
+          <th>
+        $forall (Entity hid hole) <- holes
+          <td data-url=@{ScoreInputR cid rid hid} data-par=#{holePar hole} onClick="setScoreFocus(this)">
+            $forall (Entity _ score) <- scores
+              $if (scoreRoundId score == rid) && (scoreHoleId score == hid)
+                <div class=#{textualScore (holePar hole) (scoreScore score)}>
+                  #{scoreScore score}
+        <td #penalty onClick="setScoreFocus(this)">
+        <td #sudden-death onClick="setScoreFocus(this)">
+        <td #total-score>
+        <td #par-score>

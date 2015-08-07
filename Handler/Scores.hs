@@ -100,6 +100,9 @@ getScoreEditPlayersR :: CompetitionId -> Handler Html
 getScoreEditPlayersR cid = do
   competition <- runDB $ get404 cid
   players <- runDB $ confirmedPlayers cid
+  mround <- runDB $ currentRound cid
+  let current = maybe 0 id mround
+      rounds = [1..current]
   defaultLayout $ do
     setTitleI MsgEditScores
     $(widgetFile "score-edit-players")
@@ -140,6 +143,45 @@ postScoreEditR cid rid hid = do
     scoreEditForm cid hid rid (holeNumber hole) Nothing
   formHandler result $ \res -> insertScore cid res
   redirect $ ScoreEditPlayerR cid (roundUserId round_)
+
+-- editing/inputting all scores at once
+getScoresInputR :: CompetitionId -> Int -> Handler Html
+getScoresInputR cid roundNumber = do
+  competition <- runDB $ get404 cid
+  let lid = competitionLayoutId competition
+  holes <- runDB $ selectList
+    [HoleLayoutId ==. lid] [Asc HoleNumber]
+  rounds <- getRounds cid roundNumber
+  scores <- runDB $ selectList
+    [ScoreRoundId <-. (map (\(E.Value rid, _, _) -> rid) rounds)]
+    []
+  defaultLayout $ do
+    setTitleI MsgInputScores
+    $(widgetFile "score-input")
+
+getRounds :: CompetitionId -> Int
+  -> Handler [(E.Value (Key Round), E.Value Text, E.Value (Maybe Int))]
+getRounds cid roundNumber = runDB $ E.select $
+  E.from $ \(round_, user) -> do
+    E.where_ $ round_ ^. RoundUserId E.==. user ^. UserId
+    E.where_ $ round_ ^. RoundCompetitionId E.==. E.val cid
+    E.where_ $ round_ ^. RoundRoundnumber E.==. E.val roundNumber
+    E.orderBy [E.asc (round_ ^. RoundGroupnumber)]
+    return
+      ( round_ ^. RoundId
+      , user ^. UserName
+      , user ^. UserPdgaNumber
+      )
+
+postScoreInputR :: CompetitionId -> RoundId -> HoleId -> Handler Html
+postScoreInputR cid rid hid = do
+  round_ <- runDB $ get404 rid
+  user <- runDB $ get404 $ roundUserId round_
+  value <- runInputPost $ ireq (checkScore intField) "score"
+  now <- liftIO $ getCurrentTime
+  let score = Score rid hid value now
+  insertScore cid score
+  redirect $ ScoresInputR cid $ roundRoundnumber round_
 
 getLatestScoreTimeR :: CompetitionId -> Handler Value
 getLatestScoreTimeR cid = do

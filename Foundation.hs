@@ -151,6 +151,8 @@ instance Yesod App where
   isAuthorized (ScoreEditPlayersR _) _ = isAdmin
   isAuthorized (ScoreEditPlayerR _ _) _ = isAdmin
   isAuthorized (ScoreEditR _ _ _) _ = isAdmin
+  isAuthorized (ScoresInputR _ _) _ = isAdmin
+  isAuthorized (ScoreInputR _ _ _) _ = isAdmin
   isAuthorized (EditCompetitionR _) _ = isAdmin
   isAuthorized (ChangeGroupR _ _) _ = isAdmin
   isAuthorized (ImportPlayersR _) _ = isAdmin

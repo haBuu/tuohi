@@ -91,6 +91,9 @@ textarea
 .no-permission
   color: red
 
+.center
+  text-align: center
+
 @keyboardButtonHeight: 50px
 @keyboardArrowButtonHeight: 100px
 
@@ -146,8 +149,19 @@ table#score-input td
   text-align: center
   line-height: 20px
 
-table#score-input td.score-focus
+table#score-input td.score-focus, table#score-input-admin td.score-focus
   border: 2px solid lightgreen
 
-a#double-digit.active
-  background-color: lightgreen
+table#score-input-admin
+  width: 100%
+  max-width: 100%
+  border-collapse: separate
+  border-spacing: 5px 15px
+  font-size: 1.2em
+
+table#score-input-admin td
+  border: 2px solid lightgray
+  width: 30px
+  height: 20px
+  text-align: center
+  line-height: 20px

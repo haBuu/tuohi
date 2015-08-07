@@ -162,3 +162,6 @@ LockCompetition: Lock competition
 OpenCompetition: Open competition
 CompetitionLocked: Competition locked
 CompetitionOpened: Competition opened
+PenaltyShort: P
+SuddenDeathShort: SD
+Result: Result

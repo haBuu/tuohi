@@ -162,3 +162,6 @@ LockCompetition: Lukitse kilpailu
 OpenCompetition: Avaa kilpailu
 CompetitionLocked: Kilpailu lukittu
 CompetitionOpened: Kilpailu avattu
+PenaltyShort: R
+SuddenDeathShort: SD
+Result: Tulos
