@@ -165,3 +165,4 @@ CompetitionOpened: Competition opened
 PenaltyShort: P
 SuddenDeathShort: SD
 Result: Result
+PenaltyRangeError: Penalty can't be negative

@@ -159,6 +159,7 @@ instance Yesod App where
   isAuthorized (ExportScoresR _) _ = isAdmin
   isAuthorized (AddPDGAPlayerR _) _ = isAdmin
   isAuthorized (LockCompetitionR _) _ = isAdmin
+  isAuthorized (AddPenaltyR _ _) _ = isAdmin
 
   -- super admin
   isAuthorized UsersR _ = isSuperAdmin

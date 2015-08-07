@@ -165,3 +165,4 @@ CompetitionOpened: Kilpailu avattu
 PenaltyShort: R
 SuddenDeathShort: SD
 Result: Tulos
+PenaltyRangeError: Rangaistus ei voi olla negatiivinen

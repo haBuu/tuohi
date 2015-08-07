@@ -399,8 +399,7 @@ scoreEditForm cid hid rid hole mScore extra = do
     scores = ("#", 0) : [(pack (show i), i) | i <- [1..99]]
 
 checkScore :: Field Handler Int -> Field Handler Int
-checkScore field = checkBool
-  (\v -> v >= 0 && v < 99) MsgScoreRangeError field
+checkScore = checkBool (\v -> v >= 0 && v < 99) MsgScoreRangeError
 
 profileForm :: User
   -> Handler ((FormResult (Text, Text), Widget), Enctype)
