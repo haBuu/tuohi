@@ -46,6 +46,7 @@ Round
   state RoundState
   roundnumber Int
   groupnumber Int
+  penalty Int
   UniqueRound userId competitionId roundnumber
   deriving Show
 

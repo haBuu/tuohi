@@ -13,6 +13,7 @@ import Competition.Groups
 import Competition.Competition
 import Model.EventLog
 import Model.User
+import Model.Round
 import Helpers(today)
 
 type DB a = ReaderT SqlBackend Handler a
@@ -117,7 +118,7 @@ startCompetition cid = runDB $ do
   -- make a round for each confirmed sign up
   forM_ (zip confirmed groups_) $ \((Entity _ signup), groupNumber) ->
     void $ insertBy $
-      Round (signUpUserId signup) cid R.Started 1 groupNumber
+      buildRound (signUpUserId signup) cid 1 groupNumber
 
 -- select started rounds for given competition with user names
 roundsWithNames :: CompetitionId
@@ -205,8 +206,7 @@ nextRound cid = runDB $ do
           groupedPlayers = divide (length holes) sortedPlayers
       -- insert round for each player
       forM_ groupedPlayers $ \(groupNumber, (pid, _, _)) ->
-        void $ insertBy $ Round pid cid R.Started
-          (roundNumber + 1) groupNumber
+        void $ insertBy $ buildRound pid cid (roundNumber + 1) groupNumber
 
 finishCompetition :: CompetitionId -> Handler ()
 finishCompetition cid = do

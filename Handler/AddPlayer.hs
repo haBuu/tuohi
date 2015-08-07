@@ -7,6 +7,7 @@ import Handler.Division
 import qualified Model.RoundState as R
 import qualified Model.CompetitionState as C
 import Model.User
+import Model.Round
 
 getAddPlayerR :: CompetitionId -> Handler Html
 getAddPlayerR cid = do
@@ -117,5 +118,4 @@ maybeAddPDGAPlayer cid name mPdga division = do
 
 -- add player to group one and round one
 addToCompetition :: UserId -> CompetitionId -> Handler (Maybe RoundId)
-addToCompetition uid cid = runDB $ insertUnique $
-  Round uid cid R.Started 1 1
+addToCompetition uid cid = runDB $ insertUnique $ buildRound uid cid 1 1
