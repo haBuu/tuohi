@@ -55,7 +55,7 @@ toRow (place, (user, division, rounds)) =
     scores = foldl' (\a r -> a ++ r ++ "\t") "" roundResults
 
 showRound :: (Round, [Score]) -> Text
-showRound r =
-  if roundDnf r
+showRound (round_, scores) =
+  if roundDnf (round_, scores)
     then "999"
-    else tshow $ countRoundTotal $ snd r
+    else tshow $ countRoundTotal round_ scores

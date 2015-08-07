@@ -14,7 +14,7 @@ import Helpers
 countHandicapTotal :: ([(Round, [Score])], Double) -> Double
 countHandicapTotal (rounds, hc) =
   let
-    total = foldl (\n (_, scores) -> n + countRoundTotal scores) 0 rounds
+    total = foldl (\n (round_, scores) -> n + countRoundTotal round_ scores) 0 rounds
   in
     (fromIntegral total) - (fromIntegral (length rounds) * hc)
 
@@ -23,7 +23,7 @@ handicap [] = Nothing
 handicap roundsAndPars =
   let
     toPars = for roundsAndPars $ \(par, rounds) ->
-      map (\r -> r - par) $ map countRoundTotal $ map snd rounds
+      map (\r -> r - par) $ map (uncurry countRoundTotal) rounds
   in
     Just $ avg $ hcFilter $ concat toPars
 

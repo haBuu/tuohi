@@ -45,17 +45,17 @@ $forall (d, msg) <- divisions
                         <div data-hid=#{toPathPiece $ scoreHoleId score} data-rid=#{toPathPiece $ scoreRoundId score} class=#{textualScore (holePar hole) (scoreScore score)}>
                           #{scoreScore score}
                 <td>
-                  $if countRoundToPar holes scores == 0
+                  $if countRoundToPar round_ holes scores == 0
                     E
                   $else
-                    $if countRoundToPar holes scores > 0
+                    $if countRoundToPar round_ holes scores > 0
                       +
-                    #{countRoundToPar holes scores}
+                    #{countRoundToPar round_ holes scores}
                 <td>
                   $if roundState round_ == DidNotFinish
                     DNF
                   $else
-                    #{countRoundTotal scores}
+                    #{countRoundTotal round_ scores}
                 $if roundRoundnumber round_ == 1
                   <td rowspan=#{length rounds}>
                     $if countToPar holes rounds == 0

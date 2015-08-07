@@ -23,25 +23,29 @@ countPar :: [Entity Hole] -> Int
 countPar = foldl (\n (Entity _ hole) -> n + holePar hole) 0
 
 countTotal :: [(Round, [Score])] -> Int
-countTotal = foldl (\n (_, scores) -> n + countRoundTotal scores) 0
+countTotal = foldl (\n (round_, scores) -> n + countRoundTotal round_ scores) 0
 
 countToPar :: [Entity Hole] -> [(Round, [Score])] -> Int
 countToPar holes rounds =
-  foldl (\n (_, scores) -> n + countRoundToPar holes scores) 0 rounds
+  foldl (\n (round_, scores) -> n + countRoundToPar round_ holes scores) 0 rounds
 
-countRoundTotal :: [Score] -> Int
-countRoundTotal = foldl (\n score -> n + scoreScore score) 0
+countRoundTotal :: Round -> [Score] -> Int
+countRoundTotal round_ scores =
+  addPenalty round_ $ foldl (\n score -> n + scoreScore score) 0 scores
 
-countRoundToPar :: [Entity Hole] -> [Score] -> Int
-countRoundToPar holes scores =
+countRoundToPar :: Round -> [Entity Hole] -> [Score] -> Int
+countRoundToPar round_ holes scores =
   let
     toPar = foldl (\n score -> n + holePar' holes score) 0 scores
   in
-    (countRoundTotal scores) - toPar
+    (countRoundTotal round_ scores) - toPar
 
 holePar' :: [Entity Hole] -> Score -> Int
 holePar' holes score = maybe 0 (\(Entity _ hole) -> holePar hole) $
   find (\(Entity hid _) -> hid == scoreHoleId score) holes
+
+addPenalty :: Round -> Int -> Int
+addPenalty round_ total = total + roundPenalty round_
 
 -- sorts players according to their current to par result
 playerSort :: [Entity Hole] -> [(a, Division, [(Round, [Score])])]
