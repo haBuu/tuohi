@@ -16,7 +16,7 @@ Instructions for installing Haskell and Yesod are available at http://www.yesodw
   cabal install --only-dependencies
   ```
 
-2. Set up MySQL. See config/settings.yml for database config.
+2. Set up database. See config/settings.yml for database config.
 
 3. Edit config/settings.yml as needed
 
