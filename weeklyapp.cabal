@@ -64,6 +64,7 @@ library
                      Model.CompetitionState
                      Model.RoundState
                      Model.EventLog
+                     Model.Round
                      Error
                      Datepicker
 
@@ -108,7 +109,7 @@ library
                  , template-haskell
                  , shakespeare                   >= 2.0        && < 2.1
                  , hjsmin                        >= 0.1        && < 0.2
-                 , monad-control                 >= 0.3        && < 0.4
+                 , monad-control                 >= 0.3        && < 1.1
                  , wai-extra                     >= 3.0        && < 3.1
                  , yaml                          >= 0.8        && < 0.9
                  , http-conduit                  >= 2.1        && < 2.2
@@ -129,10 +130,10 @@ library
                  , time
                  , esqueleto                     >= 2.1.1      && < 2.2
                  , mime-mail                     >= 0.4.6      && < 0.5
-                 , blaze-html                    >= 0.7.0.3    && < 0.8
+                 , blaze-html                    >= 0.7.1.0    && < 0.8
                  , foreign-store                 >= 0.1
-                 , old-locale                    >= 1.0.0.5
-                 , cassava                       >= 0.4.3.1
+                 , old-locale                    >= 1.0.0.6
+                 , cassava                       >= 0.4.2.2
 
 executable         weeklyapp
     if flag(library-only)

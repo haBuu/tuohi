@@ -31,7 +31,7 @@ function startReplYesodDev() {
   tmux new-session -d -s yesod -n repl
 
   # start yesod with repl
-  tmux send-keys -t yesod:repl "cabal repl --ghc-options=\"-O0 -fobject-code\"" C-m
+  tmux send-keys -t yesod:repl "stack ghci --ghc-options=\"-O0 -fobject-code\"" C-m
   tmux send-keys -t yesod:repl ":set -DDEVELOPMENT" C-m
   tmux send-keys -t yesod:repl ":l DevelMain" C-m
   tmux send-keys -t yesod:repl "DevelMain.update" C-m
@@ -76,8 +76,8 @@ function cleanReload() {
   tmux select-window -t yesod:repl
   tmux send-keys -t yesod:repl "DevelMain.shutdown" C-m
   tmux send-keys -t yesod:repl C-d
-  tmux send-keys -t yesod:repl "cabal clean" C-m
-  tmux send-keys -t yesod:repl "cabal repl --ghc-options=\"-O0 -fobject-code\"" C-m
+  tmux send-keys -t yesod:repl "stack clean" C-m
+  tmux send-keys -t yesod:repl "stack ghci --ghc-options=\"-O0 -fobject-code\"" C-m
   tmux send-keys -t yesod:repl ":set -DDEVELOPMENT" C-m
   tmux send-keys -t yesod:repl ":l DevelMain" C-m
   tmux send-keys -t yesod:repl "DevelMain.update" C-m

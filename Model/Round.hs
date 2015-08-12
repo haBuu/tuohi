@@ -1,7 +1,6 @@
 module Model.Round where
 
 import Import
-import Database.Persist.TH
 import Model.RoundState (RoundState(Started))
 
 buildRound :: UserId -> CompetitionId -> Int -> Int -> Round

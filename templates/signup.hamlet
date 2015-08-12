@@ -11,7 +11,7 @@ $else
 <ul .list-group>
   $forall (d, msg) <- withMessages divisions
     <div .panel .panel-primary>
-      <div .panel-heading>_{msg} (#{show $ count d signups})
+      <div .panel-heading>_{msg} (#{show $ countSignUps d signups})
       $forall (_, _, E.Value division, E.Value name) <- signups
         $if division == d
           <li .list-group-item>#{name}

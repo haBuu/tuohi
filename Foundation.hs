@@ -251,12 +251,14 @@ instance YesodAuth App where
   loginDest _ = HomeR
   -- Where to send a user after logout
   logoutDest _ = HomeR
+  -- Override the above two destinations when a Referer: header is present
+  redirectToReferer _ = True
 
-  getAuthId creds = runDB $ do
-    x <- getBy $ UniqueUser (Just $ credsIdent creds)
+  authenticate creds = runDB $ do
+    x <- getBy $ UniqueUser $ Just $ credsIdent creds
     return $ case x of
-      Just (Entity uid _) -> Just uid
-      Nothing -> Nothing
+      Just (Entity uid _) -> Authenticated uid
+      Nothing -> UserError InvalidLogin
 
   -- You can add other plugins like BrowserID, email or OAuth here
   authPlugins _ = [authEmail]

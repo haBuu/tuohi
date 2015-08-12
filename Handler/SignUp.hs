@@ -70,5 +70,5 @@ requireInit :: Competition -> Handler ()
 requireInit comp = unless (competitionState comp == Init) $
   permissionDeniedI MsgSignUpNotAllowed
 
-count d signups =
+countSignUps d signups =
   length $ filter (\(_, _, E.Value d1, _) -> d == d1) signups

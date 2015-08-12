@@ -1,7 +1,7 @@
 {-# LANGUAGE TupleSections, OverloadedStrings #-}
 module Handler.Users where
 
-import Import
+import Import hiding (isSuperAdmin, isAdmin, isUser)
 
 getUsersR :: Handler Html
 getUsersR = do

@@ -16,8 +16,8 @@ postPermissionsR :: Handler Html
 postPermissionsR = error "Not yet implemented: postPermissionsR"
 
 -- helpers
-check :: [Entity Permission] -> UserId -> PermissionType -> Bool
-check permissions uid permissionType =
+checkPermission :: [Entity Permission] -> UserId -> PermissionType -> Bool
+checkPermission permissions uid permissionType =
   any (match uid permissionType . entityVal) permissions
 
 match :: UserId -> PermissionType -> Permission -> Bool
