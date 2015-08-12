@@ -12,15 +12,14 @@ Instructions for installing Haskell and Yesod are available at http://www.yesodw
 1. Clone repo and install packages
   ```
   git clone https://github.com/haBuu/tuohi.git
-  cabal sandbox init
-  cabal install --only-dependencies
+  cd tuohi
+  stack build
   ```
-
 2. Set up database. See config/settings.yml for database config.
 
 3. Edit config/settings.yml as needed
 
-4. Start application by running `yesod devel`
+4. Start application by running `stack exec -- yesod devel`
 
 ### Running in ghci
 run-devel.sh can be used to run application in ghci. It will watch for modifications and reload the application. It has some issues but works most of the time.
