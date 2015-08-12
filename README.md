@@ -15,6 +15,7 @@ Instructions for installing Haskell and Yesod are available at http://www.yesodw
   cd tuohi
   stack build
   ```
+
 2. Set up database. See config/settings.yml for database config.
 
 3. Edit config/settings.yml as needed
