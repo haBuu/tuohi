@@ -13,7 +13,7 @@
 # name of the yesod app
 app="weeklyapp"
 # files to ignore
-ignore="\.git/*|dist/*|yesod-devel/*|static/tmp/*|$app.sqlite3|$app.cabal|run-devel.sh"
+ignore="\.git/*|dist/*|yesod-devel/*|static/tmp/*|$app.sqlite3|$app.cabal|run-devel.sh|^.*\.(o|hi)"
 
 function showHelp() {
   echo "Usage: $0 -w"
@@ -66,6 +66,7 @@ function reloadTemplates() {
   # send reload and update commands to repl
   echo "reloading..."
   tmux select-window -t yesod:repl
+  tmux send-keys -t yesod:repl "DevelMain.shutdown" C-m
   tmux send-keys -t yesod:repl ":l DevelMain" C-m
   tmux send-keys -t yesod:repl "DevelMain.update" C-m
 }
