@@ -8,7 +8,7 @@ $if live
 
 $forall (d, msg) <- divisions
   <div .panel .panel-primary>
-    <div .panel-heading onClick=toggle(this)>_{msg}
+    <div #score-table-heading data-division=#{show d} .panel-heading onClick=toggle(this)>_{msg}
 
     <div .table-responsive>
       <table #score-table>

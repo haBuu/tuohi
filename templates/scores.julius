@@ -25,8 +25,30 @@
     }
   }
 
+  // hides all divisions that have hidden value in local storage
+  function hideDivisions() {
+    var tables = $("body").find("div#score-table-heading");
+    tables.each(function(table) {
+      var division = $(this).data("division");
+      if (localStorage[division] == "hidden") {
+        $(this).parent().find("table#score-table").addClass("hidden");
+      }
+    });
+  }
+
+  hideDivisions();
+
 })();
 
 function toggle(header) {
-  $(header).parent().find("table#score-table").toggleClass("hidden");
+  var elem = $(header).parent().find("table#score-table");
+
+  // if division was hidden save information to local storage
+  var hidden = elem.toggleClass("hidden").hasClass("hidden");
+  var division = $(header).data("division");
+  if (hidden) {
+    localStorage.setItem(division, "hidden");
+  } else {
+    localStorage.removeItem(division);
+  }
 }
