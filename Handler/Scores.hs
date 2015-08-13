@@ -34,6 +34,8 @@ getScoresR cid = do
   -- divisions which had competitors
   let divisions = map (\d -> (d, D.divisionMsg d)) $ nub $
                     for sortedPlayers $ \(_, d, _) -> d
+  -- current time for js
+  time <- liftM show $ liftIO getCurrentTime
   -- Accept: application/json will return JSON
   -- Accept: text/html will return HTML
   defaultLayoutJson
