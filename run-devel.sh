@@ -13,7 +13,7 @@
 # name of the yesod app
 app="weeklyapp"
 # files to ignore
-ignore="\.git/*|dist/*|yesod-devel/*|static/tmp/*|$app.sqlite3|$app.cabal|run-devel.sh|^.*\.(o|hi)"
+ignore="\.git/*|dist/*|yesod-devel/*|.stack-work/*|static/tmp/*|$app.sqlite3|$app.cabal|stack.yaml|run-devel.sh|^.*\.(o|hi)"
 
 function showHelp() {
   echo "Usage: $0 -w"
@@ -41,10 +41,10 @@ function startReplYesodDev() {
   tmux select-pane -t 1
   tmux send-keys "iwatch -X '$ignore' -r -e close_write -c \"$0 -r\" ." C-m
 
-  # cabal watcher
+  # cabal/stack watcher
   tmux split-window
   tmux select-pane -t 2
-  tmux send-keys "iwatch -t '$app.cabal' -e close_write -c \"$0 -c\" ." C-m
+  tmux send-keys "iwatch -t '$app.cabal|stack.yaml' -e close_write -c \"$0 -c\" ." C-m
 
   # hide watchers
   tmux select-pane -t 1
@@ -63,7 +63,7 @@ function startReplYesodDev() {
 }
 
 function reloadTemplates() {
-  # send reload and update commands to repl
+  # send reload and update commands to repl window
   echo "reloading..."
   tmux select-window -t yesod:repl
   tmux send-keys -t yesod:repl "DevelMain.shutdown" C-m
@@ -72,12 +72,13 @@ function reloadTemplates() {
 }
 
 function cleanReload() {
-  # send cabal clean, reload and update commands to repl
+  # send clean, build, reload and update commands to repl window
   echo "reloading..."
   tmux select-window -t yesod:repl
   tmux send-keys -t yesod:repl "DevelMain.shutdown" C-m
   tmux send-keys -t yesod:repl C-d
   tmux send-keys -t yesod:repl "stack clean" C-m
+  tmux send-keys -t yesod:repl "stack build" C-m
   tmux send-keys -t yesod:repl "stack ghci --ghc-options=\"-O0 -fobject-code\"" C-m
   tmux send-keys -t yesod:repl ":set -DDEVELOPMENT" C-m
   tmux send-keys -t yesod:repl ":l DevelMain" C-m
@@ -87,7 +88,7 @@ function cleanReload() {
 if [ "$1" = "-w" ]; then
   startReplYesodDev # startup
 elif [ "$1" = "-c" ]; then
-  cleanReload # reload with cabal clean
+  cleanReload # reload with stack clean and build
 elif [ "$1" = "-r" ]; then
   reloadTemplates # normal reload
 else
