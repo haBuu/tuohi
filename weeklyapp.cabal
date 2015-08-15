@@ -120,7 +120,7 @@ library
                  , aeson                         >= 0.6        && < 0.9
                  , conduit                       >= 1.0        && < 2.0
                  , monad-logger                  >= 0.3        && < 0.4
-                 , fast-logger                   >= 2.2        && < 2.3
+                 , fast-logger                   >= 2.2        && < 2.5
                  , wai-logger                    >= 2.2        && < 2.3
                  , file-embed
                  , safe
@@ -130,10 +130,11 @@ library
                  , time
                  , esqueleto                     >= 2.1.1      && < 2.2
                  , mime-mail                     >= 0.4.6      && < 0.5
-                 , blaze-html                    >= 0.7.1.0    && < 0.8
+                 , blaze-html                    >= 0.8.1.0    && < 0.9
                  , foreign-store                 >= 0.1
                  , old-locale                    >= 1.0.0.6
                  , cassava                       >= 0.4.2.2
+                 , network
 
 executable         weeklyapp
     if flag(library-only)
