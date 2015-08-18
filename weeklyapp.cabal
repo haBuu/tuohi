@@ -52,6 +52,7 @@ library
                      Handler.EventLog
                      Handler.ImportPlayers
                      Handler.ExportScores
+                     Handler.AddPenalty
                      Helpers
                      Database
                      Competition.Competition

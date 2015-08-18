@@ -17,10 +17,11 @@ import Database.Persist.MySQL               (createMySQLPool, runSqlPool,
                                              myConnInfo, myPoolSize)
 import Import
 import Language.Haskell.TH.Syntax           (qLocation)
-import Network.Wai.Handler.Warp             (Settings, runSettings, defaultSettings,
+import Network.Wai.Handler.Warp             (Settings, runSettings, runSettingsSocket, defaultSettings,
                                              defaultShouldDisplayException,
                                              setHost, setPort,
-                                             setOnException, getPort)
+                                             setOnException, getPort,
+                                             Port, HostPreference)
 import Network.Wai.Handler.WarpTLS
 import Network.Wai.Middleware.RequestLogger (Destination (Logger),
                                              IPAddrSource (..),
@@ -28,6 +29,11 @@ import Network.Wai.Middleware.RequestLogger (Destination (Logger),
                                              mkRequestLogger, outputFormat)
 import System.Log.FastLogger                (defaultBufSize, newStdoutLoggerSet,
                                              toLogStr)
+
+import Network.Socket
+import System.Environment (setEnv, unsetEnv)
+
+import Prelude(read)
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
@@ -61,6 +67,7 @@ import Handler.EditCompetition
 import Handler.EventLog
 import Handler.ImportPlayers
 import Handler.ExportScores
+import Handler.AddPenalty
 
 -- This line actually creates our YesodDispatch instance. It is the second half
 -- of the call to mkYesodData which occurs in Foundation.hs. Please see the
@@ -153,6 +160,37 @@ getAppSettings = loadAppSettings [configSettingsYml] [] useEnv
 -- | main function for use by yesod devel
 develMain :: IO ()
 develMain = develMainHelper getApplicationDev
+
+develMainHelper' :: IO (Settings, Application) -> IO ()
+develMainHelper' getSettingsApp = do
+  (settings, app) <- getSettingsApp
+
+  _ <- unsetEnv "wai_port" >> setEnv "wai_port" "3001"
+  _ <- unsetEnv "wai_host" >> setEnv "wai_host" "127.0.0.1"
+
+  let settings'  = setPort (3001 :: Port) settings
+      settings'' = setHost ((read "127.0.0.1") :: HostPreference) settings'
+
+  sock <- createSocket
+
+  runSettingsSocket settings'' sock app
+
+  where
+    -- Create the socket that we will use to communicate with
+    -- localhost:3001 here.
+    createSocket :: IO Socket
+    createSocket = do
+
+      sock <- socket AF_INET Stream defaultProtocol
+
+      -- Tell the OS *not* to reserve the socket after your program exits.
+      setSocketOption sock ReuseAddr 1
+
+      -- Bind the socket to localhost:3000 and listen.
+      -- I wonder why I can't specify localhost instead of iNADDR_ANY
+      bindSocket sock (SockAddrInet 3001 iNADDR_ANY)
+      listen sock 2
+      return sock
 
 -- | The @main@ function for an executable running this site.
 appMain :: IO ()

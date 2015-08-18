@@ -185,16 +185,6 @@ postScoreInputR cid rid hid = do
   insertScore cid score
   redirect $ ScoresInputR cid $ roundRoundnumber round_
 
-postAddPenaltyR :: CompetitionId -> RoundId -> Handler Html
-postAddPenaltyR cid rid = do
-  round_ <- runDB $ get404 rid
-  value <- runInputPost $ ireq (checkPenalty intField) "penalty"
-  runDB $ update rid [RoundPenalty =. value]
-  redirect $ ScoresInputR cid $ roundRoundnumber round_
-
-checkPenalty :: Field Handler Int -> Field Handler Int
-checkPenalty = checkBool ((>=) 0) MsgPenaltyRangeError
-
 getLatestScoreTimeR :: CompetitionId -> Handler Value
 getLatestScoreTimeR cid = do
   scores <- runDB $ latestScore cid
