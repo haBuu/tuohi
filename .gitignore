@@ -18,7 +18,6 @@ config/certificate.csr
 config/certificate.pem
 config/key.pem
 *.keter
-.ghci
 .dir-locals.el
 deploy.sh
 *.txt
