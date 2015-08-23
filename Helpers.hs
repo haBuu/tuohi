@@ -18,8 +18,6 @@ import Data.Text(Text)
 import Text.Printf
 import qualified Data.Text
 
-import System.Locale
-
 today :: IO Day
 today = getCurrentTime
   >>= return . utctDay
