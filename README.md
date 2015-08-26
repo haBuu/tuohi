@@ -23,4 +23,4 @@ Instructions for installing Haskell and Yesod are available at http://www.yesodw
 4. Start application by running `stack exec -- yesod devel`
 
 ### Running in ghci
-run-devel.sh can be used to run application in ghci. It will watch for modifications and reload the application. It has some issues but works most of the time.
+run-devel.sh can be used to run application in ghci. It will watch for modifications and reload the application. It has some issues but works most of the time. You can also just run stack ghci and it will start the app and reload it automatically.
