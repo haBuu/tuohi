@@ -7,10 +7,16 @@ $if verified
   <div .panel .panel-success>
     <div .panel-heading>_{MsgVerified}
 $else
-  <div .panel .panel-danger>
-    <div .panel-heading>_{MsgNotVerified}
+  <ul .list-group>
+    <div .panel .panel-danger>
+      <div .panel-heading>_{MsgNotVerified}
+      $maybe (key, email) <- maybeEmailAndKey
+        <a .center .list-group-item href=mailto:#{email}?subject=Verify%20your%20email%20address&body=@{AuthR $ verifyR (toPathPiece uid) key}>
+          _{MsgSendVerEmail}
+      $nothing
+        <li .list-group-item>_{MsgNoVerKey}
 
-<ul .list-group>
+<ul .list-group .hidden>
   <div .panel .panel-primary>
     <div .panel-heading>_{MsgPermissions}
     $forall t <- types

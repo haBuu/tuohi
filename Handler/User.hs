@@ -6,6 +6,9 @@ import Handler.Forms
 import qualified Error as E
 import Model.User
 
+-- for printing verification URL
+import Yesod.Auth.Email(verifyR)
+
 getUserR :: UserId -> Handler Html
 getUserR uid = do
   user <- runDB $ get404 uid
@@ -15,6 +18,7 @@ getUserR uid = do
   permissions <- runDB $ selectList
     [PermissionUserId ==. uid] [Asc PermissionType]
   ((_, formWidget), formEnctype) <- runFormPost $ userForm user
+  let maybeEmailAndKey = (,) <$> (userVerkey user) <*> (userEmail user)
   defaultLayout $ do
     setTitleI MsgUser
     $(widgetFile "user")
