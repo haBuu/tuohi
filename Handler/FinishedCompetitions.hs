@@ -7,7 +7,9 @@ import Model.CompetitionState
 getFinishedCompetitionsR :: Handler Html
 getFinishedCompetitionsR = do
   finished <- runDB $ selectList
-    [CompetitionState ==. Finished]
+    [ CompetitionState ==. Finished
+    , CompetitionPrivate !=. True
+    ]
     [Desc CompetitionDate]
   defaultLayout $ do
     setTitleI MsgCompetitions
