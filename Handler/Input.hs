@@ -32,6 +32,8 @@ getInputR cid groupNumber = do
           let mValue = fmap (scoreScore . entityVal) mScore
           return (rid, name, mValue)
         return ((hid, holeNumber hole), zip [1..] players)
+      -- hole that should be active when the page is loaded
+      let startingHole = groupNumber
       defaultLayout $ do
         setTitleI $ MsgGroupNumber groupNumber
         $(widgetFile "input-scores")

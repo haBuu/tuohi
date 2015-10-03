@@ -168,3 +168,7 @@ Result: Result
 PenaltyRangeError: Penalty can't be negative
 NoVerKey: User does not have a verification key
 SendVerEmail: Send verification email
+CompetitionEventLog: Competition event log
+NoEvents: No events
+Search: Search
+NoSearchResults: No search results

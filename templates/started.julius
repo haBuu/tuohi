@@ -1,6 +1,6 @@
 (function() {
 
-  var dnfListPanel = $("ul#dnf-list div.panel");
+  var dnfList = $("ul#dnf-list");
   var dnfButtons = $("table button#dnf-round");
   var nextRoundButton = $("form#next-round-form button");
   var finishCompetitionButton = $("form#finish-competition-form button");
@@ -27,6 +27,7 @@
     } else {
       // set new if selectedPlayer was undefined
       selectedPlayer = self.parent();
+      console.log(selectedPlayer);
       selectedPlayer.addClass("list-group-item-success");
     }
   });
@@ -67,7 +68,7 @@
             $('<li/>', {
               class: "list-group-item",
               text: name
-            }).appendTo(dnfListPanel);
+            }).appendTo(dnfList);
           }
         });
       });

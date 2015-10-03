@@ -1,7 +1,7 @@
-<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{AdminR} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}
 
-<div .panel .panel-primary>
-  <div .panel-heading>_{MsgPermissions}
+<div .card .card-inverse>
+  <div .card-header .card-primary>_{MsgPermissions}
   <div .table-responsive>
     <table .table>
       <thead>

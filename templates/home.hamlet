@@ -1,10 +1,10 @@
 $maybe activeRound <- mactiveRound
-  <a href=@{InputR (roundCompetitionId activeRound) (roundGroupnumber activeRound)} .btn .btn-default .btn-block>
+  <a href=@{InputR (roundCompetitionId activeRound) (roundGroupnumber activeRound)} .btn .btn-secondary .btn-block>
     _{MsgInputScores}
 
 $if not $ null activeSignUps
-  <div .panel .panel-primary #sign-ups>
-    <div .panel-heading>_{MsgSignUps}
+  <div .card .card-inverse #sign-ups>
+    <div .card-header .card-primary>_{MsgSignUps}
     <table .table>
       <tbody>
         $forall (E.Value sid, _, E.Value name, E.Value date) <- activeSignUps
@@ -13,12 +13,12 @@ $if not $ null activeSignUps
               #{name}, #{showDay date}
             <td>
               <div .pull-right>
-                <button data-url=@{SignUpR sid} #sign-up .pull-right .btn .btn-default .btn-sm>
+                <button data-url=@{SignUpR sid} #sign-up .pull-right .btn .btn-secondary .btn-sm>
                   _{MsgRemove}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgNotifications}
+<div .card .card-inverse>
+  <div .card-header .card-primary>_{MsgNotifications}
+  <ul .list-group .list-group-flush>
     $forall Entity _ notification <- notifications
       <li .list-group-item .clearfix>
         <p .list-group-item-heading .notification>
@@ -28,27 +28,27 @@ $if not $ null activeSignUps
 
 <div .row>
   <div .col-sm-3>
-    <ul .list-group>
-      <div .panel .panel-primary>
-        <div .panel-heading>_{MsgActiveCompetitions}
+    <div .card .card-inverse>
+      <div .card-header .card-primary>_{MsgActiveCompetitions}
+      <ul .list-group>
         $forall Entity cid competition <- activeCompetitions
           $if competitionState competition == Started
             <a href=@{GroupsR cid} .list-group-item>
               #{displayCompetition competition}
 
   <div .col-sm-3>
-    <ul .list-group #open-signups>
-      <div .panel .panel-primary>
-        <div .panel-heading>_{MsgOpenSignUps}
+    <div .card .card-inverse>
+      <div .card-header .card-primary>_{MsgOpenSignUps}
+      <ul .list-group #open-signups>
         $forall Entity cid competition <- activeCompetitions
           $if competitionState competition == Init
             <a href=@{SignUpsR cid} .list-group-item :(findMatch cid activeSignUps):.list-group-item-success>
               #{displayCompetition competition}
 
   <div .col-sm-3>
-    <ul .list-group>
-      <div .panel .panel-primary>
-        <div .panel-heading>_{MsgPastCompetitions}
+    <div .card .card-inverse>
+      <div .card-header .card-primary>_{MsgPastCompetitions}
+      <ul .list-group>
         $forall Entity cid competition <- take finishedLimit finished
           <a href=@{ResultsR cid} .list-group-item>
             #{displayCompetition competition}
@@ -57,9 +57,9 @@ $if not $ null activeSignUps
             _{MsgAllCompetitions}
 
   <div .col-sm-3>
-    <ul .list-group>
-      <div .panel .panel-primary>
-        <div .panel-heading>_{MsgHandicaps}
+    <div .card .card-inverse>
+      <div .card-header .card-primary>_{MsgHandicaps}
+      <ul .list-group>
         $forall Entity sid serie <- series
           <a href=@{HandicapsR sid} .list-group-item>
             #{serieName serie}
@@ -67,3 +67,5 @@ $if not $ null activeSignUps
 ^{languageWidget}
 
 ^{signUpWidget}
+
+<img .img-responsive alt="TFS" src=@{StaticR img_TFS_kilpi_png}>

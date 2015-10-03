@@ -1,28 +1,28 @@
 <div .row>
   <div .col-sm-6>
-    <ul .list-group>
-      <div .panel .panel-primary>
-        <div .panel-heading>_{MsgActiveCompetitions}
+    <div .card .card-inverse>
+      <div .card-header .card-primary>_{MsgActiveCompetitions}
+      <ul .list-group>
         $forall Entity cid competition <- competitions
           $if competitionState competition == Started
             <a href=@{CompetitionR cid} .list-group-item>
               #{displayCompetition competition}
 
   <div .col-sm-6>
-    <ul .list-group>
-      <div .panel .panel-primary>
-        <div .panel-heading>_{MsgFutureCompetitions}
+    <div .card .card-inverse>
+      <div .card-header .card-primary>_{MsgFutureCompetitions}
+      <ul .list-group>
         $forall Entity cid competition <- competitions
           $if competitionState competition == Init
             <a href=@{CompetitionR cid} .list-group-item>
               #{displayCompetition competition}
 
 <div .btn-group .btn-group-vertical .btn-block .btn-group-lg>
-  <a href=@{NewCompetitionR} .btn .btn-default>_{MsgNewCompetition}
+  <a href=@{NewCompetitionR} .btn .btn-secondary>_{MsgNewCompetition}
   $if superAdmin
-    <a href=@{UsersR} .btn .btn-default>_{MsgUsers}
-    <a href=@{PermissionsR} .btn .btn-default>_{MsgPermissions}
-    <a href=@{EventLogR} .btn .btn-default>_{MsgEventLog}
-  <a href=@{NotificationsR} .btn .btn-default>_{MsgNotifications}
-  <a href=@{CoursesR} .btn .btn-default>_{MsgCourses}
-  <a href=@{SeriesR} .btn .btn-default>_{MsgSeries}
+    <a href=@{UsersR} .btn .btn-secondary>_{MsgUsers}
+    <a href=@{PermissionsR} .btn .btn-secondary>_{MsgPermissions}
+    <a href=@{EventLogR} .btn .btn-secondary>_{MsgEventLog}
+  <a href=@{NotificationsR} .btn .btn-secondary>_{MsgNotifications}
+  <a href=@{CoursesR} .btn .btn-secondary>_{MsgCourses}
+  <a href=@{SeriesR} .btn .btn-secondary>_{MsgSeries}

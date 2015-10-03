@@ -168,3 +168,7 @@ Result: Tulos
 PenaltyRangeError: Rangaistus ei voi olla negatiivinen
 NoVerKey: Käyttäjällä ei ole vahvistusavainta
 SendVerEmail: Lähetä vahvistussähköposti
+CompetitionEventLog: Kilpailun tapahtumaloki
+NoEvents: Ei tapahtumia
+Search: Haku
+NoSearchResults: Ei hakutuloksia

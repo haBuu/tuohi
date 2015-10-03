@@ -1,7 +1,7 @@
-<h3 .page-header>#{serieName serie}
+<h1 .display-1>#{serieName serie}
 
-<div .panel .panel-primary>
-  <div .panel-heading>_{MsgHandicaps}
+<div .card .card-inverse >
+  <div .card-header .card-primary>_{MsgHandicaps}
   <table .table>
     <tbody>
       $forall (user, hc) <- handicaps

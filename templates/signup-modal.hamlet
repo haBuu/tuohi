@@ -7,4 +7,4 @@
         <p>
       <div .modal-footer>
         <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
-        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
+        <button type="button" .btn .btn-secondary data-dismiss="modal">_{MsgCancel}

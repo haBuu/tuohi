@@ -1,7 +1,7 @@
-<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{AdminR} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}
 
-<div .panel .panel-primary>
-  <div .panel-heading>_{MsgEventLog}
+<div .card .card-inverse>
+  <div .card-header .card-primary>_{MsgEventLog}
   <div .table-responsive>
     <table .table>
       <thead>

@@ -6,6 +6,7 @@ import Helpers
 import Handler.Forms
 import Model.CompetitionState
 import Handler.Division
+import qualified Model.CompetitionEventLog as CE
 
 getEditCompetitionR :: CompetitionId -> Handler Html
 getEditCompetitionR cid = do
@@ -37,6 +38,7 @@ postEditCompetitionR cid = do
       replace cid comp
       deleteWhere [CompetitionDivisionCompetitionId ==. cid]
       insertMany_ $ map (\d -> CompetitionDivision cid d) divisions
+      CE.logInfo cid "Competition edited"
     setMessageI MsgCompetitionUpdated
   redirect $ CompetitionR cid
 

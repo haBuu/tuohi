@@ -53,6 +53,7 @@ library
                      Handler.ImportPlayers
                      Handler.ExportScores
                      Handler.AddPenalty
+                     Handler.CompetitionEventLog
                      Helpers
                      Database
                      Competition.Competition
@@ -66,6 +67,7 @@ library
                      Model.RoundState
                      Model.EventLog
                      Model.Round
+                     Model.CompetitionEventLog
                      Error
                      Datepicker
 

@@ -1,23 +1,19 @@
-<nav .navbar .navbar-default .navbar-static-top>
-  <div .container-fluid .container>
-    <div .navbar-header>
-      <button type="button" .navbar-toggle .collapsed data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span .sr-only>Toggle navigation
-        <span .icon-bar>
-        <span .icon-bar>
-        <span .icon-bar>
-      <a .navbar-brand href=@{HomeR}>Tampereen Frisbeeseura
-
-    <div #navbar .navbar-collapse .collapse .navbar-right>
+<nav .navbar .navbar-light .bg-faded .m-b>
+  <div .container>
+    <a .navbar-brand href=@{HomeR}>
+      Tampereen Frisbeeseura
+    <button .pull-right .navbar-toggler .hidden-sm-up type=button data-toggle=collapse data-target=#navbar>
+      &#9776;
+    <div .collapse .navbar-toggleable-xs #navbar .pull-right>
       $maybe (Entity _ user) <- muser
-        <a .btn .btn-default .navbar-btn href=@{ProfileR}>_{MsgProfile}
-        $if userAdmin user || userSuperAdmin user
-          <a .btn .btn-default .navbar-btn href=@{AdminR}>_{MsgAdminPanel}
-        <a .btn .btn-default .navbar-btn href=@{AuthR LogoutR}>_{MsgLogOut}
+        <div .btn-group role=group>
+          <a .btn .btn-secondary href=@{ProfileR}>_{MsgProfile}
+          $if userAdmin user || userSuperAdmin user
+            <a .btn .btn-secondary href=@{AdminR}>_{MsgAdminPanel}
+          <a .btn .btn-secondary href=@{AuthR LogoutR}>_{MsgLogOut}
       $nothing
-        <form .navbar-form method=post action=@{AuthR loginR}>
-          <div .form-group>
-            <input type="email" name="email" .form-control placeholder=_{MsgEmail} required>
-            <input type="password" name="password" .form-control placeholder=_{MsgPassword} required>
-          <button type="submit" .btn .btn-success>_{MsgLogIn}
-          <a .btn .btn-default href=@{AuthR registerR}>_{MsgRegister}
+        <form .form-inline .navbar-form method=post action=@{AuthR loginR}>
+          <input type=email name=email .form-control placeholder=_{MsgEmail} required>
+          <input type=password name=password .form-control placeholder=_{MsgPassword} required>
+          <button type=submit .btn .btn-success>_{MsgLogIn}
+          <a .btn .btn-secondary href=@{AuthR registerR}>_{MsgRegister}

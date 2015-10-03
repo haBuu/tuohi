@@ -7,6 +7,7 @@ import Handler.Forms
 import Handler.Division
 import Helpers
 import qualified Datepicker
+import qualified Model.CompetitionEventLog as CE
 
 getNewCompetitionR :: Handler Html
 getNewCompetitionR = do
@@ -31,5 +32,6 @@ postNewCompetitionR = do
     runDB $ do
       cid <- insert comp
       insertMany_ $ map (\d -> CompetitionDivision cid d) divisions
+      CE.logInfo cid "Competition added"
     setMessageI MsgCompetitionAdded
   redirect AdminR

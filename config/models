@@ -107,3 +107,10 @@ CompetitionDivision
   competitionId CompetitionId
   division Division
   deriving Show
+
+CompetitionEventLog
+  competitionId CompetitionId
+  time UTCTime
+  level Level
+  event Text
+  deriving Show

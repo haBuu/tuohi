@@ -21,7 +21,7 @@ formHandler result f =
 
 -- default submit button
 submitButton :: a -> BootstrapSubmit a
-submitButton msg = BootstrapSubmit msg "btn btn-default btn-block btn-lg" []
+submitButton msg = BootstrapSubmit msg "btn btn-secondary btn-block btn-lg" []
 
 competitionForm :: UserId -> Maybe Competition -> [D.Division] -> Html
   -> MForm Handler (FormResult (Competition, [D.Division]), Widget)
@@ -95,17 +95,18 @@ competitionForm uid mCompetition divisions extra = do
           <label>^{fvLabel divisionView}
           <div .checkbox>
             ^{fvInput divisionView}
-        <div .checkbox>
-          <label>
+        <div .c-inputs-stacked>
+          <label .c-input .c-checkbox>
             ^{fvInput pdgaView}^{fvLabel pdgaView}
-        <div .checkbox>
-          <label>
+            <span .c-indicator>
+          <label .c-input .c-checkbox>
             ^{fvInput privateView}^{fvLabel privateView}
+            <span .c-indicator>
         <div .form-group>
           $if isJust mCompetition
-            <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgEditCompetition}>
+            <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgEditCompetition}>
           $else
-            <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgNewCompetition}>
+            <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgNewCompetition}>
       |]
   return (result, widget)
   where
@@ -166,7 +167,7 @@ newLayoutForm cid extra = do
           <label .control-label>^{fvLabel holesView}
           ^{fvInput holesView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddLayout}>
+          <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgAddLayout}>
       |]
   return (res, widget)
 
@@ -187,7 +188,7 @@ holesForm holes extra = do
             <label .control-label>^{fvLabel holeView}
             ^{fvInput holeView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdateLayout}>
+          <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgUpdateLayout}>
       |]
   return (result, widget)
   where
@@ -251,7 +252,7 @@ addPlayerForm cid extra = do
           <div .radio>
             ^{fvInput divisionView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddPlayer}>
+          <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgAddPlayer}>
       |]
   return (result, widget)
 
@@ -283,7 +284,7 @@ addPDGAPlayerForm cid extra = do
           <div .radio>
             ^{fvInput divisionView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgAddPlayer}>
+          <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgAddPlayer}>
       |]
   return (result, widget)
 
@@ -325,7 +326,7 @@ signUpForm cid extra = do
           <label .control-label>^{fvLabel pwView}
           ^{fvInput pwView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgSignUp}>
+          <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgSignUp}>
       |]
   return (result, widget)
 
@@ -353,7 +354,7 @@ signUpFormLoggedIn cid user extra = do
           <label .control-label>^{fvLabel pwView}
           ^{fvInput pwView}
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgSignUp}>
+          <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgSignUp}>
       |]
   return (result, widget)
 
@@ -432,11 +433,11 @@ userForm user extra = do
           <label .control-label>^{fvLabel emailView}
           ^{fvInput emailView}
         <div .form-group>
-          <div .checkbox>
-            <label>
-              ^{fvInput adminView}_{MsgAdmin}
+          <label .c-input .c-checkbox>
+            ^{fvInput adminView}_{MsgAdmin}
+            <span .c-indicator>
         <div .form-group>
-          <input type=submit .btn .btn-default .btn-block .btn-lg value=_{MsgUpdate}>
+          <input type=submit .btn .btn-secondary .btn-block .btn-lg value=_{MsgUpdate}>
       |]
   return (result, widget)
 

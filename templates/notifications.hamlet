@@ -1,21 +1,21 @@
 <form method=post action=@{NotificationsR}#form enctype=#{formEnctype}>
   ^{formWidget}
 
-<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{AdminR} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgNotifications}
+<div .card .card-inverse>
+  <div .card-primary .card-header>_{MsgNotifications}
+  <ul .list-group>
     $forall Entity nid notification <- notifications
       <li .list-group-item .clearfix>
         <p>#{notificationContent notification}
         <textarea .margin-bottom .hidden .form-control>
           #{notificationContent notification}
-        <button #remove data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default>
+        <button #remove data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-secondary>
           _{MsgRemove}
-        <button #edit .pull-right .margin-left .btn .btn-default>
+        <button #edit .pull-right .margin-left .btn .btn-secondary>
           _{MsgEdit}
-        <button #cancel .pull-right .margin-left .btn .btn-default .hidden>
+        <button #cancel .pull-right .margin-left .btn .btn-secondary .hidden>
           _{MsgCancel}
-        <button #save data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default .hidden>
+        <button #save data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-secondary .hidden>
           _{MsgSave}

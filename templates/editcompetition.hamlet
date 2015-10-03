@@ -1,4 +1,4 @@
 <form method=post action=@{EditCompetitionR cid}#form enctype=#{formEnctype}>
   ^{formWidget}
 
-<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgCancel}
+<a href=@{CompetitionR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgCancel}

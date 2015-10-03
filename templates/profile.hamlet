@@ -1,6 +1,6 @@
 $if not $ null activeSignUps
-  <div .panel .panel-primary #sign-ups>
-    <div .panel-heading>_{MsgSignUps}
+  <div .card .card-inverse #sign-ups>
+    <div .card-header .card-primary>_{MsgSignUps}
     <table .table>
       <tbody>
         $forall (E.Value sid, _, E.Value name, E.Value date) <- activeSignUps
@@ -9,7 +9,8 @@ $if not $ null activeSignUps
               #{name}, #{showDay date}
             <td>
               <div .pull-right>
-                <button data-url=@{SignUpR sid} #sign-up .pull-right .btn .btn-default .btn-sm>_{MsgRemove}
+                <button data-url=@{SignUpR sid} #sign-up .pull-right .btn .btn-secondary .btn-sm>
+                  _{MsgRemove}
 
 <form method=post action=@{ProfileR}#form enctype=#{formEnctype}>
   ^{formWidget}

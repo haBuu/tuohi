@@ -1,61 +1,60 @@
-<div role="tabpanel">
-  <div .tab-content>
-    $forall ((hid, hole), players) <- holesAndPlayers
-      <div role="tabpanel" .tab-pane :(hole == 1):.active #hole-#{show hole}>
+<div .tab-content>
+  $forall ((hid, hole), players) <- holesAndPlayers
+    <div role="tabpanel" .tab-pane :(hole == startingHole):.active #hole-#{show hole}>
 
-        <div #score-input-error .hidden .alert .alert-danger role="alert">
-          _{MsgScoreInputError}
+      <div #score-input-error .hidden .alert .alert-danger role="alert">
+        _{MsgScoreInputError}
 
-        <h3 .page-header>_{MsgHole} #{show hole}
+      <h1 .display-1>_{MsgHole} #{show hole}
 
-        <table #score-input>
-          <tbody>
-            $forall (n, (rid, name, mValue)) <- players
-              <tr onClick="setScoreFocus(#{n})">
-                <th>#{name}
-                $maybe value <- mValue
-                  <td data-url=@{ScoreR cid rid hid} :(firstHoleFirstPlayer hole n):.score-focus>#{show value}
-                $nothing
-                  <td data-url=@{ScoreR cid rid hid} :(firstHoleFirstPlayer hole n):.score-focus>
+      <table #score-input>
+        <tbody>
+          $forall (n, (rid, name, mValue)) <- players
+            <tr onClick="setScoreFocus(#{n})">
+              <th>#{name}
+              $maybe value <- mValue
+                <td data-url=@{ScoreR cid rid hid} :(firstHoleFirstPlayer hole n):.score-focus>#{show value}
+              $nothing
+                <td data-url=@{ScoreR cid rid hid} :(firstHoleFirstPlayer hole n):.score-focus>
 
-        <div #keyboard .zero-to-nine>
-          <a .btn .btn-default .rounded-ul onClick="inputScore(0)">0
-          <a .btn .btn-default onClick="inputScore(1)">1
-          <a .btn .btn-default onClick="inputScore(2)">2
-          <a .btn .btn-default onClick="inputScore(3)">3
-          <a #double-digit .btn .btn-default .rounded-ur onClick="changeKeyboard(true)">10-19
-          $if hole == 1
-            <a href=#hole-#{length holesAndPlayers} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
-              <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
-          $else
-            <a href=#hole-#{show (hole - 1)} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
-              <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
-          <a .btn .btn-default onClick="inputScore(4)">4
-          <a .btn .btn-default onClick="inputScore(5)">5
-          <a .btn .btn-default onClick="inputScore(6)">6
-          <a href=#hole-#{mod hole (length holesAndPlayers) + 1} #next .arrow .arrow-right .rounded-lr .btn .btn-default role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true">
-          <a .btn .btn-default onClick="inputScore(7)">7
-          <a .btn .btn-default onClick="inputScore(8)">8
-          <a .btn .btn-default onClick="inputScore(9)">9
+      <div #keyboard .zero-to-nine>
+        <a .btn .btn-secondary .rounded-ul onClick="inputScore(0)">0
+        <a .btn .btn-secondary onClick="inputScore(1)">1
+        <a .btn .btn-secondary onClick="inputScore(2)">2
+        <a .btn .btn-secondary onClick="inputScore(3)">3
+        <a #double-digit .btn .btn-secondary .rounded-ur onClick="changeKeyboard(true)">10-19
+        $if hole == 1
+          <a .nav-link href=#hole-#{length holesAndPlayers} #prev .arrow .arrow-left .rounded-ll .btn .btn-secondary role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">Edellinen
+        $else
+          <a .nav-link href=#hole-#{show (hole - 1)} #prev .arrow .arrow-left .rounded-ll .btn .btn-secondary role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">Seuraava
+        <a .btn .btn-secondary onClick="inputScore(4)">4
+        <a .btn .btn-secondary onClick="inputScore(5)">5
+        <a .btn .btn-secondary onClick="inputScore(6)">6
+        <a .nav-link href=#hole-#{mod hole (length holesAndPlayers) + 1} #next .arrow .arrow-right .rounded-lr .btn .btn-secondary role="tab" data-toggle="tab">
+          <span class="glyphicon glyphicon-arrow-right" aria-hidden="true">Seuraava
+        <a .btn .btn-secondary onClick="inputScore(7)">7
+        <a .btn .btn-secondary onClick="inputScore(8)">8
+        <a .btn .btn-secondary onClick="inputScore(9)">9
 
-        <div #keyboard .ten-to-nineteen .hidden>
-          <a .btn .btn-default .rounded-ul onClick="inputScore(10)">10
-          <a .btn .btn-default onClick="inputScore(11)">11
-          <a .btn .btn-default onClick="inputScore(12)">12
-          <a .btn .btn-default onClick="inputScore(13)">13
-          <a #double-digit .btn .btn-default .rounded-ur onClick="changeKeyboard(false)">0-9
-          $if hole == 1
-            <a href=#hole-#{length holesAndPlayers} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
-              <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
-          $else
-            <a href=#hole-#{show (hole - 1)} #prev .arrow .arrow-left .rounded-ll .btn .btn-default role="tab" data-toggle="tab">
-              <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">
-          <a .btn .btn-default onClick="inputScore(14)">14
-          <a .btn .btn-default onClick="inputScore(15)">15
-          <a .btn .btn-default onClick="inputScore(16)">16
-          <a href=#hole-#{mod hole (length holesAndPlayers) + 1} #next .arrow .arrow-right .rounded-lr .btn .btn-default role="tab" data-toggle="tab">
-            <span class="glyphicon glyphicon-arrow-right" aria-hidden="true">
-          <a .btn .btn-default onClick="inputScore(17)">17
-          <a .btn .btn-default onClick="inputScore(18)">18
-          <a .btn .btn-default onClick="inputScore(19)">19
+      <div #keyboard .ten-to-nineteen .hidden>
+        <a .btn .btn-secondary .rounded-ul onClick="inputScore(10)">10
+        <a .btn .btn-secondary onClick="inputScore(11)">11
+        <a .btn .btn-secondary onClick="inputScore(12)">12
+        <a .btn .btn-secondary onClick="inputScore(13)">13
+        <a #double-digit .btn .btn-secondary .rounded-ur onClick="changeKeyboard(false)">0-9
+        $if hole == 1
+          <a .nav-link href=#hole-#{length holesAndPlayers} #prev .arrow .arrow-left .rounded-ll .btn .btn-secondary role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">Edellinen
+        $else
+          <a .nav-link href=#hole-#{show (hole - 1)} #prev .arrow .arrow-left .rounded-ll .btn .btn-secondary role="tab" data-toggle="tab">
+            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true">Seuraava
+        <a .btn .btn-secondary onClick="inputScore(14)">14
+        <a .btn .btn-secondary onClick="inputScore(15)">15
+        <a .btn .btn-secondary onClick="inputScore(16)">16
+        <a .nav-link href=#hole-#{mod hole (length holesAndPlayers) + 1} #next .arrow .arrow-right .rounded-lr .btn .btn-secondary role="tab" data-toggle="tab">
+          <span class="glyphicon glyphicon-arrow-right" aria-hidden="true">Seuraava
+        <a .btn .btn-secondary onClick="inputScore(17)">17
+        <a .btn .btn-secondary onClick="inputScore(18)">18
+        <a .btn .btn-secondary onClick="inputScore(19)">19

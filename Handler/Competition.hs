@@ -10,6 +10,7 @@ import qualified Database.Esqueleto as E
 
 import Handler.Forms
 import Model.CompetitionState
+import qualified Model.CompetitionEventLog as CE
 import qualified Model.RoundState as R
 import Database
 import Helpers
@@ -68,7 +69,7 @@ postCompetitionNextRoundR cid = do
     if allScores
       then do
         nextRound res
-        logInfo "Round changed"
+        runDB $ CE.logInfo cid "Round changed"
         setMessageI MsgNextRoundChanged
       else
         setMessageI MsgNextRoundScoresMissing
@@ -82,7 +83,7 @@ postCompetitionFinishR cid = do
     if allScores
       then do
         finishCompetition res
-        logInfo "Competition finished"
+        runDB $ CE.logInfo cid "Competition finished"
         setMessageI MsgCompetitionFinished
       else
         setMessageI MsgFinishCompetitionScoresMissing
@@ -93,7 +94,7 @@ postCompetitionR cid = do
   ((result, _), _) <- startCompetitionForm cid
   formHandler result $ \res -> do
     startCompetition res
-    logInfo "Competition started"
+    runDB $ CE.logInfo cid "Competition started"
     setMessageI MsgCompetitionStarted
   redirect $ CompetitionR cid
 
@@ -103,7 +104,12 @@ postLockCompetitionR cid = do
   let locked = competitionLocked competition
   ((result, _), _) <- lockCompetitionForm cid locked
   formHandler result $ \res -> do
-    runDB $ update res [CompetitionLocked =. not locked]
+    runDB $ do
+      update res [CompetitionLocked =. not locked]
+      let event = if locked
+                    then "Competition opened"
+                    else "Competition locked"
+      CE.logInfo cid event
     let msg = if locked
                 then MsgCompetitionOpened
                 else MsgCompetitionLocked

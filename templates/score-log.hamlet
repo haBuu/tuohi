@@ -1,10 +1,10 @@
 <h3 .page-header>#{displayCompetition competition}
 
-<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>
+<a href=@{CompetitionR cid} .btn .btn-secondary .btn-block .btn-lg>
   _{MsgBack}
 
-<div .panel .panel-primary>
-  <div .panel-heading>_{MsgUpdatedScores}
+<div .card .card-inverse>
+  <div .card-header .card-primary>_{MsgUpdatedScores}
   <div .table-responsive>
     <table .table>
       <thead>

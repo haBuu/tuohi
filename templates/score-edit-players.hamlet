@@ -1,12 +1,12 @@
 <h3 .page-header>#{displayCompetition competition}
 
-<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{CompetitionR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}
 
 $forall r <- rounds
-  <a href=@{ScoresInputR cid r} .btn .btn-default .btn-block .btn-lg>_{MsgRound} #{show r}
+  <a href=@{ScoresInputR cid r} .btn .btn-secondary .btn-block .btn-lg>_{MsgRound} #{show r}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgChoosePlayer}
-    $forall Entity uid user <- players
-      <a href=@{ScoreEditPlayerR cid uid} .list-group-item>#{userName user}
+<div .card .card-inverse>
+  <div .card-header .card-primary>_{MsgChoosePlayer}
+  <ul .list-group>
+  $forall Entity uid user <- players
+    <a href=@{ScoreEditPlayerR cid uid} .list-group-item>#{userName user}

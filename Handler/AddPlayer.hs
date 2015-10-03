@@ -17,7 +17,17 @@ getAddPlayerR cid = do
   ((_, formWidget), formEnctype) <- runFormPost $ addPlayerForm cid
   defaultLayout $ do
     setTitleI MsgAddPlayer
+    addScript $ StaticR js_jets_min_js
     $(widgetFile "addplayer")
+    search
+
+search :: Widget
+search = toWidget [julius|
+  var jets = new Jets({
+    searchTag: '#player-search',
+    contentTag: '#player-content'
+  });
+|]
 
 getAddPDGAPlayerR :: CompetitionId -> Handler Html
 getAddPDGAPlayerR cid = do

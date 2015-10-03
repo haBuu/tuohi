@@ -1,3 +1,7 @@
+.hidden
+  display: none !important
+  visibility: hidden !important
+
 .ui-block-b
   text-align: right
 
@@ -165,3 +169,10 @@ table#score-input-admin td
   height: 20px
   text-align: center
   line-height: 20px
+
+div.search-container
+  height: 90px
+  overflow: hidden
+
+div.search-container-item
+  height: 30px

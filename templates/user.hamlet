@@ -1,28 +1,29 @@
 <form method=post enctype=#{formEnctype}>
   ^{formWidget}
 
-<a href=@{UsersR} .btn .btn-default .btn-block .btn-lg>_{MsgCancel}
+<a href=@{UsersR} .btn .btn-secondary .btn-block .btn-lg>_{MsgCancel}
 
 $if verified
-  <div .panel .panel-success>
-    <div .panel-heading>_{MsgVerified}
+  <div .card .card-success>
+    <div .card-header>_{MsgVerified}
 $else
-  <ul .list-group>
-    <div .panel .panel-danger>
-      <div .panel-heading>_{MsgNotVerified}
+  <div .card .card-danger>
+    <div .card-header>_{MsgNotVerified}
+    <ul .list-group>
       $maybe (key, email) <- maybeEmailAndKey
         <a .center .list-group-item href=mailto:#{email}?subject=Verify%20your%20email%20address&body=@{AuthR $ verifyR (toPathPiece uid) key}>
           _{MsgSendVerEmail}
       $nothing
         <li .list-group-item>_{MsgNoVerKey}
 
-<ul .list-group .hidden>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgPermissions}
-    $forall t <- types
-      <li .list-group-item>
-        <div class="checkbox">
-          $if elem t $ map (permissionType . entityVal) permissions
-            <label><input type="checkbox" checked>#{show t}
-          $else
-            <label><input type="checkbox">#{show t}
+<div .card .card-inverse>
+  <div .card-primary .card-header>_{MsgPermissions}
+  <ul .list-group .hidden2>
+  $forall t <- types
+    <li .list-group-item>
+      <label .c-input .c-checkbox>
+        $if elem t $ map (permissionType . entityVal) permissions
+          <input type=checkbox checked>#{show t}
+        $else
+          <input type=checkbox>#{show t}
+        <span .c-indicator>

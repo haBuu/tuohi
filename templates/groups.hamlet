@@ -1,12 +1,12 @@
-<h3 .page-header>#{displayCompetition competition}
+<h1 .display-1>#{displayCompetition competition}
 
-<a href=@{ScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgHoleScores}
-<a href=@{ResultsR cid} .btn .btn-default .btn-block .btn-lg>_{MsgResults}
+<a href=@{ScoresR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgHoleScores}
+<a href=@{ResultsR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgResults}
 
-<ul .list-group>
-  $forall group <- groups
-    <div .panel .panel-primary>
-      <div .panel-heading>_{MsgGroup} #{group}
+$forall group <- groups
+  <div .card .card-inverse>
+    <div .card-header .card-primary>_{MsgGroup} #{group}
+    <ul .list-group>
       $forall (E.Value _, E.Value _, E.Value groupNumber, E.Value name, E.Value _) <- rounds
         $if group == groupNumber
           <a href=@{InputR cid groupNumber} .list-group-item>#{name}

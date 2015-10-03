@@ -1,0 +1,20 @@
+<a href=@{CompetitionR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}
+
+<div .card .card-inverse>
+  $if null events
+    <div .card-primary .card-header .text-center>_{MsgNoEvents}
+  $else
+    <div .card-header .card-primary>_{MsgCompetitionEventLog}
+    <div .table-responsive>
+    <table .table>
+      <thead>
+        <tr>
+          <th>_{MsgLevel}
+          <th>_{MsgTime}
+          <th>_{MsgEvent}
+      <tbody>
+        $forall (Entity _ event) <- events
+          <tr>
+            <td>#{show $ competitionEventLogLevel event}
+            <td>#{showTime tz $ competitionEventLogTime event}
+            <td>#{competitionEventLogEvent event}

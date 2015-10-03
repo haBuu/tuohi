@@ -1,10 +1,10 @@
-<h3.page-header>#{displayCompetition competition}
+<h1 .display-1>#{displayCompetition competition}
 
-<a href=@{ScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgHoleScores}
+<a href=@{ScoresR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgHoleScores}
 
 $forall (d, msg) <- divisions
-  <div .panel .panel-primary>
-    <div .panel-heading>_{msg}
+  <div .card .card-inverse>
+    <div .card-header .card-primary>_{msg}
     <table .table>
       <tbody>
         $forall (place, (user, _, rounds)) <- addPlacements holes $ filterByDivision d sortedPlayers
@@ -26,8 +26,8 @@ $forall (d, msg) <- divisions
                   )
 
 $if length sortedHandicaps > 0
-  <div .panel .panel-primary .hidden>
-    <div .panel-heading>_{MsgHandicapResults}
+  <div .card .card-inverse .hidden>
+    <div .card-header .card-primary>_{MsgHandicapResults}
     <table .table>
       <tbody>
         $forall ((user, _, _), hc) <- sortedHandicaps

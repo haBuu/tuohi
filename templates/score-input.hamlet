@@ -1,4 +1,4 @@
-<a href=@{ScoreEditPlayersR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{ScoreEditPlayersR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}
 
 <h3.page-header>#{displayCompetition competition}
 
@@ -24,12 +24,12 @@
         $nothing
           <th>
         $forall (Entity hid hole) <- holes
-          <td data-url=@{ScoreInputR cid rid hid} data-par=#{holePar hole} onClick="setScoreFocus(this)">
+          <td data-url=@{ScoreInputR cid rid hid} data-par=#{holePar hole} onClick=setScoreFocus(this)>
             $forall (Entity _ score) <- scores
               $if (scoreRoundId score == rid) && (scoreHoleId score == hid)
                 <div class=#{textualScore (holePar hole) (scoreScore score)}>
                   #{scoreScore score}
-        <td #penalty onClick="setScoreFocus(this)">
-        <td #sudden-death onClick="setScoreFocus(this)">
+        <td #penalty onClick=setScoreFocus(this)>
+        <td #sudden-death onClick=setScoreFocus(this)>
         <td #total-score>
         <td #par-score>

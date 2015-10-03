@@ -3,36 +3,40 @@
 <form #next-round-form method=post action=@{CompetitionNextRoundR cid}#form enctype=#{nextRoundFormEnctype}>
   ^{nextRoundFormWidget}
 
-<div .panel .panel-info>
-  <div .panel-heading>_{MsgPassword}: #{competitionPassword competition}
+<div .card .card-info>
+  <div .card-header>_{MsgPassword}: #{competitionPassword competition}
 
-<div .panel .panel-info>
-  <div .panel-heading>_{MsgRound}: #{currentRound_}
+<div .card .card-info>
+  <div .card-header>_{MsgRound}: #{currentRound_}
 
 $if competitionPrivate competition
-  <div .panel .panel-info>
-    <div .panel-heading>_{MsgCompetitionUrl}: @{GroupsR cid}
+  <div .card .card-info>
+    <div .card-header>_{MsgCompetitionUrl}
+    <ul .list-group>
+      <li .list-group-item>@{GroupsR cid}
 
 <form method=post action=@{LockCompetitionR cid}#form enctype=#{lockFormEnctype}>
   ^{lockFormWidget}
 
 $if currentRound_ == 1
   $if competitionPdga competition
-    <a href=@{AddPDGAPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+    <a href=@{AddPDGAPlayerR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgAddPlayer}
   $else
-    <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+    <a href=@{AddPlayerR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgAddPlayer}
 
 $if competitionPdga competition
-  <a href=@{ExportScoresR cid} .btn .btn-default .btn-block .btn-lg>_{MsgPDGAScores}
+  <a href=@{ExportScoresR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgPDGAScores}
 
-<a href=@{ScoreEditPlayersR cid} .btn .btn-default .btn-block .btn-lg>_{MsgEditScores}
+<a href=@{ScoreEditPlayersR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgEditScores}
+
+<a href=@{CompetitionEventLogR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgCompetitionEventLog}
 
 $maybe _ <- mScoreUpdate
   <a href=@{ScoreLogR cid} .btn .btn-warning .btn-block .btn-lg>_{MsgScoreLog}
 
 $forall group <- groups
-  <div .panel .panel-primary>
-    <div .panel-heading #group data-group=#{show group}>
+  <div .card .card-inverse>
+    <div .card-primary .card-header #group data-group=#{show group}>
       _{MsgGroup} #{group}
     <table .table>
       <tbody>
@@ -48,14 +52,14 @@ $forall group <- groups
                     <span .label .label-success .label-lg>#{scoreCount}
                   $else
                     <span .label .label-warning .label-lg>#{scoreCount}
-                  <button data-url=@{DnfRoundR rid} #dnf-round type="button" .btn .btn-danger .btn-sm>
-                    <span class="glyphicon glyphicon-remove">
+                  <button data-url=@{DnfRoundR rid} #dnf-round type=button .btn .btn-danger .btn-sm>
+                    <span class="glyphicon glyphicon-remove">DNF
 
-<ul .list-group #dnf-list>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgDNF}
-    $forall (E.Value _, E.Value name) <- dnf
-      <li .list-group-item>#{name}
+<div .card .card-inverse>
+  <div .card-primary .card-header>_{MsgDNF}
+  <ul .list-group #dnf-list>
+  $forall (E.Value _, E.Value name) <- dnf
+    <li .list-group-item>#{name}
 
 <form #finish-competition-form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
   ^{finishFormWidget}
@@ -68,8 +72,8 @@ $forall group <- groups
       <div .modal-body>
         <p>
       <div .modal-footer>
-        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
-        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
+        <button type=button .btn .btn-primary data-dismiss=modal #confirm-button>_{MsgConfirm}
+        <button type=button .btn .btn-secondary data-dismiss=modal>_{MsgCancel}
 
 <div #confirm-next-round .modal>
   <div .modal-dialog>
@@ -77,8 +81,8 @@ $forall group <- groups
       <div .modal-header>
         <h4 .modal-title>_{MsgConfirmNextRoundTitle}
       <div .modal-footer>
-        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
-        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
+        <button type=button .btn .btn-primary data-dismiss=modal #confirm-button>_{MsgConfirm}
+        <button type=button .btn .btn-secondary data-dismiss=modal>_{MsgCancel}
 
 <div #confirm-finish-competition .modal>
   <div .modal-dialog>
@@ -86,5 +90,5 @@ $forall group <- groups
       <div .modal-header>
         <h4 .modal-title>_{MsgConfirmFinishCompetitionTitle}
       <div .modal-footer>
-        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
-        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
+        <button type=button .btn .btn-primary data-dismiss=modal #confirm-button>_{MsgConfirm}
+        <button type=button .btn .btn-secondary data-dismiss=modal>_{MsgCancel}

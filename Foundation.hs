@@ -93,11 +93,13 @@ instance Yesod App where
     -- you to use normal widget features in default-layout.
 
     pc <- widgetToPageContent $ do
-      addStylesheet $ StaticR css_bootstrap_css
+      -- addStylesheet $ StaticR css_bootstrap4_css
+      addStylesheetRemote "//cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css"
       $(widgetFile "style")
       -- jquery
       addScriptRemote "//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
-      addScript $ StaticR js_bootstrap_js
+      -- addScriptRemote "//cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"
+      addScript $ StaticR js_bootstrap4_js
       $(widgetFile "header")
       $(widgetFile "message")
       $(widgetFile "default-layout")
@@ -160,6 +162,7 @@ instance Yesod App where
   isAuthorized (AddPDGAPlayerR _) _ = isAdmin
   isAuthorized (LockCompetitionR _) _ = isAdmin
   isAuthorized (AddPenaltyR _ _) _ = isAdmin
+  isAuthorized (CompetitionEventLogR _) _ = isAdmin
 
   -- super admin
   isAuthorized UsersR _ = isSuperAdmin

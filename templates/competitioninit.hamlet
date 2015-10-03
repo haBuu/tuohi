@@ -4,20 +4,24 @@
   ^{formWidget}
 
 $if competitionPrivate competition
-  <div .panel .panel-info>
-    <div .panel-heading>_{MsgCompetitionUrl}: @{GroupsR cid}
+  <div .card .card-info>
+    <div .card-header>_{MsgCompetitionUrl}
+    <ul .list-group>
+      <li .list-group-item>@{GroupsR cid}
 
 $if competitionPdga competition
-  <a href=@{AddPDGAPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+  <a href=@{AddPDGAPlayerR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgAddPlayer}
 $else
-  <a href=@{AddPlayerR cid} .btn .btn-default .btn-block .btn-lg>_{MsgAddPlayer}
+  <a href=@{AddPlayerR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgAddPlayer}
 
 $if competitionPdga competition
-  <a href=@{ImportPlayersR cid} .btn .btn-default .btn-block .btn-lg>_{MsgImportPlayers}
-<a href=@{EditCompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgEditCompetition}
+  <a href=@{ImportPlayersR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgImportPlayers}
+<a href=@{EditCompetitionR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgEditCompetition}
 
-<div .panel .panel-primary>
-  <div .panel-heading>_{MsgNotPresent}
+<a href=@{CompetitionEventLogR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgCompetitionEventLog}
+
+<div .card .card-inverse>
+  <div .card-primary .card-header>_{MsgNotPresent}
   <table .table #not-confirmed>
     <tbody>
       $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
@@ -27,13 +31,13 @@ $if competitionPdga competition
               #{name}
             <td>
               <div .pull-right>
-                <button data-url=@{ConfirmSignUpR sid} #confirm-signup type="button" class="btn btn-success btn-sm">
-                  <span class="glyphicon glyphicon-ok">
-                <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
-                  <span class="glyphicon glyphicon-remove">
+                <button data-url=@{ConfirmSignUpR sid} #confirm-signup type=button .btn .btn-success .btn-sm>
+                  <span class="glyphicon glyphicon-ok">OK
+                <button data-url=@{RemoveSignUpR sid} #remove-signup type=button .btn .btn-danger .btn-sm>
+                  <span class="glyphicon glyphicon-remove">_{MsgRemove}
 
-<div .panel .panel-primary>
-  <div .panel-heading>_{MsgPresent}
+<div .card .card-inverse>
+  <div .card-primary .card-header>_{MsgPresent}
   <table .table #confirmed>
     <tbody>
       $forall (E.Value sid, E.Value confirmed, _, E.Value name) <- signups
@@ -44,7 +48,7 @@ $if competitionPdga competition
             <td>
               <div .pull-right>
                 <button data-url=@{RemoveSignUpR sid} #remove-signup type="button" class="btn btn-danger btn-sm">
-                  <span class="glyphicon glyphicon-remove">
+                  <span class="glyphicon glyphicon-remove">_{MsgRemove}
 
 <div #confirm-start-competition .modal>
   <div .modal-dialog>
@@ -52,5 +56,5 @@ $if competitionPdga competition
       <div .modal-header>
         <h4 .modal-title>_{MsgConfirmStartCompetitionTitle}
       <div .modal-footer>
-        <button type="button" .btn .btn-primary data-dismiss="modal" #confirm-button>_{MsgConfirm}
-        <button type="button" .btn .btn-default data-dismiss="modal">_{MsgCancel}
+        <button type=button .btn .btn-primary data-dismiss=modal #confirm-button>_{MsgConfirm}
+        <button type=button .btn .btn-secondary data-dismiss=modal>_{MsgCancel}

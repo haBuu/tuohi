@@ -1,22 +1,26 @@
-<a href=@{AdminR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{AdminR} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgHeadAdmins} (#{length $ filter isSuperAdmin users})
-    $forall Entity uid user <- users
-      $if userSuperAdmin user
-        <a href=@{UserR uid} .list-group-item>#{userName user}
+<form>
+  <fieldset .form-group>
+    <input type=text #player-search .form-control placeholder=Haku .form-control-lg>
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgAdmins} (#{length $ filter isAdmin users})
-    $forall Entity uid user <- users
-      $if userAdmin user && not (userSuperAdmin user)
-        <a href=@{UserR uid} .list-group-item>#{userName user}
+<div #player-content .card .card-inverse>
+  <div .card-primary .card-header style="display: block; !important">_{MsgHeadAdmins} (#{length $ filter isSuperAdmin users})
+  <ul #player-content .list-group>
+  $forall Entity uid user <- users
+    $if userSuperAdmin user
+      <a href=@{UserR uid} .list-group-item>#{userName user}
 
-<ul .list-group>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgUsers} (#{length $ filter isUser users})
-    $forall Entity uid user <- users
-      $if not (userSuperAdmin user) && not (userAdmin user)
-        <a href=@{UserR uid} .list-group-item>#{userName user}
+<div #player-content .card .card-inverse>
+  <div .card-primary .card-header style="display: block; !important">_{MsgAdmins} (#{length $ filter isAdmin users})
+  <ul #player-content .list-group>
+  $forall Entity uid user <- users
+    $if userAdmin user && not (userSuperAdmin user)
+      <a href=@{UserR uid} .list-group-item>#{userName user}
+
+<div #player-content .card .card-inverse>
+  <div .card-primary .card-header style="display: block; !important">_{MsgUsers} (#{length $ filter isUser users})
+  <ul #player-content .list-group>
+  $forall Entity uid user <- users
+    $if not (userSuperAdmin user) && not (userAdmin user)
+      <a href=@{UserR uid} .list-group-item>#{userName user}

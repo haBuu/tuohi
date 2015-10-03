@@ -1,14 +1,14 @@
 <h3.page-header>#{displayCompetition competition}
 
 $if live
-  <div .checkbox>
-    <label>
-      <input name="live-update" type="checkbox" checked="checked">
-        _{MsgReloadPage}
+  <label .c-input .c-checkbox>
+    <input name=live-update type=checkbox checked=checked>
+      _{MsgReloadPage}
+    <span .c-indicator>
 
 $forall (d, msg) <- divisions
-  <div .panel .panel-primary>
-    <div #score-table-heading data-division=#{show d} .panel-heading onClick=toggle(this)>_{msg}
+  <div .card .card-inverse>
+    <div #score-table-heading data-division=#{show d} .card-header .card-primary onClick=toggle(this)>_{msg}
 
     <div .table-responsive>
       <table #score-table>

@@ -1,4 +1,4 @@
 <form method=post action=@{CompetitionAuthR cid}#form enctype=#{formEnctype}>
   ^{formWidget}
 
-<a href=@{HomeR} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{HomeR} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}

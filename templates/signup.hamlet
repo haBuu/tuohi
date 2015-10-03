@@ -1,4 +1,4 @@
-<h3 .page-header>#{displayCompetition competition}
+<h1 .display-1>#{displayCompetition competition}
 
 $if full
   <fieldset disabled>
@@ -8,10 +8,10 @@ $else
   <form method=post action=@{SignUpsR cid}#form enctype=#{formEnctype}>
     ^{formWidget}
 
-<ul .list-group>
-  $forall (d, msg) <- withMessages divisions
-    <div .panel .panel-primary>
-      <div .panel-heading>_{msg} (#{show $ countSignUps d signups})
+$forall (d, msg) <- withMessages divisions
+  <div .card .card-inverse>
+    <div .card-header .card-primary>_{msg} (#{show $ countSignUps d signups})
+    <ul .list-group>
       $forall (_, _, E.Value division, E.Value name) <- signups
         $if division == d
           <li .list-group-item>#{name}

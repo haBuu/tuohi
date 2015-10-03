@@ -3,30 +3,3 @@
 :set -XCPP -XTemplateHaskell -XQuasiQuotes -XTypeFamilies -XFlexibleContexts -XGADTs -XOverloadedStrings -XMultiParamTypeClasses -XGeneralizedNewtypeDeriving -XEmptyDataDecls -XDeriveDataTypeable
 :set -O0
 :set -fobject-code
-
---{
-import Prelude
-import System.FSNotify
-import System.FSNotify.Devel
-import Control.Concurrent.MVar
-import Control.Concurrent
-
-:{
-:def watch const (withManager (\manager ->
-     do putStrLn "Listening to changes..."
-        lock <- newEmptyMVar
-        _ <- treeExtAny manager "." ".hamlet" (const $ putMVar lock True)
-        _ <- treeExtAny manager "." ".julius" (const $ putMVar lock True)
-        _ <- treeExtAny manager "." ".cassius" (const $ putMVar lock True)
-        _ <- treeExtAny manager "." ".hs" (const $ putMVar lock True)
-        _ <- treeExtAny manager "." ".yaml" (const $ putMVar lock True)
-        _ <- treeExtAny manager "." ".cabal" (const $ putMVar lock True)
-        _ <- readMVar lock
-        return ":l DevelMain \n DevelMain.update \n :watch"
-     ))
-:}
---}
-
-:l DevelMain
-DevelMain.update
-:watch

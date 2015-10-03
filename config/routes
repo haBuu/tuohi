@@ -40,7 +40,6 @@
 
 /admin/competition/#CompetitionId CompetitionR GET POST
 /admin/competition/#CompetitionId/edit EditCompetitionR GET POST
-
 /admin/competition/signup/#SignUpId/confirm ConfirmSignUpR POST
 /admin/competition/signup/#SignUpId/remove RemoveSignUpR POST
 /admin/competition/round/#RoundId/dnf DnfRoundR POST
@@ -56,8 +55,10 @@
 /admin/competition/#CompetitionId/score/#RoundId/#HoleId ScoreEditR POST
 /admin/competition/#CompetitionId/import/players ImportPlayersR GET POST
 /admin/competition/#CompetitionId/lock/ LockCompetitionR POST
-/admin/addplayer/#CompetitionId AddPlayerR GET POST
-/admin/addplayer/pdga/#CompetitionId AddPDGAPlayerR GET POST
+/admin/competition/#CompetitionId/addplayer AddPlayerR GET POST
+/admin/competition/#CompetitionId/addplayer/pdga/ AddPDGAPlayerR GET POST
+/admin/competition/#CompetitionId/export/scores ExportScoresR GET
+/admin/competition/#CompetitionId/eventlog CompetitionEventLogR GET
 
 /admin/users UsersR GET
 /admin/user/#UserId UserR GET POST
@@ -67,4 +68,3 @@
 
 /admin/permissions PermissionsR GET POST
 /admin/eventlog EventLogR GET
-/admin/competition/#CompetitionId/export/scores ExportScoresR GET

@@ -1,16 +1,17 @@
-$if not $ competitionPdga competition
-  <label .control-label>_{MsgChoosePlayer}
-  <select .form-control .margin-bottom>
-    <option>
-    $forall Entity _ user <- users
-      $maybe email <- userEmail user
-        <option data-email=#{email}>#{userName user} (#{email})
-
 $if competitionPdga competition
-  <form method=post action=@{AddPDGAPlayerR cid}#form enctype=#{formEnctype}>
+  <form method=post action=@{AddPDGAPlayerR cid} enctype=#{formEnctype}>
     ^{formWidget}
 $else
-  <form method=post action=@{AddPlayerR cid}#form enctype=#{formEnctype}>
+  <fieldset .form-group>
+    <input type=text #player-search .form-control placeholder=_{MsgSearch}>
+
+  <div .m-b .search-container #player-content>
+    $forall Entity _ user <- users
+      $maybe email <- userEmail user
+        <div .search-container-item data-email=#{email} data-name=#{userName user}>
+          #{userName user} (#{email})
+
+  <form #add-player-form method=post action=@{AddPlayerR cid} enctype=#{formEnctype}>
     ^{formWidget}
 
-<a href=@{CompetitionR cid} .btn .btn-default .btn-block .btn-lg>_{MsgBack}
+<a href=@{CompetitionR cid} .btn .btn-secondary .btn-block .btn-lg>_{MsgBack}
