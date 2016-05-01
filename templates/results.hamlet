@@ -26,7 +26,7 @@ $forall (d, msg) <- divisions
                   )
 
 $if length sortedHandicaps > 0
-  <div .panel .panel-primary .hidden>
+  <div .panel .panel-primary>
     <div .panel-heading>_{MsgHandicapResults}
     <table .table>
       <tbody>
