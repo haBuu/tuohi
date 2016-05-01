@@ -7,7 +7,7 @@
       $forall (user, hc) <- handicaps
         <tr>
           <td>
-            #{userName user}
+            #{user}
           <td>
             <div .pull-right>
               #{showHandicap hc}

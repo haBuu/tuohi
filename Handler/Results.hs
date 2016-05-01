@@ -3,6 +3,7 @@ module Handler.Results where
 import Import hiding(for)
 
 import Data.List(nub)
+import Database.Persist.Sql (Single, rawSql, unSingle)
 
 import Competition.Competition
 import Database
@@ -31,16 +32,10 @@ getResultsR cid = do
   -- and belongs to a serie
   handicapsAll <- case (msid, state) of
     (Just sid, Finished) -> do
-      competitions <- runDB $ selectList
-        [ CompetitionSerieId ==. Just sid
-        , CompetitionDate <. date
-        , CompetitionState ==. Finished
-        ]
-        []
       forM finished $ \u@(user, _, _) -> do
         entity <- runDB $ getBy404 $ UniqueUser $ userEmail user
-        handicapScores_ <- runDB $ handicapScores (entityKey entity) competitions
-        let mhc = H.handicap handicapScores_
+        handicapScores <- handicapSelect sid (entityKey entity) date
+        let mhc = H.handicap $ map unSingle handicapScores
         return (u, mhc)
     _ -> return []
   -- filter out handicaps that are Nothing and count to
@@ -69,3 +64,7 @@ countOrFilter (u, mhc) =
 filterByDivision :: Division -> [(a, Division, [(Round, [Score])])]
   -> [(a, Division, [(Round, [Score])])]
 filterByDivision d = filter (\(_, d1, _) -> d == d1)
+
+handicapSelect :: SerieId -> UserId -> Day -> Handler [Single Int]
+handicapSelect sid uid day = runDB $ rawSql s [toPersistValue sid, toPersistValue uid, toPersistValue day]
+  where s = "SELECT result FROM handicap WHERE sid = ? and uid = ? and date < ?"

@@ -18,14 +18,9 @@ countHandicapTotal (rounds, hc) =
   in
     (fromIntegral total) - (fromIntegral (length rounds) * hc)
 
-handicap :: [(Int, [(Round, [Score])])] -> Maybe Double
+handicap :: [Int] -> Maybe Double
 handicap [] = Nothing
-handicap roundsAndPars =
-  let
-    toPars = for roundsAndPars $ \(par, rounds) ->
-      map (\r -> r - par) $ map (uncurry countRoundTotal) rounds
-  in
-    Just $ avg $ hcFilter $ concat toPars
+handicap results = Just $ avg $ hcFilter results
 
 avg :: [Int] -> Double
 avg [] = 0.0

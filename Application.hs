@@ -34,6 +34,8 @@ import Network.Socket
 import System.Environment (setEnv, unsetEnv)
 
 import Prelude(read)
+import qualified Data.Text.IO as T
+import Database.Persist.Sql (rawExecute)
 
 -- Import all relevant handler modules here.
 -- Don't forget to add new modules to your cabal file!
@@ -102,10 +104,15 @@ makeFoundation appSettings = do
     (myPoolSize $ appDatabaseConf appSettings)
 
   -- Perform database migration using our application's logging settings.
-  runLoggingT (runSqlPool (runMigration migrateAll) pool) logFunc
+  runLoggingT (runSqlPool (views >> runMigration migrateAll) pool) logFunc
 
   -- Return the foundation
   return $ mkFoundation pool
+
+views :: MonadIO m => ReaderT SqlBackend m ()
+views = do
+  migration <- liftIO $ T.readFile "handicap.sql"
+  rawExecute migration []
 
 -- | Convert our foundation to a WAI Application by calling @toWaiAppPlain@ and
 -- applyng some additional middlewares.
