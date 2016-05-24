@@ -3,6 +3,8 @@ module Handler.Home where
 
 import Import
 
+import Yesod.Auth.Email
+
 import Model.CompetitionState
 import Database
 import Data.Time.LocalTime

@@ -168,3 +168,4 @@ Result: Tulos
 PenaltyRangeError: Rangaistus ei voi olla negatiivinen
 NoVerKey: Käyttäjällä ei ole vahvistusavainta
 SendVerEmail: Lähetä vahvistussähköposti
+ForgotPassword: Salasana unohtunut?

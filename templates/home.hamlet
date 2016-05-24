@@ -67,3 +67,5 @@ $if not $ null activeSignUps
 ^{languageWidget}
 
 ^{signUpWidget}
+
+<a .pull-right .p-t-1 href=@{AuthR forgotPasswordR}>_{MsgForgotPassword}
