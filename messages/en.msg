@@ -14,8 +14,8 @@ Total: Total
 MPO: Open
 FPO: Women
 MPM: Master
-MJ1: Junior-19
-MJ2: Junior-16
+MJ1: Junior-18
+MJ2: Junior-15
 MA2: Amateur Intermediate
 MA3: Amateur Recreational
 Password: Password

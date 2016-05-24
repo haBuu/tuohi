@@ -14,8 +14,8 @@ Total: Yhteensä
 MPO: Avoin
 FPO: Naiset
 MPM: Seniorit-40
-MJ1: Juniorit-19
-MJ2: Juniorit-16
+MJ1: Juniorit-18
+MJ2: Juniorit-15
 MA2: Amateur Intermediate
 MA3: Amateur Recreational
 Password: Salasana
