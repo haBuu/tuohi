@@ -2,10 +2,10 @@
 module Model where
 
 import ClassyPrelude.Yesod
+import Yesod.Markdown (Markdown)
 import Database.Persist.Quasi
 
 import Handler.Division
-
 import Helpers
 import Model.Permission
 import Model.EventLog

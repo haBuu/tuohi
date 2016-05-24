@@ -136,6 +136,7 @@ library
                  , cassava                       >= 0.4.2.2
                  , network
                  , fsnotify
+                 , yesod-markdown
 
 executable         weeklyapp
     if flag(library-only)

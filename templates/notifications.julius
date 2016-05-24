@@ -31,12 +31,7 @@
       url: url,
       data: { content: text },
       success: function() {
-        self.toggleClass("hidden");
-        item.find("textarea").toggleClass("hidden");
-        item.find("button#edit").toggleClass("hidden");
-        item.find("button#cancel").toggleClass("hidden");
-        item.find("p").toggleClass("hidden");
-        item.find("p").text(text);
+        location.reload();
       }
     });
   });
@@ -44,7 +39,7 @@
   editButtons.on("click", function() {
     var self = $(this);
     var item = self.parent();
-    item.find("p").toggleClass("hidden");
+    item.find("div#notification-content").toggleClass("hidden");
     self.toggleClass("hidden");
     item.find("textarea").toggleClass("hidden");
     item.find("button#save").toggleClass("hidden");
@@ -54,12 +49,12 @@
   cancelButtons.on("click", function() {
     var self = $(this);
     var item = self.parent();
-    var p = item.find("p");
+    var div = item.find("div#notification-content");
     var ta = item.find("textarea");
-    p.toggleClass("hidden");
+    div.toggleClass("hidden");
     self.toggleClass("hidden");
     ta.toggleClass("hidden");
-    ta.val(p.text());
+    ta.val(item.data("markdown"));
     item.find("button#save").toggleClass("hidden");
     item.find("button#edit").toggleClass("hidden");
   });

@@ -86,7 +86,7 @@ Hole
   deriving Show
 
 Notification
-  content Textarea
+  content Markdown
   user UserId
   date UTCTime
   deriving Show

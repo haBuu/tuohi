@@ -448,17 +448,6 @@ competitionAuthForm = do
     areq textField settings Nothing
     <* bootstrapSubmit (submitButton MsgLogIn)
 
-notificationForm :: UserId -> UTCTime
-  -> Handler ((FormResult Notification, Widget), Enctype)
-notificationForm uid time = do
-  mr <- getMessageRender
-  let settings = withPlaceholder (mr MsgNotification) $ bfs MsgNotification
-  runFormPost $ renderBootstrap3 BootstrapBasicForm $ Notification
-    <$> areq textareaField settings Nothing
-    <*> pure uid
-    <*> pure time
-    <* bootstrapSubmit (submitButton MsgAddNotification)
-
 importPlayersForm :: Handler ((FormResult Textarea, Widget), Enctype)
 importPlayersForm = do
   mr <- getMessageRender

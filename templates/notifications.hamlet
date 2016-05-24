@@ -7,10 +7,11 @@
   <div .panel .panel-primary>
     <div .panel-heading>_{MsgNotifications}
     $forall Entity nid notification <- notifications
-      <li .list-group-item .clearfix>
-        <p>#{notificationContent notification}
-        <textarea .margin-bottom .hidden .form-control>
+      <li .list-group-item .clearfix data-markdown=#{unMarkdown $ notificationContent notification}>
+        <div #notification-content>
           #{notificationContent notification}
+        <textarea .margin-bottom .hidden .form-control>
+          #{unMarkdown $ notificationContent notification}
         <button #remove data-url=@{NotificationR nid} .pull-right .margin-left .btn .btn-default>
           _{MsgRemove}
         <button #edit .pull-right .margin-left .btn .btn-default>

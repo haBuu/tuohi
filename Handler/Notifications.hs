@@ -3,6 +3,9 @@ module Handler.Notifications where
 
 import Import
 
+import Yesod.Markdown
+import Yesod.Form.Bootstrap3
+
 import Handler.Forms
 
 -- how many notifications gets displayed
@@ -39,7 +42,7 @@ deleteNotificationR nid =
 putNotificationR :: NotificationId -> Handler Html
 putNotificationR nid = do
   aid <- requireAuthId
-  content <- runInputPost $ ireq textareaField "content"
+  content <- runInputPost $ ireq markdownField "content"
   time <- liftIO getCurrentTime
   runDB $ update nid
     [ NotificationContent =. content
@@ -47,3 +50,15 @@ putNotificationR nid = do
     , NotificationUser =. aid
     ]
   redirect NotificationsR
+
+notificationForm :: UserId
+                 -> UTCTime
+                 -> Handler ((FormResult Notification, Widget), Enctype)
+notificationForm uid time = do
+  mr <- getMessageRender
+  let settings = withPlaceholder (mr MsgNotification) $ bfs MsgNotification
+  runFormPost $ renderBootstrap3 BootstrapBasicForm $ Notification
+    <$> areq markdownField settings Nothing
+    <*> pure uid
+    <*> pure time
+    <* bootstrapSubmit (submitButton MsgAddNotification)

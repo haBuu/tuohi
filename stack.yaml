@@ -1,8 +1,11 @@
 flags:
-  weeklyapp:
-    library-only: false
-    dev: false
+  pandoc:
+    old-locale: false
 packages:
 - '.'
-extra-deps: []
+extra-deps:
+- pandoc-1.15.0.6
+- persistent-sqlite-2.2
+- yaml-0.8.13
+- yesod-markdown-0.10.0
 resolver: lts-3.1
