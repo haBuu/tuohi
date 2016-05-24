@@ -108,8 +108,13 @@ startCompetition cid = runDB $ do
   -- set state to started
   update cid [CompetitionState =. Started]
   -- get sign ups for the competition that are confirmed
+  -- order by user id to provide some "randomization" to the order
+  -- which player will be put to groups
+  -- otherwise the sign up order would determine the groups
+  -- list shuffle would be better but i am too lazy for that
   confirmed <- selectList
-    [SignUpConfirmed ==. True, SignUpCompetitionId ==. cid] []
+    [SignUpConfirmed ==. True, SignUpCompetitionId ==. cid]
+    [Asc SignUpUserId]
   -- count holes in the layout
   let lid = competitionLayoutId competition
   holes <- count [HoleLayoutId ==. lid]
