@@ -13,7 +13,7 @@
 # name of the yesod app
 app="weeklyapp"
 # files to ignore
-ignore="\.git/*|dist/*|yesod-devel/*|.stack-work/*|static/tmp/*|$app.sqlite3|$app.cabal|stack.yaml|run-devel.sh|^.*\.(o|hi)"
+ignore="\.git/*|dist/*|yesod-devel/*|.stack-work/*|static/tmp/*|$app.sqlite3|$app.cabal|stack.yaml|run-devel.sh|^.*\.(o|hi)|4913"
 
 function showHelp() {
   echo "Usage: $0 -w"
@@ -56,7 +56,6 @@ function startReplYesodDev() {
   tmux rename-window iwatch
   tmux select-window -t yesod:2
   tmux rename-window iwatch_cabal
-
   # make the repl window active and attach to session
   tmux select-window -t yesod:repl
   tmux attach-session -t yesod
@@ -67,7 +66,7 @@ function reloadTemplates() {
   echo "reloading..."
   tmux select-window -t yesod:repl
   tmux send-keys -t yesod:repl "DevelMain.shutdown" C-m
-  tmux send-keys -t yesod:repl ":l DevelMain" C-m
+  tmux send-keys -t yesod:repl ":reload" C-m
   tmux send-keys -t yesod:repl "DevelMain.update" C-m
 }
 
