@@ -39,12 +39,12 @@ function startReplYesodDev() {
   # main watcher
   tmux split-window
   tmux select-pane -t 1
-  tmux send-keys "iwatch -X '$ignore' -r -e close_write -c \"$0 -r\" ." C-m
+  tmux send-keys "iwatch -X '$ignore' -r -e modify -c \"$0 -r\" ." C-m
 
   # cabal/stack watcher
   tmux split-window
   tmux select-pane -t 2
-  tmux send-keys "iwatch -t '$app.cabal|stack.yaml' -e close_write -c \"$0 -c\" ." C-m
+  tmux send-keys "iwatch -t '$app.cabal|stack.yaml' -e modify -c \"$0 -c\" ." C-m
 
   # hide watchers
   tmux select-pane -t 1
