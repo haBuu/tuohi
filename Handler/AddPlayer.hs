@@ -1,6 +1,7 @@
 module Handler.AddPlayer where
 
 import Import
+
 import Database
 import Handler.Forms
 import Handler.Division
@@ -78,12 +79,11 @@ maybeAddNewPlayer cid name email division = do
     -- if competition is started we also need to add player to a group
     C.Started -> do
       uid <- insertUser name email
-      msid <- runDB $ insertUnique $ SignUp uid cid True division
-      case msid of
-        Just _ -> do
-          mgroup <- addToCompetition uid cid
-          return $ isJust mgroup
-        Nothing -> return False
+      let signup = SignUp uid cid True division
+      -- add signup or update existing
+      void $ runDB $ upsert signup [SignUpConfirmed =. True]
+      mgroup <- addToCompetition uid cid
+      return $ isJust mgroup
 
 maybeAddPDGAPlayer :: CompetitionId -> Text -> Maybe Int -> Division
   -> Handler Bool
