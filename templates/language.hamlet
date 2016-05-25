@@ -3,7 +3,7 @@
     <input type="hidden" value="fi" name="lang">
     <input type="image" src=@{StaticR img_fi_png} .flag-icon>
 
-<div .pull-right>
+<div .pull-right .margin-left>
   <form action=@{LanguageR} method=post>
     <input type="hidden" value="en" name="lang">
     <input type="image" src=@{StaticR img_gb_png} .flag-icon>

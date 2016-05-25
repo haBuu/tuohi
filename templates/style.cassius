@@ -71,6 +71,9 @@ ol *.list-group-item
 .margin-left
   margin-left: 10px
 
+.margin-bottom
+  margin-bottom: 20px
+
 .label-lg
   font-size: 100%
 
