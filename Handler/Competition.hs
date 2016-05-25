@@ -125,6 +125,28 @@ postDnfRoundR rid = do
   runDB $ update rid [RoundState =. R.DidNotFinish]
   redirect AdminR
 
+-- TODO: allow this even if it is not the same round
+postRevertDnfRoundR :: RoundId -> Handler Html
+postRevertDnfRoundR rid = do
+  runDB $ do
+    round <- get404 rid
+    competition <- get404 $ roundCompetitionId round
+    mr <- currentRound $ roundCompetitionId round
+    case mr of
+      -- should't happen ever
+      -- lets just display error for the user
+      Nothing -> setMessageI MsgCompetitionDoesNotHaveRounds
+      Just current ->
+        if current == roundRoundnumber round
+          then do
+            -- all is well
+            update rid [RoundState =. R.Started]
+            setMessageI MsgDnfReverted
+          else do
+            -- this is not the same round so not good
+            setMessageI MsgCantRevertDnf
+  redirect AdminR
+
 getScoreLogR :: CompetitionId -> Handler Html
 getScoreLogR cid = do
   competition <- runDB $ get404 cid

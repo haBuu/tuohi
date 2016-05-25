@@ -169,3 +169,6 @@ PenaltyRangeError: Penalty can't be negative
 NoVerKey: User does not have a verification key
 SendVerEmail: Send verification email
 ForgotPassword: Forgot password?
+CompetitionDoesNotHaveRounds: Competition does not have rounds
+CantRevertDnf: Can't revert DNF of the player
+DnfReverted: DNF reverted

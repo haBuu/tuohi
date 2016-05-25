@@ -4,12 +4,13 @@
   var dnfButtons = $("table button#dnf-round");
   var nextRoundButton = $("form#next-round-form button");
   var finishCompetitionButton = $("form#finish-competition-form button");
+  var revertDnfButtons = $("table button#revert-dnf-round");
 
   var selectedPlayer = undefined;
 
-  var confirmModalPlayer = $('div#confirm-player-remove');
+  var confirmModalPlayerRemove = $('div#confirm-player-remove');
+  var confirmModalPlayerRemoveRevert = $('div#confirm-player-remove-revert');
   var confirmModalNextRound = $('div#confirm-next-round');
-  var confirmModalFinishCompetition = $('div#confirm-finish-competition');
 
   $('body').on("click", "table td#player-name", function() {
     var self = $(this);
@@ -54,24 +55,33 @@
     var item = self.parent().parent().parent();
     var url = self.data("url");
     var name = item.find("td#player-name").text();
-    confirmModalPlayer.find("div.modal-body p").text(name);
-    confirmModalPlayer.modal({ backdrop: 'static', keyboard: false })
+    confirmModalPlayerRemove.find("div.modal-body p").text(name);
+    confirmModalPlayerRemove.modal({ backdrop: 'static', keyboard: false })
       .one('click', '#confirm-button', function (e) {
         // remove from db
         $.ajax({
           type: 'POST',
           url: url,
           success: function() {
-            // move to dnf players
-            item.remove();
-            $('<li/>', {
-              class: "list-group-item",
-              text: name
-            }).appendTo(dnfListPanel);
+            location.reload();
           }
         });
       });
   });
+
+  revertDnfButtons.on("click", function() {
+    var self = $(this);
+    var url = self.data("url");
+    // remove from db
+    $.ajax({
+      type: 'POST',
+      url: url,
+      success: function() {
+        location.reload();
+      }
+    });
+  });
+
 
   nextRoundButton.on("click", function(e) {
     e.preventDefault();

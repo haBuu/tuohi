@@ -51,11 +51,19 @@ $forall group <- groups
                   <button data-url=@{DnfRoundR rid} #dnf-round type="button" .btn .btn-danger .btn-sm>
                     <span class="glyphicon glyphicon-remove">
 
-<ul .list-group #dnf-list>
-  <div .panel .panel-primary>
-    <div .panel-heading>_{MsgDNF}
-    $forall (E.Value _, E.Value name) <- dnf
-      <li .list-group-item>#{name}
+<div .panel .panel-primary>
+  <div .panel-heading>
+    _{MsgDNF}
+  <table .table>
+    <tbody>
+      $forall (E.Value rid, E.Value name) <- dnf
+        <tr>
+          <td .middle>
+            #{name}
+          <td>
+            <button data-url=@{RevertDnfRoundR rid} #revert-dnf-round type="button" .btn .btn-warning .btn-sm .pull-right>
+              <span class="glyphicon glyphicon-arrow-up">
+
 
 <form #finish-competition-form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
   ^{finishFormWidget}

@@ -142,6 +142,7 @@ instance Yesod App where
   isAuthorized (ConfirmSignUpR _) _ = isAdmin
   isAuthorized (RemoveSignUpR _) _ = isAdmin
   isAuthorized (DnfRoundR _) _ = isAdmin
+  isAuthorized (RevertDnfRoundR _) _ = isAdmin
   isAuthorized (CompetitionNextRoundR _) _ = isAdmin
   isAuthorized (CompetitionFinishR _) _ = isAdmin
   isAuthorized NotificationsR _ = isAdmin

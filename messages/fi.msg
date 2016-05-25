@@ -169,3 +169,6 @@ PenaltyRangeError: Rangaistus ei voi olla negatiivinen
 NoVerKey: Käyttäjällä ei ole vahvistusavainta
 SendVerEmail: Lähetä vahvistussähköposti
 ForgotPassword: Salasana unohtunut?
+CompetitionDoesNotHaveRounds: Kilpailussa ei ole kierroksia
+CantRevertDnf: Pelaajaa ei voi palauttaa kilpailuun
+DnfReverted: Pelaaja palautettiin kilpailuun
