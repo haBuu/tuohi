@@ -11,6 +11,7 @@
   var confirmModalPlayerRemove = $('div#confirm-player-remove');
   var confirmModalPlayerRemoveRevert = $('div#confirm-player-remove-revert');
   var confirmModalNextRound = $('div#confirm-next-round');
+  var confirmModalFinishCompetition = $('div#confirm-finish-competition');
 
   $('body').on("click", "table td#player-name", function() {
     var self = $(this);
