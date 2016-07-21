@@ -172,3 +172,6 @@ ForgotPassword: Salasana unohtunut?
 CompetitionDoesNotHaveRounds: Kilpailussa ei ole kierroksia
 CantRevertDnf: Pelaajaa ei voi palauttaa kilpailuun
 DnfReverted: Pelaaja palautettiin kilpailuun
+AddGroup: Lisää ryhmä
+InputGroupNumber: Ryhmän numero
+InputInteger: Syötä kokonaisluku

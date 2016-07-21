@@ -172,3 +172,6 @@ ForgotPassword: Forgot password?
 CompetitionDoesNotHaveRounds: Competition does not have rounds
 CantRevertDnf: Can't revert DNF of the player
 DnfReverted: DNF reverted
+AddGroup: Add group
+InputGroupNumber: Group number
+InputInteger: Input an integer

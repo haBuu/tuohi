@@ -51,6 +51,11 @@ $forall group <- groups
                   <button data-url=@{DnfRoundR rid} #dnf-round type="button" .btn .btn-danger .btn-sm>
                     <span class="glyphicon glyphicon-remove">
 
+<div #add-group .input-group .input-group-lg .margin-bottom>
+  <input #group-number type="number" .form-control placeholder=_{MsgInputGroupNumber}>
+  <span .input-group-btn>
+    <button #add-group .btn .btn-default type="button">_{MsgAddGroup}
+
 <div .panel .panel-primary>
   <div .panel-heading>
     _{MsgDNF}
@@ -63,7 +68,6 @@ $forall group <- groups
           <td>
             <button data-url=@{RevertDnfRoundR rid} #revert-dnf-round type="button" .btn .btn-warning .btn-sm .pull-right>
               <span class="glyphicon glyphicon-arrow-up">
-
 
 <form #finish-competition-form method=post action=@{CompetitionFinishR cid}#form enctype=#{finishFormEnctype}>
   ^{finishFormWidget}

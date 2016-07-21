@@ -56,6 +56,8 @@ startedPage cid = do
   count_ <- holeCount $ competitionLayoutId competition
   -- compine rounds and score counts
   let roundsAndScores = zip rounds scoreCounts
+  -- need message render for julius
+  messageRender <- getMessageRender
   defaultLayout $ do
     setTitleI MsgAdminPanel
     $(widgetFile "started")

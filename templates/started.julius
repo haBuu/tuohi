@@ -50,6 +50,32 @@
     }
   });
 
+  $('body').on("click", "button#add-group", function() {
+    // get group number from input
+    var group = $('input#group-number').val();
+    console.log(group);
+    if (!isNaN(parseInt(group, 10))) {
+      // add new group to the ui if input was integer
+      $('<div></div>')
+        .addClass('panel panel-primary')
+        .append($('<div id=group></div>')
+          .text('Ryhmä ' + group.toString())
+          .addClass('panel-heading')
+          .data('group', group)
+        )
+        .append($('<table></table>')
+          .addClass('table')
+          .append($('<tbody></tbody>')
+          )
+        )
+        .insertBefore('div#add-group')
+      ;
+    } else {
+      var msg = '#{toJSON $ messageRender MsgInputInteger}'.replace(/\"/g, '');
+      alert(msg);
+    }
+  });
+
   dnfButtons.on("click", function() {
     var self = $(this);
     var item = self.parent().parent().parent();
@@ -81,7 +107,6 @@
       }
     });
   });
-
 
   nextRoundButton.on("click", function(e) {
     e.preventDefault();
